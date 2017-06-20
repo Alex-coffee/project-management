@@ -1,0 +1,66 @@
+// constructures
+.ganttRoot{
+    position: relative;
+    height: 500px;
+}
+.slotContainer{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 10;
+    overflow: hidden;
+}
+.slotInner > .slotItem:first-child{
+    border-top: 1px solid #ccc;
+}
+.slotItem{
+    text-align: center;
+    padding: 7px;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+.ganttContainer{
+    position: relative;
+    top:0;
+    max-height: 100%;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    overflow: auto;
+}
+.ganttBG{
+    position: absolute;
+    background: url("assets/images/gantt/grid40_strip.png");
+}
+
+#svgContainer{
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    z-index: 5;
+}
+
+circle.process{
+  stroke: #333;
+  stroke-width: 2;
+  fill: white;
+}
+svg text{
+  stroke: #333;
+  fill: #333;
+}
+svg .netWorkLine{
+  stroke: #333;
+  stroke-width: 1;
+}
+svg .ganttItem{
+  stroke: #1c84c6;
+  stroke-width: 1;
+  fill: white;
+}
+svg .shortest{
+  stroke: #1c84c6;
+  stroke-width: 1;
+  fill: #1c84c6;
+}

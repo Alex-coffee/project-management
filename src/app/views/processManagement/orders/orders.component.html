@@ -1,0 +1,31 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                
+                <h5>订单列表</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>数量</th>
+                        <th>交付日期</th>
+                        <th>等级</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let o of orderData">
+                    <td>{{o.orderId}}</td>
+                    <td>{{o.amount}}</td>
+                    <td>{{o.dueDate}}</td>
+                    <td>{{o.level}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
