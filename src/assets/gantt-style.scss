@@ -2,6 +2,11 @@
 .ganttRoot{
     position: relative;
     height: 500px;
+    border: 1px solid #ccc;
+}
+.timelineContainer{
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #ccc;
 }
 .slotContainer{
     position: absolute;
@@ -12,21 +17,18 @@
     overflow: hidden;
 }
 .slotInner > .slotItem:first-child{
-    border-top: 1px solid #ccc;
+    border-top: 1px solid transparent;
 }
 .slotItem{
     text-align: center;
     padding: 7px;
     border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
 }
 .ganttContainer{
     position: relative;
     top:0;
     max-height: 100%;
     border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
     overflow: auto;
 }
 .ganttBG{
@@ -40,15 +42,16 @@
     height: 1000px;
     z-index: 5;
 }
+#timelineInner{overflow: hidden;}
+#timelineSvg text.textTime{
+    fill: #666;
+    font-size: 12px;   
+}
 
 circle.process{
   stroke: #333;
   stroke-width: 2;
   fill: white;
-}
-svg text{
-  stroke: #333;
-  fill: #333;
 }
 svg .netWorkLine{
   stroke: #333;

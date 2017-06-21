@@ -1,5 +1,6 @@
 import { Directive, ElementRef, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import * as d3 from "d3";
+import * as dateFormat from "dateFormat";
 declare var $:any;
 
 @Directive({
@@ -35,6 +36,7 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
     if(this.dataSet.length > 0 && this.slotSet.length > 0){
       this.processData();
       this.buildSlot();
+      this.buildTimeline();
       this.buildGantt(this.dataSet);
     }
   }
@@ -42,11 +44,31 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
   //***************** build the elements that we need in page *****************
   createStructure(){
     let rootContainer = $("<div>", {"class": "ganttRoot"});
+    let timelineContainer = $("<div>", {"id": "timelineContainer", "class": "timelineContainer"});
+    timelineContainer.height(this.blockSize);
+
+    let timelineInner = $("<div>", {"id": "timelineInner"});
+    timelineInner.css({
+      height: this.blockSize,
+      "margin-left": this.slotContainerWidth
+    })
+
+    var timelineSvg = document.createElementNS ("http://www.w3.org/2000/svg", "svg");
+    timelineSvg.setAttribute("id", "timelineSvg");
+    timelineSvg.style.display = "block";
+    timelineInner.append($(timelineSvg));
+
+    timelineContainer.append(timelineInner);
+    rootContainer.append(timelineContainer);
+
     let slotContainer = $("<div>", {"id": "slotContainer", "class": "slotContainer"});
     let slotInner = $("<div>", {"id": "slotInner","class": "slotInner"});
     slotInner.height(1000);
     slotContainer.append(slotInner);
-    slotContainer.width(this.slotContainerWidth);
+    slotContainer.css({
+      top: this.blockSize,
+      width: this.slotContainerWidth
+    });
     rootContainer.append(slotContainer);
 
     let ganttContainer = $("<div>", {"id": "ganttContainer", "class": "ganttContainer"});
@@ -65,9 +87,14 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
 
     $(this.el.nativeElement).append(rootContainer);
 
+    //set some width after the rootContainer being appened to dom
     $("#ganttContainer").scroll(function () { 
        $("#slotContainer").animate({
           scrollTop: $("#ganttContainer").scrollTop()
+        }, 0);
+
+        $("#timelineInner").animate({
+          scrollLeft: $("#ganttContainer").scrollLeft()
         }, 0);
     });
   }
@@ -101,7 +128,69 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
     
   }
 
-  ////*************** relevant to slot ***************
+  //*************** relevant to timeline ***************
+  buildTimeline(){
+    let that = this;
+    let timelineArray = [];
+	  for(let i = 0; i < this.ganttSettings.totalBlock; i++){
+      let linePosition = this.blockSize * i;
+      const currenTime = this.scenarioStartTime + this.ganttSettings.blockTimeLenth * 60 * 1000 * linePosition;
+
+      for(let scaleNo = 0; scaleNo < 4; scaleNo++){
+        let shortLineOffset = this.blockSize / 4 * scaleNo;
+
+        timelineArray.push({
+          x: linePosition + shortLineOffset,
+          time: currenTime
+        })
+      }
+	  }
+
+    let svg = d3.select("#timelineSvg");
+    svg.selectAll("line.tItem").data(timelineArray)
+      .enter()
+      .append("line")
+      .attr("class", "tItem")
+      .attr("stroke", "#ccc")
+      .attr("x1", function(d){
+        return d.x;
+      })
+      .attr("y1", function(d){
+        return that.blockSize;
+      })
+      .attr("x2", function(d){
+        return d.x;
+      })
+      .attr("y2", function(d){
+        if(d.x % that.blockSize == 0){
+          return that.blockSize - 10;
+        }else{
+          return that.blockSize - 5;
+        }
+      })
+      ;
+
+    svg.selectAll("text.textTime").data(timelineArray)
+      .enter()
+      .filter(function(d){
+        return d.x % (that.blockSize * 5) == 0;
+      })
+      .append("text")
+      .attr("class", "textTime")
+      .text(function(d){
+        return dateFormat(d.time, "yyyy-mm-dd HH:MM");
+      })
+      .attr("x", function(d){
+        return d.x;
+      })
+      .attr("y", function(d){
+        return 10;
+      })
+      ;
+
+  }
+
+  //*************** relevant to slot ***************
   getSlotDetail(id){
     const detailInfo = {
       index: this.slotArray.indexOf(id),
@@ -138,39 +227,45 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
 
       ganttNodes.append("rect")
         .attr("class", "ganttItem")
+        .attr("rx", 3)
+        .attr("ry", 3)
         .attr("x", function(d){
           return that.getItemLeft(d.earlistStartTime);
         })
         .attr("y", function(d){
-          return that.blockSize * that.getSlotDetail(d.processId).index + 2;
+          return that.blockSize * that.getSlotDetail(d.processId).index + 4;
         })
         .attr("width", function(d){
           return that.getItemWidth(d.latestFinishTime, d.earlistStartTime);
         })
         .attr("height", function(d){
-          return that.blockSize - 4;
+          return that.blockSize - 8;
         })
 
-      ganttNodes.append("line")
-        .attr("x1", function(d){
-          return d.earlistFinishTime * that.blockSize;
-        })
-        .attr("y1", function(d){
-          return that.blockSize * that.getSlotDetail(d.processId).index + 2;
-        })
-        .attr("x2", function(d){
-          return d.earlistFinishTime * that.blockSize;
-        })
-        .attr("y2", function(d){
-          return that.blockSize * that.getSlotDetail(d.processId).index ++ - 2;
-        })
-        .attr("stroke", "red")
+      // ganttNodes.append("line")
+      //   .attr("x1", function(d){
+      //     return d.earlistFinishTime * that.blockSize;
+      //   })
+      //   .attr("y1", function(d){
+      //     return that.blockSize * that.getSlotDetail(d.processId).index + 2;
+      //   })
+      //   .attr("x2", function(d){
+      //     return d.earlistFinishTime * that.blockSize;
+      //   })
+      //   .attr("y2", function(d){
+      //     return that.blockSize * that.getSlotDetail(d.processId).index ++ - 2;
+      //   })
+      //   .attr("stroke", "red")
     
     $("#svgContainer, .ganttBG").css({
       width: this.blockSize * this.ganttSettings.totalBlock,
       height: this.blockSize * this.slotArray.length
     });
     
+    $("#timelineSvg").css({
+      width: this.blockSize * this.ganttSettings.totalBlock,
+      height: this.blockSize
+    });
   }
 
 
