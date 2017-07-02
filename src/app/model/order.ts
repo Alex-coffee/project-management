@@ -1,8 +1,9 @@
 export class Order{
     constructor(
-        public orderId: number,
-        public amount: number,
-        public dueDate: string,
-        public level: number
+        public orderName: string,
+        public unitCost: number,
+        public initialStorage: number,
+        public safeStorage: number,
+        public demands: number[]
     ){}
 }

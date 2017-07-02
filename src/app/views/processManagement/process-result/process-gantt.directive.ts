@@ -27,7 +27,17 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
   defaultTimeUnitSize = 10;
   // blockScale = 0.25; //  1/4 hour
   blockScale = 3; //  1/4 hour
-  blockScaleArray = [0.25, 0.5, 1, 2, 3, 6, 12, 24];
+  // blockScaleArray = [0.25, 0.5, 1, 2, 3, 6, 12, 24];
+  blockScaleArray = [
+      {scale: 0.25, label: "15分钟"},
+      {scale: 0.5, label: "半小时"},
+      {scale: 1, label: "1小时"},
+      {scale: 2, label: "2小时"},
+      {scale: 3, label: "3小时"},
+      {scale: 6, label: "6小时"},
+      {scale: 12, label: "半天"},
+      {scale: 24, label: "1天"}
+    ];
 
   constructor(private el: ElementRef) { }
 
@@ -107,13 +117,16 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
     });
 
     //set the toolBar
-    let scaleSelector = $("<select>", {"id": "scaleSelector"});
-    this.blockScaleArray.forEach(scale => {
-      let scaleOption = $("<option>", {"value": scale});
-      scaleOption.html(scale);
+    let scaleSelectorContainer = $("<div>", {"class": "pull-right"});
+    scaleSelectorContainer.text("时间轴比例")
+    let scaleSelector = $("<select>", {"id": "scaleSelector", "class": "m-l-sm"});
+    this.blockScaleArray.forEach(blockScale => {
+      let scaleOption = $("<option>", {"value": blockScale.scale});
+      scaleOption.html(blockScale.label);
       scaleSelector.append(scaleOption);
     })
-    $("#toolBar").append(scaleSelector);
+    scaleSelectorContainer.append(scaleSelector)
+    $("#toolBar").append(scaleSelectorContainer);
     $("#scaleSelector").change(val => {
       this.blockScale = parseInt($("#scaleSelector").val());
       this.drawGantt();

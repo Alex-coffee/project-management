@@ -7,21 +7,23 @@
                 <h5>订单列表</h5>
             </div>
             <div class="ibox-content">
-                <table class="table table-bordered table-striped table-hover">
+                <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th>订单号</th>
-                        <th>数量</th>
-                        <th>交付日期</th>
-                        <th>等级</th>
+                        <th>订单名称</th>
+                        <th>单位价格</th>
+                        <th>初始库存</th>
+                        <th>安全库存</th>
+                        <th>需求</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let o of orderData">
-                    <td>{{o.orderId}}</td>
-                    <td>{{o.amount}}</td>
-                    <td>{{o.dueDate}}</td>
-                    <td>{{o.level}}</td>
+                        <td>{{o.orderName}}</td>
+                        <td>{{o.unitCost}}</td>
+                        <td>{{o.initialStorage}}</td>
+                        <td>{{o.safeStorage}}</td>
+                        <td>{{o.demands}}</td>
                     </tr>
                     </tbody>
                 </table>
