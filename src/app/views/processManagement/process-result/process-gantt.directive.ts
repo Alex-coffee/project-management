@@ -1,4 +1,7 @@
 import { Directive, ElementRef, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import { GanttItem } from 'app/model/gantt-item';
+import { GanttSlot } from 'app/model/gantt-slot';
+import { GanttDataSet } from 'app/model/ganttDataSet';
 import * as d3 from "d3";
 import * as dateFormat from "dateFormat";
 declare var $:any;
@@ -7,11 +10,9 @@ declare var $:any;
   selector: '[appProcessGantt]'
 })
 export class ProcessGanttDirective implements OnChanges, OnInit{
-  @Input() private dataSet: any[];
-  @Input() private slotSet: any[];
+  @Input() private ganttDataSet: GanttDataSet;
 
   slotMap: any = {};
-  slotArray: any[] = [];
 
   scenarioStartTime: number;
   scenarioEndTime: number;
@@ -24,7 +25,9 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
   slotContainerWidth = 150;
   blockSize = 40;
   defaultTimeUnitSize = 10;
-  blockScale = 0.25; //  1/4 hour
+  // blockScale = 0.25; //  1/4 hour
+  blockScale = 3; //  1/4 hour
+  blockScaleArray = [0.25, 0.5, 1, 2, 3, 6, 12, 24];
 
   constructor(private el: ElementRef) { }
 
@@ -33,13 +36,18 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
   }
 
   ngOnChanges(changes:SimpleChanges) {
-    if(this.dataSet.length > 0 && this.slotSet.length > 0){
+
+    if(this.ganttDataSet){
+      this.drawGantt();
+    }
+  }
+  drawGantt(){
       this.processData();
       this.buildSlot();
       this.buildTimeline();
-      this.buildGantt(this.dataSet);
-    }
+      this.buildGantt();
   }
+  
 
   //***************** build the elements that we need in page *****************
   createStructure(){
@@ -97,26 +105,36 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
           scrollLeft: $("#ganttContainer").scrollLeft()
         }, 0);
     });
+
+    //set the toolBar
+    let scaleSelector = $("<select>", {"id": "scaleSelector"});
+    this.blockScaleArray.forEach(scale => {
+      let scaleOption = $("<option>", {"value": scale});
+      scaleOption.html(scale);
+      scaleSelector.append(scaleOption);
+    })
+    $("#toolBar").append(scaleSelector);
+    $("#scaleSelector").change(val => {
+      this.blockScale = parseInt($("#scaleSelector").val());
+      this.drawGantt();
+    });
+
   }
 
   //***************** data process **********************
   processData(){
     //sort the process id
-    this.slotSet.sort((a, b) =>{
-      return a.processId - b.processId
+    this.ganttDataSet.ganttSlots.sort((a, b) =>{
+      return a.id - b.id
     })
 
-    this.slotSet.forEach(element => {
-      this.slotMap[element.processId] = element;
-      this.slotArray.push(element.processId);
+    this.ganttDataSet.ganttSlots.forEach(element => {
+      this.slotMap[element.id] = element;
     });
 
-    this.scenarioStartTime = 
-      this.getTimeMiliFromToday(d3.min(this.dataSet, function(d) { return d.earlistStartTime; }));
-    this.scenarioEndTime = 
-      this.getTimeMiliFromToday(d3.max(this.dataSet, function(d) { return d.latestFinishTime; }));
+    this.scenarioStartTime = this.ganttDataSet.startTime;
 
-    let diffDays = this.getCeilDiffDays(this.scenarioEndTime, this.scenarioStartTime);
+    let diffDays = this.getCeilDiffDays(this.ganttDataSet.endTime, this.ganttDataSet.startTime);
     let totalBlock = diffDays * 24 / this.blockScale;
     let blockTimeLenth = this.blockScale * 60 / this.blockSize;
 
@@ -124,8 +142,6 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
     this.ganttSettings.blockTimeLenth = blockTimeLenth;
 
     console.log(this.slotMap);
-    console.log(this.slotArray);
-    
   }
 
   //*************** relevant to timeline ***************
@@ -146,12 +162,12 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
       }
 	  }
 
+    d3.selectAll("#timelineSvg > *").remove();
     let svg = d3.select("#timelineSvg");
     svg.selectAll("line.tItem").data(timelineArray)
       .enter()
       .append("line")
       .attr("class", "tItem")
-      .attr("stroke", "#ccc")
       .attr("x1", function(d){
         return d.x;
       })
@@ -191,36 +207,33 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
   }
 
   //*************** relevant to slot ***************
-  getSlotDetail(id){
-    const detailInfo = {
-      index: this.slotArray.indexOf(id),
-      name: this.slotMap[id].name
-    }
-    return detailInfo;
-  }
 
   buildSlot(){
+    $("#slotInner").html("");
+
     let that = this;
-    this.slotArray.forEach(slot =>{
+    this.ganttDataSet.ganttSlots.forEach(slot =>{
       let slotItem = $("<div>", {"class": "slotItem"});
       slotItem.height(that.blockSize);
-      slotItem.text(slot);
+      slotItem.text(slot.label);
       $("#slotInner").append(slotItem);
     })
 
-    $("#slotInner").height(this.blockSize * this.slotArray.length);
+    $("#slotInner").height(this.blockSize * this.ganttDataSet.ganttSlots.length);
   }
 
 
   //*************** relevant to gantt *****************
-  buildGantt(dataSet){
+  buildGantt(){
+    let ganttItems = this.ganttDataSet.ganttItems;
     let that = this;
+    d3.selectAll("#svgContainer > *").remove();
     let svg = d3.select("#svgContainer"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
     //{"earlistFinishTime":5,"earlistStartTime":0,"isCritical":true,"latestFinishTime":15,"latestStartTime":10,"processId":0}
 
-    let ganttNodes = svg.selectAll("g.ganttNodes").data(this.dataSet)
+    let ganttNodes = svg.selectAll("g.ganttNodes").data(ganttItems)
       .enter()
       .append("g")
       .attr("class", "ganttNodes");
@@ -230,13 +243,13 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
         .attr("rx", 3)
         .attr("ry", 3)
         .attr("x", function(d){
-          return that.getItemLeft(d.earlistStartTime);
+          return that.getItemLeft(d.startTime);
         })
         .attr("y", function(d){
-          return that.blockSize * that.getSlotDetail(d.processId).index + 4;
+          return that.blockSize * d.rowIndex + 4;
         })
         .attr("width", function(d){
-          return that.getItemWidth(d.latestFinishTime, d.earlistStartTime);
+          return that.getItemWidth(d.endTime, d.startTime);
         })
         .attr("height", function(d){
           return that.blockSize - 8;
@@ -259,7 +272,7 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
     
     $("#svgContainer, .ganttBG").css({
       width: this.blockSize * this.ganttSettings.totalBlock,
-      height: this.blockSize * this.slotArray.length
+      height: this.blockSize * this.ganttDataSet.ganttSlots.length
     });
     
     $("#timelineSvg").css({
@@ -272,12 +285,12 @@ export class ProcessGanttDirective implements OnChanges, OnInit{
 
   //**************** Utils *****************/
   getItemWidth(toTime, fromTime){
-    return this.getTotalDiffMinutes(this.getTimeMiliFromToday(toTime), this.getTimeMiliFromToday(fromTime)) 
+    return this.getTotalDiffMinutes(toTime, fromTime) 
       / this.ganttSettings.blockTimeLenth;
   }
 
   getItemLeft(fromTime){
-    return this.getTotalDiffMinutes(this.getTimeMiliFromToday(fromTime), this.scenarioStartTime) 
+    return this.getTotalDiffMinutes(fromTime, this.scenarioStartTime) 
       / this.ganttSettings.blockTimeLenth;
   }
 

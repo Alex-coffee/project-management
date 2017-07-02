@@ -4,8 +4,6 @@ import {RouterModule} from "@angular/router";
 
 import {OrdersComponent} from "./orders/orders.component";
 import {ProcessComponent} from "./process/process.component";
-import {WorkersComponent} from "./workers/workers.component";
-import {RawMaterialsComponent} from "./raw-materials/raw-materials.component";
 import {ProcessResultComponent} from "./process-result/process-result.component";
 
 import {PeityModule } from '../../components/charts/peity';
@@ -18,8 +16,6 @@ import { ProcessGanttDirective } from './process-result/process-gantt.directive'
   declarations: [
     OrdersComponent,
     ProcessComponent,
-    WorkersComponent,
-    RawMaterialsComponent,
     ProcessResultComponent,
     D3ChartDirective,
     ProcessGanttDirective
@@ -34,8 +30,6 @@ import { ProcessGanttDirective } from './process-result/process-gantt.directive'
   exports: [
     OrdersComponent,
     ProcessComponent,
-    WorkersComponent,
-    RawMaterialsComponent,
     ProcessResultComponent
   ],
 })

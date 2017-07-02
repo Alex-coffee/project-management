@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService } from '../../../services/backend.service';
-import { ProcessResult } from '../../../model/process-result';
-import { Process } from '../../../model/process';
+import { BackendService } from 'app/services/backend.service';
+
+import { GanttItem } from 'app/model/gantt-item';
+import { GanttSlot } from 'app/model/gantt-slot';
+import { GanttDataSet } from 'app/model/ganttDataSet';
 
 @Component({
   selector: 'app-process-result',
@@ -11,27 +13,22 @@ import { Process } from '../../../model/process';
 })
 export class ProcessResultComponent implements OnInit {
   errorMessage: string;
-  processResultData: ProcessResult[] = [];
-  processData: any[] = [];
+  ganttDataSet: GanttDataSet;
 
   constructor(private backendService: BackendService) { }
 
   ngOnInit() {
-    this.getProcessResultData();
-    this.getProcessData();
+    this.getGanttData();
   }
 
-  getProcessResultData() {
-    this.backendService.getProcessResultData()
-                     .subscribe(
-                       processResultData => this.processResultData = processResultData,
-                       error =>  this.errorMessage = <any>error);
-  }
-
-  getProcessData() {
-    this.backendService.getProcessData()
-                     .subscribe(
-                       processData => this.processData = processData,
-                       error =>  this.errorMessage = <any>error);
+  getGanttData() {
+    this.backendService.getGanttDataByType("order")
+    .subscribe(ganttDataSet => {
+      this.ganttDataSet = ganttDataSet;
+      console.log(ganttDataSet);
+    }, error => {
+      console.log(error);
+      this.errorMessage = <any>error;
+    });
   }
 }

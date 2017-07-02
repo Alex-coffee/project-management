@@ -19,10 +19,10 @@ export class ProcessComponent implements OnInit {
   }
 
   getProcessData() {
-    this.backendService.getProcessData()
-                     .subscribe(
-                       processData => this.processData = processData,
-                       error =>  this.errorMessage = <any>error);
+    // this.backendService.getProcessData()
+    //                  .subscribe(
+    //                    processData => this.processData = processData,
+    //                    error =>  this.errorMessage = <any>error);
   }
 
 }

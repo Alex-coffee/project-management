@@ -10,8 +10,6 @@ import {Dashboard5Component} from "./views/dashboards/dashboard5.component";
 import {OrdersComponent} from "./views/processManagement/orders/orders.component";
 import {ProcessComponent} from "./views/processManagement/process/process.component";
 import {ProcessResultComponent} from "./views/processManagement/process-result/process-result.component";
-import {WorkersComponent} from "./views/processManagement/workers/workers.component";
-import {RawMaterialsComponent} from "./views/processManagement/raw-materials/raw-materials.component";
 
 import {StarterViewComponent} from "./views/appviews/starterview.component";
 import {LoginComponent} from "./views/appviews/login.component";
@@ -39,9 +37,7 @@ export const ROUTES:Routes = [
     path: 'processManagement', component: BasicLayoutComponent,
     children: [
       {path: 'orders', component: OrdersComponent},
-      {path: 'workers', component: WorkersComponent},
       {path: 'process', component: ProcessComponent},
-      {path: 'raw-material', component: RawMaterialsComponent}
     ]
   },
   {

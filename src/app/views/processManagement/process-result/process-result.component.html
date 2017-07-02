@@ -1,54 +1,15 @@
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-12">
+
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                
-                <h5>流程结果</h5>
-            </div>
-            <div class="ibox-content">
-                <div appProcessGantt [dataSet]="processResultData" [slotSet]="processData">
-
+                    <div id="toolBar" class="pull-right" style="width: 250px;"></div>
+                    <h5>流程结果</h5>
                 </div>
-
-                <!--<svg appProcessGantt [dataSet]="processResultData" [slotSet]="processData" width="960" height="500"></svg>-->
-
-                <ngb-tabset>
-                    <ngb-tab >
-                        <ng-template ngbTabTitle>流程表</ng-template>
-                        <ng-template ngbTabContent>
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>最早开始时间</th>
-                                        <th>最晚开始时间</th>
-                                        <th>最早完成时间</th>
-                                        <th>最晚结束时间</th>
-                                        <th>是否紧急</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let pr of processResultData">
-                                    <td>{{pr.processId}}</td>
-                                    <td>{{pr.earlistStartTime}}</td>
-                                    <td>{{pr.latestStartTime}}</td>
-                                    <td>{{pr.earlistFinishTime}}</td>
-                                    <td>{{pr.latestFinishTime}}</td>
-                                    <td>{{pr.isCritical}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </ng-template>
-                    </ngb-tab>
-                    <ngb-tab>
-                        <ng-template ngbTabTitle>流程图</ng-template>
-                        <ng-template ngbTabContent>
-                            123
-                        </ng-template>
-                    </ngb-tab>
-                </ngb-tabset>
-                
+                <div class="ibox-content">
+                    <div appProcessGantt [ganttDataSet]="ganttDataSet"></div>
+                </div>
             </div>
         </div>
     </div>
