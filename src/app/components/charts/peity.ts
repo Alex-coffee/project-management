@@ -15,6 +15,7 @@ export class PeityDirective implements OnChanges, OnInit {
   // Properties
   @Input() private  options:any;
   @Input() private  type:any;
+  @Input() private  data: number[];
 
   public chart:any;
   private element:ElementRef;
@@ -38,6 +39,9 @@ export class PeityDirective implements OnChanges, OnInit {
     // Check if peity is available
     if (typeof jQuery(this.element).peity === 'undefined') {
       throw new Error('Configuration issue: Embedding peity lib is mandatory');
+    }
+    if(this.data){
+      jQuery(this.element.nativeElement).html(this.data.join(","));
     }
 
     // Let's build chart

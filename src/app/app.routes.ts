@@ -7,9 +7,14 @@ import {Dashboard4Component} from "./views/dashboards/dashboard4.component";
 import {Dashboard41Component} from "./views/dashboards/dashboard41.component";
 import {Dashboard5Component} from "./views/dashboards/dashboard5.component";
 
-import {OrdersComponent} from "./views/processManagement/orders/orders.component";
-import {ProcessComponent} from "./views/processManagement/process/process.component";
+import {OrdersComponent} from "app/views/processManagement/orders/orders.component";
+import {LineStaticComponent} from "app/views/processManagement/line-static/line-static.component";
+import {ProductStaticComponent} from "app/views/processManagement/product-static/product-static.component";
+import {StorageAmountComponent} from "app/views/processManagement/storage-amount/storage-amount.component";
+import {UncoveredDemandsComponent} from "app/views/processManagement/uncovered-demands/uncovered-demands.component";
+
 import {ProcessResultComponent} from "./views/processManagement/process-result/process-result.component";
+
 
 import {StarterViewComponent} from "./views/appviews/starterview.component";
 import {LoginComponent} from "./views/appviews/login.component";
@@ -20,7 +25,7 @@ import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavig
 
 export const ROUTES:Routes = [
   // Main redirect
-  {path: '', redirectTo: 'starterview', pathMatch: 'full'},
+  {path: '', redirectTo: 'process-result', pathMatch: 'full'},
 
   // App views
   {
@@ -37,25 +42,16 @@ export const ROUTES:Routes = [
     path: 'processManagement', component: BasicLayoutComponent,
     children: [
       {path: 'orders', component: OrdersComponent},
-      {path: 'process', component: ProcessComponent},
+      {path: 'line-static', component: LineStaticComponent},
+      {path: 'product-static', component: ProductStaticComponent},
+      {path: 'storage-amount', component: StorageAmountComponent},
+      {path: 'uncovered-demands', component: UncoveredDemandsComponent},
     ]
   },
   {
     path: '', component: BasicLayoutComponent,
     children: [
       {path: 'process-result', component: ProcessResultComponent}
-    ]
-  },
-  {
-    path: 'dashboards', component: TopNavigationLayoutComponent,
-    children: [
-      {path: 'dashboard41', component: Dashboard41Component}
-    ]
-  },
-  {
-    path: '', component: BasicLayoutComponent,
-    children: [
-      {path: 'starterview', component: StarterViewComponent}
     ]
   },
   {
@@ -66,5 +62,5 @@ export const ROUTES:Routes = [
   },
 
   // Handle all other routes
-  {path: '**',  redirectTo: 'starterview'}
+  {path: '**',  redirectTo: 'process-result'}
 ];

@@ -16,10 +16,12 @@ import {ProcessManagementViewModule} from "./views/processManagement/processMana
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
+import { StorageAmountComponent } from './app/views/process-management/storage-amount/storage-amount.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StorageAmountComponent
   ],
   imports: [
     BrowserModule,

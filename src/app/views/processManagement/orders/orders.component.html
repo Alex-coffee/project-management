@@ -23,7 +23,12 @@
                         <td>{{o.unitCost}}</td>
                         <td>{{o.initialStorage}}</td>
                         <td>{{o.safeStorage}}</td>
-                        <td>{{o.demands}}</td>
+                        <td>
+                            <span peity [type]="peityType1" [options]="peityOptions1" [data]="o.demands">
+                        
+                            </span>
+                            
+                        </td>
                     </tr>
                     </tbody>
                 </table>
