@@ -12,16 +12,14 @@ import { AppComponent } from './app.component';
 import {DashboardsModule} from "./views/dashboards/dashboards.module";
 import {AppviewsModule} from "./views/appviews/appviews.module";
 import {ProcessManagementViewModule} from "./views/processManagement/processManagement.views.module";
-
+import {MaterialsModule} from "./views/materials/materials.module";
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
-import { StorageAmountComponent } from './app/views/process-management/storage-amount/storage-amount.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    StorageAmountComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +27,7 @@ import { StorageAmountComponent } from './app/views/process-management/storage-a
     HttpModule,
     DashboardsModule,
     ProcessManagementViewModule,
+    MaterialsModule,
     LayoutsModule,
     AppviewsModule,
     RouterModule.forRoot(ROUTES)

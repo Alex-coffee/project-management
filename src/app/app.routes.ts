@@ -12,9 +12,10 @@ import {LineStaticComponent} from "app/views/processManagement/line-static/line-
 import {ProductStaticComponent} from "app/views/processManagement/product-static/product-static.component";
 import {StorageAmountComponent} from "app/views/processManagement/storage-amount/storage-amount.component";
 import {UncoveredDemandsComponent} from "app/views/processManagement/uncovered-demands/uncovered-demands.component";
-
 import {ProcessResultComponent} from "./views/processManagement/process-result/process-result.component";
 
+import { RawMaterialsComponent} from "app/views/materials/raw-materials/raw-materials.component";
+import { OrderRawMaterialsComponent} from "app/views/materials/order-raw-materials/order-raw-materials.component";
 
 import {StarterViewComponent} from "./views/appviews/starterview.component";
 import {LoginComponent} from "./views/appviews/login.component";
@@ -46,6 +47,13 @@ export const ROUTES:Routes = [
       {path: 'product-static', component: ProductStaticComponent},
       {path: 'storage-amount', component: StorageAmountComponent},
       {path: 'uncovered-demands', component: UncoveredDemandsComponent},
+    ]
+  },
+  {
+    path: 'materials', component: BasicLayoutComponent,
+    children: [
+      {path: 'raw-materials', component: RawMaterialsComponent},
+      {path: 'order-raw-materials', component: OrderRawMaterialsComponent}
     ]
   },
   {
