@@ -14,6 +14,11 @@ import {AppviewsModule} from "./views/appviews/appviews.module";
 import {ProcessManagementViewModule} from "./views/processManagement/processManagement.views.module";
 import {MaterialsModule} from "./views/materials/materials.module";
 
+import {BasicModule} from "./views/basic/basic.module";
+import {OrderModule} from "./views/order/order.module";
+import {ScheduleModule} from "./views/schedule/schedule.module";
+
+
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
 
@@ -25,11 +30,12 @@ import {LayoutsModule} from "./components/common/layouts/layouts.module";
     BrowserModule,
     FormsModule,
     HttpModule,
-    DashboardsModule,
-    ProcessManagementViewModule,
-    MaterialsModule,
     LayoutsModule,
     AppviewsModule,
+
+    BasicModule,
+    OrderModule,
+    ScheduleModule,
     RouterModule.forRoot(ROUTES)
   ],
   providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],

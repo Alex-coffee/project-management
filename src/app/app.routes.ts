@@ -1,24 +1,19 @@
 import {Routes} from "@angular/router";
 
-import {Dashboard1Component} from "./views/dashboards/dashboard1.component";
-import {Dashboard2Component} from "./views/dashboards/dashboard2.component";
-import {Dashboard3Component} from "./views/dashboards/dashboard3.component";
-import {Dashboard4Component} from "./views/dashboards/dashboard4.component";
-import {Dashboard41Component} from "./views/dashboards/dashboard41.component";
-import {Dashboard5Component} from "./views/dashboards/dashboard5.component";
+//pages
+import { LineStaticComponent} from "app/views/basic/line-static/line-static.component";
+import { RawMaterialsComponent} from "app/views/basic/raw-materials/raw-materials.component";
+import { ParametersComponent} from "app/views/basic/parameters/parameters.component";
 
-import {OrdersComponent} from "app/views/processManagement/orders/orders.component";
-import {LineStaticComponent} from "app/views/processManagement/line-static/line-static.component";
-import {ProductStaticComponent} from "app/views/processManagement/product-static/product-static.component";
-import {StorageAmountComponent} from "app/views/processManagement/storage-amount/storage-amount.component";
-import {UncoveredDemandsComponent} from "app/views/processManagement/uncovered-demands/uncovered-demands.component";
-import {ProcessResultComponent} from "./views/processManagement/process-result/process-result.component";
+import { OrdersComponent} from "app/views/order/orders/orders.component";
+import { OrderRawMaterialsComponent} from "app/views/order/order-raw-materials/order-raw-materials.component";
+import { ProductStaticComponent} from "app/views/order/product-static/product-static.component";
 
-import { RawMaterialsComponent} from "app/views/materials/raw-materials/raw-materials.component";
-import { OrderRawMaterialsComponent} from "app/views/materials/order-raw-materials/order-raw-materials.component";
+import { ProductionScheduleComponent} from "app/views/schedule/production-schedule/production-schedule.component";
+import { RawMaterialDemandsComponent} from "app/views/schedule/raw-material-demands/raw-material-demands.component";
+import { StorageAmountComponent} from "app/views/schedule/storage-amount/storage-amount.component";
+import { UncoveredDemandsComponent} from "app/views/schedule/uncovered-demands/uncovered-demands.component";
 
-import {StarterViewComponent} from "./views/appviews/starterview.component";
-import {LoginComponent} from "./views/appviews/login.component";
 
 import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
 import {BasicLayoutComponent} from "./components/common/layouts/basicLayout.component";
@@ -26,49 +21,35 @@ import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavig
 
 export const ROUTES:Routes = [
   // Main redirect
-  {path: '', redirectTo: 'process-result', pathMatch: 'full'},
+  {path: '', redirectTo: '/schedule/production-schedule', pathMatch: 'full'},
 
   // App views
   {
-    path: 'dashboards', component: BasicLayoutComponent,
+    path: 'basic', component: BasicLayoutComponent,
     children: [
-      {path: 'dashboard1', component: Dashboard1Component},
-      {path: 'dashboard2', component: Dashboard2Component},
-      {path: 'dashboard3', component: Dashboard3Component},
-      {path: 'dashboard4', component: Dashboard4Component},
-      {path: 'dashboard5', component: Dashboard5Component}
+      {path: 'line-static', component: LineStaticComponent},
+      {path: 'raw-materials', component: RawMaterialsComponent},
+      {path: 'parameters', component: ParametersComponent}
     ]
   },
   {
-    path: 'processManagement', component: BasicLayoutComponent,
+    path: 'order', component: BasicLayoutComponent,
     children: [
       {path: 'orders', component: OrdersComponent},
-      {path: 'line-static', component: LineStaticComponent},
-      {path: 'product-static', component: ProductStaticComponent},
+      {path: 'order-raw-materials', component: OrderRawMaterialsComponent},
+      {path: 'product-static', component: ProductStaticComponent}
+    ]
+  },
+  {
+    path: 'schedule', component: BasicLayoutComponent,
+    children: [
+      {path: 'production-schedule', component: ProductionScheduleComponent},
+      {path: 'raw-material-demands', component: RawMaterialDemandsComponent},
       {path: 'storage-amount', component: StorageAmountComponent},
-      {path: 'uncovered-demands', component: UncoveredDemandsComponent},
-    ]
-  },
-  {
-    path: 'materials', component: BasicLayoutComponent,
-    children: [
-      {path: 'raw-materials', component: RawMaterialsComponent},
-      {path: 'order-raw-materials', component: OrderRawMaterialsComponent}
-    ]
-  },
-  {
-    path: '', component: BasicLayoutComponent,
-    children: [
-      {path: 'process-result', component: ProcessResultComponent}
-    ]
-  },
-  {
-    path: '', component: BlankLayoutComponent,
-    children: [
-      { path: 'login', component: LoginComponent },
+      {path: 'uncovered-demands', component: UncoveredDemandsComponent}
     ]
   },
 
   // Handle all other routes
-  {path: '**',  redirectTo: 'process-result'}
+  {path: '**',  redirectTo: '/schedule/production-schedule'}
 ];
