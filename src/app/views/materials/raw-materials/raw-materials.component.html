@@ -11,13 +11,21 @@
                     <thead>
                     <tr>
                         <th>原料代码</th>
+                        <th>原料名</th>
                         <th>储存量</th>
+                        <th>供应</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let d of dataList">
                         <td>{{d.rawId}}</td>
-                        <td>{{d.storage}}</td>
+                        <td>{{d.rawName}}</td>
+                        <td>{{d.initialStorage}}</td>
+                        <td>
+                            <span peity [type]="peityType1" [options]="peityOptions1" [data]="d.supply">
+                        
+                            </span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
