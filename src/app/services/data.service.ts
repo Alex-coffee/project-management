@@ -60,6 +60,10 @@ export class DataService {
     return this.getFilesByUrl(this.parametersUrl);
   }
 
+  saveLineStaticData(content): Observable<any> {
+    return this.saveFile(this.lineStaticDataUrl, content);
+  }
+
   saveParameters(content): Observable<any> {
     return this.saveFile(this.parametersUrl, content);
   }
