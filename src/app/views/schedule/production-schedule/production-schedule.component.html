@@ -4,8 +4,15 @@
 
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <div class="btn-group btn-group-xs pull-left">
+                        <button [ngClass]="{'btn-info': currentType == 'order', 'btn-default': currentType != 'order'}" class="btn" (click)="setGanttType('order')">
+                            订单角度
+                        </button>
+                        <button [ngClass]="{'btn-info': currentType == 'line', 'btn-default': currentType != 'line'}" class="btn" (click)="setGanttType('line')">
+                            生产线角度
+                        </button>
+                    </div>
                     <div id="toolBar" class="pull-right" style="width: 250px;"></div>
-                    <h5>优化结果</h5>
                 </div>
                 <div class="ibox-content">
                     <div appGanttDirective [ganttDataSet]="ganttDataSet"></div>

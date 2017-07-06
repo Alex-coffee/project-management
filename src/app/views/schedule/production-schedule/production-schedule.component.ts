@@ -14,6 +14,7 @@ import { GanttDataSet } from 'app/model/ganttDataSet';
 export class ProductionScheduleComponent implements OnInit {
   errorMessage: string;
   ganttDataSet: GanttDataSet;
+  currentType: string = "line";
 
   constructor(private backendService: BackendService) { }
 
@@ -21,8 +22,13 @@ export class ProductionScheduleComponent implements OnInit {
     this.getGanttData();
   }
 
+  setGanttType(type){
+    this.currentType = type;
+    this.getGanttData();
+  }
+
   getGanttData() {
-    this.backendService.getGanttDataByType("order")
+    this.backendService.getGanttDataByType(this.currentType)
     .subscribe(ganttDataSet => {
       this.ganttDataSet = ganttDataSet;
       console.log(ganttDataSet);

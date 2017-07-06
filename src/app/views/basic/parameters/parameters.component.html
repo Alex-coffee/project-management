@@ -3,6 +3,10 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <button class="btn btn-primary btn-xs pull-right" (click)="save()">
+                        <i class="fa fa-file m-r-xs"></i>
+                        保存
+                    </button>
                     <h5>未覆盖的订单</h5>
                 </div>
                 <div class="ibox-content">
@@ -12,7 +16,7 @@
                                 总天数
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <input type="number" [(ngModel)]="parameters.numDays">
                             </td>
                         </tr>
                         <tr>
@@ -20,15 +24,24 @@
                                 开启换生产线罚分
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" [(ngModel)]="parameters.isPenalizeForNumLineModeChangeOn" 
+                                            class="onoffswitch-checkbox" id="isPenalizeForNumLineModeChangeOn">
+                                        <label class="onoffswitch-label" for="isPenalizeForNumLineModeChangeOn">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="parameters.isPenalizeForNumLineModeChangeOn">
                             <td class="col-sm-4">
                                 换生产线罚分
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <input type="number" [(ngModel)]="parameters.penaltyForLineModeChange">
                             </td>
                         </tr>
                         <tr>
@@ -36,16 +49,25 @@
                                 开启库存罚分
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" [(ngModel)]="parameters.isPenalizeForStorageOn" 
+                                            class="onoffswitch-checkbox" id="isPenalizeForStorageOn">
+                                        <label class="onoffswitch-label" for="isPenalizeForStorageOn">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr *ngIf="parameters.isPenalizeForStorageOn">
                             <td class="col-sm-4">
                                 库存罚分
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <input type="number" [(ngModel)]="parameters.penaltyForLineUsage">
                             </td>
                         </tr>
 
@@ -54,7 +76,16 @@
                                 isPenalizeForNumLineUsedOn
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" [(ngModel)]="parameters.isPenalizeForNumLineUsedOn" 
+                                            class="onoffswitch-checkbox" id="isPenalizeForNumLineUsedOn">
+                                        <label class="onoffswitch-label" for="isPenalizeForNumLineUsedOn">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
 
@@ -63,10 +94,20 @@
                                 isRawMaterialPrepareConstraintOn
                             </td>
                             <td class="col-sm-8">
-                                <input type="number" class="form-control">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" [(ngModel)]="parameters.isRawMaterialPrepareConstraintOn" 
+                                            class="onoffswitch-checkbox" id="isRawMaterialPrepareConstraintOn">
+                                        <label class="onoffswitch-label" for="isRawMaterialPrepareConstraintOn">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </table>
+
                 </div>
             </div>
         </div>

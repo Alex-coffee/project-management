@@ -890,17 +890,17 @@ div.dt-button-info {
   padding-left: 0;
 }
 
-.form-control, .single-line {
-  background-color: #FFFFFF;
-  background-image: none;
-  border: 1px solid #e5e6e7;
-  border-radius: 1px;
-  color: inherit;
-  display: block;
-  padding: 6px 12px;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  width: 100%;
-}
+// .form-control, .single-line {
+//   background-color: #FFFFFF;
+//   background-image: none;
+//   border: 1px solid #e5e6e7;
+//   border-radius: 1px;
+//   color: inherit;
+//   display: block;
+//   padding: 6px 12px;
+//   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+//   width: 100%;
+// }
 
 .form-control:focus, .single-line:focus {
   border-color: $navy;
@@ -993,7 +993,7 @@ div.dt-button-info {
   display: block;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #1AB394;
+  border: 2px solid #62c462;
   border-radius: 3px;
 }
 
@@ -1026,7 +1026,7 @@ div.dt-button-info {
 .onoffswitch-inner:before {
   content: "ON";
   padding-left: 7px;
-  background-color: #1AB394;
+  background-color: #62c462;
   color: #FFFFFF;
 }
 
@@ -1043,7 +1043,7 @@ div.dt-button-info {
   width: 18px;
   margin: 0;
   background: #FFFFFF;
-  border: 2px solid #1AB394;
+  border: 2px solid #62c462;;
   border-radius: 3px;
   position: absolute;
   top: 0;

@@ -8,6 +8,7 @@ import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
 export class DataService {
+  private HOST:string = "http://localhost:8001";
   //schedule
   private rawMaterialDemandsResultUrl = 'assets/or/output/RawMaterialDemandsResult.json';
   private storageAmountResultUrl = 'assets/or/output/StorageAmountResult.json';
@@ -59,7 +60,15 @@ export class DataService {
     return this.getFilesByUrl(this.parametersUrl);
   }
 
+  saveParameters(content): Observable<any> {
+    return this.saveFile(this.parametersUrl, content);
+  }
+
   //************** private methods ***************
+  private saveFile(fileUrl, content){
+    return this.http.post(this.HOST + "/api/saveJSON", {fileUrl: fileUrl, content: content}).map(this.extractData)
+  }
+
   private getFilesByUrl(fileUrls: string){
     return this.http.get(fileUrls)
                     .map(this.extractData)
