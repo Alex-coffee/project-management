@@ -128,7 +128,7 @@ export class GanttDirective implements OnChanges, OnInit{
     scaleSelectorContainer.append(scaleSelector)
     $("#toolBar").append(scaleSelectorContainer);
     $("#scaleSelector").change(val => {
-      this.blockScale = parseInt($("#scaleSelector").val());
+      this.blockScale = parseFloat($("#scaleSelector").val());
       this.drawGantt();
     });
 
