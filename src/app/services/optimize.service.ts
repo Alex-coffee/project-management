@@ -13,7 +13,7 @@ export class OptimizeService {
   constructor(private http: Http) { }
 
   runOR(): Observable<any> {
-    return this.http.post(this.HOST + "/api/runOR", {});
+    return this.http.post(this.HOST + "/api/runOR", {}).map(this.extractData);
   }
 
   private extractData(res: Response) {
