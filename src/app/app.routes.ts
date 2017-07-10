@@ -8,6 +8,7 @@ import { ParametersComponent} from "app/views/basic/parameters/parameters.compon
 import { OrdersComponent} from "app/views/order/orders/orders.component";
 import { OrderRawMaterialsComponent} from "app/views/order/order-raw-materials/order-raw-materials.component";
 import { ProductStaticComponent} from "app/views/order/product-static/product-static.component";
+import { MaterialPurchasingComponent} from "app/views/order/material-purchasing/material-purchasing.component";
 
 import { ProductionScheduleComponent} from "app/views/schedule/production-schedule/production-schedule.component";
 import { RawMaterialDemandsComponent} from "app/views/schedule/raw-material-demands/raw-material-demands.component";
@@ -37,6 +38,7 @@ export const ROUTES:Routes = [
     children: [
       {path: 'orders', component: OrdersComponent},
       {path: 'order-raw-materials', component: OrderRawMaterialsComponent},
+      {path: 'material-purchasing', component: MaterialPurchasingComponent},
       {path: 'product-static', component: ProductStaticComponent}
     ]
   },

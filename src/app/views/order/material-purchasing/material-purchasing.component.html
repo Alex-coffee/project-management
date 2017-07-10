@@ -8,39 +8,29 @@
                             <i class="fa fa-file m-r-xs"></i>
                             保存
                         </button>
-                        <button class="btn btn-default" (click)="add()">
+                        <!--<button class="btn btn-default" (click)="add()">
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
-                        </button>
+                        </button>-->
                     </div>
 
-                    <h5>原材料</h5>
+                    <h5>原料采购</h5>
                 </div>
                 <div class="ibox-content">
-                    <table class="table table-striped table-hover">
+                    <table *ngIf="supplyFormData" class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>原材料号</th>
-                                <th>原材料名称</th>
-                                <th>初始库存量</th>
-                                <th>补充</th>
-                                <th></th>
+                              <th *ngFor="let h of supplyFormData.header">{{h}}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
-                                <td>{{d.rawId}}</td>
-                                <td>{{d.rawName}}</td>
-                                <td>{{d.initialStorage}}</td>
-                                <td>
-                                  <span peity [type]="peityType" [options]="peityOptions" [data]="d.supplys"></span>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
-                                        <button class="btn btn-danger" (click)="remove(d)"><i class="fa fa-times"></i></button>
-                                    </div>
-                                </td>
+                            <tr *ngFor="let r of supplyFormData.rows; let day = index;">
+                              <td *ngFor="let d of r; let m = index;">
+                                {{d}}
+                                <button *ngIf="m != 0" class="btn btn-xs btn-info" (click)="modify(m-1, day)">
+                                  <i class="fa fa-pencil"></i>
+                                </button>
+                              </td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,7 +44,7 @@
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">原材料详情</h4>
+        <h4 class="modal-title pull-left">原材料采购计划</h4>
         <button type="button" class="close pull-right" (click)="detailModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -65,24 +55,28 @@
                 {{errMsg}}
             </div>
             
-            <div class="form-group">
-                <label class="col-sm-4 control-label">原材料号</label>
+            <!--<div class="form-group">
+                <label class="col-sm-4 control-label">原材料</label>
                 <div class="col-sm-8">
-                    <input name="lineId" type="number" [(ngModel)]="detailItem.rawId" class="form-control">
+                  <ng-select name="rawId" [(ngModel)]="detailItem.rawId" required
+                      [options]="rawMaterialOptions">
+                  </ng-select>
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
             <div class="form-group">
-                <label class="col-sm-4 control-label">原材料名称</label>
+                <label class="col-sm-4 control-label">日期</label>
                 <div class="col-sm-8">
-                    <input name="availHours" type="text" [(ngModel)]="detailItem.rawName" class="form-control">
+                  <ng-select name="day" [(ngModel)]="detailItem.day" required
+                      [options]="dayOptions">
+                  </ng-select>
                 </div>
             </div>
-            <div class="hr-line-dashed"></div>
+            <div class="hr-line-dashed"></div>-->
             <div class="form-group">
-                <label class="col-sm-4 control-label">初始库存量</label>
+                <label class="col-sm-4 control-label">进货数量</label>
                 <div class="col-sm-8">
-                    <input name="turnHours" type="number" [(ngModel)]="detailItem.initialStorage" class="form-control">
+                    <input name="num" type="number" [(ngModel)]="detailItem.num" class="form-control">
                 </div>
             </div>
         </form>

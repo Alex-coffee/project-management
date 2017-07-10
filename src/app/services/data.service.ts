@@ -56,7 +56,7 @@ export class DataService {
     return this.getFilesByUrl(this.lineStaticDataUrl);
   }
 
-  getParameters(): Observable<any[]> {
+  getParameters(): Observable<any> {
     return this.getFilesByUrl(this.parametersUrl);
   }
 
@@ -64,8 +64,61 @@ export class DataService {
     return this.saveFile(this.lineStaticDataUrl, content);
   }
 
+  saveRawMaterialData(content): Observable<any> {
+    return this.saveFile(this.rawMaterialsUrl, content);
+  }
+
   saveParameters(content): Observable<any> {
     return this.saveFile(this.parametersUrl, content);
+  }
+
+  saveProductStaticData(content): Observable<any> {
+    return this.saveFile(this.productStaticDataUrl, content);
+  }
+
+  saveOrderData(content): Observable<any> {
+    return this.saveFile(this.ordersUrl, content);
+  }
+
+  getMaterialPurchaseData(): Observable<any> {
+    let materialPurchase$ = new Observable(observer => {
+        Observable.forkJoin([
+          this.getRawMaterials(),
+          this.getParameters()
+        ]).subscribe(res => {
+          let rawMaterials = res[0];
+          let parameters = res[1];
+          const totalDays = parameters["numDays"];
+          
+          observer.next({
+            rawMaterials: rawMaterials,
+            totalDays: totalDays
+          })
+
+        })
+    });
+    return materialPurchase$;
+  }
+
+  processSupplyFormData(rawMaterials:any[], totalDays: number): any{
+    let rawMaterialsMap = {};
+          let rawHeader = ['原料'];
+          let supplyRows = [];
+          rawMaterials.forEach(rm => {
+            rawMaterialsMap[rm.rawId] = rm;
+            rawHeader.push(rm.rawName);
+          })
+          for(let i = 0; i < totalDays; i++){
+            let rowData = ["Day " + i];
+            for(let j = 0; j < rawMaterials.length; j++){
+              rowData.push(rawMaterials[j].supplys[i]);
+            }
+            supplyRows.push(rowData);
+          }
+    return {
+      header: rawHeader,
+      rows: supplyRows
+    }
   }
 
   //************** private methods ***************

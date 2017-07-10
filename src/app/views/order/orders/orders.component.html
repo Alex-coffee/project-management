@@ -3,6 +3,16 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <div class="btn-group btn-group-xs pull-right">
+                        <button class="btn btn-info" (click)="save()">
+                            <i class="fa fa-file m-r-xs"></i>
+                            保存
+                        </button>
+                        <button class="btn btn-default" (click)="add()">
+                            <i class="fa fa-plus m-r-xs"></i>
+                            新增
+                        </button>
+                    </div>
                     <h5>订单列表</h5>
                 </div>
                 <div class="ibox-content">
@@ -14,6 +24,7 @@
                                 <th>安全库存量</th>
                                 <th>单个成本</th>
                                 <th>需求</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,6 +36,12 @@
                                 <td>
                                   <span peity [type]="peityType" [options]="peityOptions" [data]="d.demands"></span>
                                 </td>
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-danger" (click)="remove(d)"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -32,4 +49,75 @@
             </div>
         </div>
     </div>
+</div>
+
+<div bsModal #detailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">订单详情</h4>
+        <button type="button" class="close pull-right" (click)="detailModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+            <div *ngIf="errMsg" class="alert alert-danger">
+                {{errMsg}}
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 control-label">订单号</label>
+                <div class="col-sm-8">
+                    <input name="orderName" type="text" [(ngModel)]="detailItem.orderName" required class="form-control">
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">初始库存</label>
+                <div class="col-sm-8">
+                    <input name="turnHours" type="number" [(ngModel)]="detailItem.initialStorage" required class="form-control">
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">安全库存</label>
+                <div class="col-sm-8">
+                    <input name="safeStorage" type="number" [(ngModel)]="detailItem.safeStorage" required class="form-control">
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">初始库存量</label>
+                <div class="col-sm-8">
+                    <input name="unitCost" type="number" [(ngModel)]="detailItem.unitCost" class="form-control">
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">需求</label>
+                <div class="col-sm-8">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>天数</th>
+                            <th>数量</th>
+                        </tr>
+                        <tr *ngFor="let d of detailItem.demands; let i = index; trackBy:trackByIndex">
+                            <td>第{{i}}天</td>
+                            <td>
+                                <input id="demand_{{i}}" name="demand_{{i}}" type="number" [(ngModel)]="detailItem.demands[i]">
+                            </td>
+                        </tr>
+                    </table>
+                    <!--<input name="unitCost" type="number" [(ngModel)]="detailItem.unitCost" class="form-control">-->
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
+        <button class="btn btn-sm btn-default" (click)="detailModal.hide()">取消</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,20 @@
+ng-select > div > div.single > div.value, ng-select > div > div.single > div.placeholder{
+    line-height: 38px !important;
+    background-color: white;
+    color:#3a3f44;
+}
+
+ng-select > div > div.single > div.clear, ng-select > div > div.single > div.toggle{
+    line-height: 38px !important;
+    background-color: white;
+}
+
+select-dropdown > div .options ul li{
+    color: #3a3f44;
+}
+ng-select > div{
+    border-radius: 3px;
+}
+ng-select > div > div.single{
+    height: 38px !important;
+}

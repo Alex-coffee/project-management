@@ -15,12 +15,11 @@ module.exports = function(app) {
     app.use(allowCrossDomain);
 
     app.post('/api/saveJSON', function(req, res){
-        fs.open(settings.dataPath + req.body.fileUrl, "w",function(err, fd){
-            var points = JSON.stringify(req.body.content);
-            var buf = new Buffer(points);
-            fs.writeSync(fd,buf,0,buf.length,0);
-            res.status(200).send({"message" : "数据已保存"});
-        })
+        var fd = fs.openSync(settings.dataPath + req.body.fileUrl, "w");
+        var points = JSON.stringify(req.body.content);
+        var buf = new Buffer(points);
+        fs.writeSync(fd,buf,0,buf.length,0);
+        res.status(200).send({"message" : "数据已保存"});
     })
 
 };
