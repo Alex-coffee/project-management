@@ -3,6 +3,16 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <div class="btn-group btn-group-xs pull-right">
+                        <button class="btn btn-info" (click)="save()">
+                            <i class="fa fa-file m-r-xs"></i>
+                            保存
+                        </button>
+                        <button class="btn btn-primary" (click)="add()">
+                            <i class="fa fa-plus m-r-xs"></i>
+                            新增
+                        </button>
+                    </div>
                     <h5>订单原料</h5>
                 </div>
                 <div class="ibox-content">
@@ -11,6 +21,7 @@
                             <tr>
                                 <th>订单名称</th>
                                 <th>原料</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,6 +39,12 @@
                                     </tr>
                                   </table>
                                 </td>
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-danger" (click)="remove(d)"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -35,4 +52,66 @@
             </div>
         </div>
     </div>
+</div>
+
+<div bsModal #detailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">订单原料</h4>
+        <button type="button" class="close pull-right" (click)="detailModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+            <div *ngIf="errMsg" class="alert alert-danger">
+                {{errMsg}}
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 control-label">订单名称</label>
+                <div class="col-sm-8">
+                  <ng-select name="orderName" [(ngModel)]="detailItem.orderName" required
+                      [options]="orderOptions">
+                  </ng-select>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">原材料</label>
+                <div class="col-sm-8">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>原材料名称</th>
+                            <th>数量</th>
+                        </tr>
+                        <tr *ngFor="let d of detailItem.raws; let i = index; trackBy:trackByIndex">
+                            <td>
+                                <ng-select name="rawId_{{i}}" [(ngModel)]="detailItem.raws[i].rawName" required
+                                    [options]="rawMaterialOptions">
+                                </ng-select>
+                            </td>
+                            <td>
+                                <input id="demand_{{i}}" name="demand_{{i}}" type="number" class="form-control"
+                                    [(ngModel)]="detailItem.raws[i].amount" required>
+                            </td>
+                        </tr>
+                    </table>
+                    <button class="btn btn-sm btn-info pull-right" (click)="addNewRawMaterial()">
+                        <i class="fa fa-plus"></i>
+                        添加新原材料
+                    </button>
+                </div>
+            </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
+        <button class="btn btn-sm btn-default" (click)="detailModal.hide()">取消</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -80,6 +80,10 @@ export class DataService {
     return this.saveFile(this.ordersUrl, content);
   }
 
+  saveOrderRawMaterials(content): Observable<any> {
+    return this.saveFile(this.orderRawMaterialsUrl, content);
+  }
+
   getMaterialPurchaseData(): Observable<any> {
     let materialPurchase$ = new Observable(observer => {
         Observable.forkJoin([

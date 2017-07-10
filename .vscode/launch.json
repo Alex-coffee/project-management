@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Express Start",
+            "name": "Express Server",
             "program": "${workspaceRoot}/server.js"
         }
     ]

@@ -69,8 +69,13 @@ export class ProductStaticComponent implements OnInit {
     this.dataService.getProductStatic()
       .subscribe(res => {
         this.dataList = res;
+      });
+
+    this.dataService.getOrders()
+      .subscribe(res => {
+        let orders = res;
         let orderOptionArray = [];
-        this.dataList.forEach(order => {
+        orders.forEach(order => {
           orderOptionArray.push({
             label: order.orderName,
             value: order.orderName

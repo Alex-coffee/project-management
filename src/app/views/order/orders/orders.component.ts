@@ -74,6 +74,18 @@ export class OrdersComponent implements OnInit {
     return index;
   }
 
+  getDemandsArray(){
+    if(this.totalDays && this.totalDays > 0){
+      let result = [];
+      for(let i = 0; i < this.totalDays; i++){
+        result.push(i);
+      }
+      return result;
+    }else{
+      return [];
+    }
+  }
+
   loadData(){
     this.dataService.getOrders()
       .subscribe(res => {

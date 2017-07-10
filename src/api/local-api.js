@@ -22,4 +22,32 @@ module.exports = function(app) {
         res.status(200).send({"message" : "数据已保存"});
     })
 
+    app.post('/api/runOR', function(req, res){
+        var orCommand = [];
+        orCommand.push(settings.systemPath + settings.command);
+        orCommand.push(settings.systemPath + "input/");
+        orCommand.push(settings.systemPath + "output/");
+        orCommand.push("optimize");
+        console.log("command: " + orCommand.join(" "));
+
+        var bat = spawn('cmd', ['/s', '/c', orCommand.join(" ")]);
+        bat.stdout.on('data', function (data) {
+            console.log(data.toString());
+        });
+
+        bat.stderr.on('error', function (data) {
+            console.log(data.toString());
+        });
+
+        bat.on('exit', function (code) {
+            console.log("Code: " + code);
+            if(code == 0){
+                res.status(200).send({"message" : "已生成优化结果"});
+            }else{
+                res.status(500).send({"message" : "Code: " + ' + code +'});
+            }
+        });
+    })
+
+    
 };

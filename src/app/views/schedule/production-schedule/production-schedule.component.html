@@ -12,6 +12,12 @@
                             生产线角度
                         </button>
                     </div>
+
+                    <button [disabled]="inProcess" class="btn btn-xs btn-success m-l-sm" (click)="runOR()">
+                        <i class="fa fa-lightbulb-o m-r-xs"></i>
+                        自动优化
+                    </button>
+
                     <div id="toolBar" class="pull-right" style="width: 250px;"></div>
                 </div>
                 <div class="ibox-content">

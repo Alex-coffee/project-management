@@ -8,7 +8,7 @@
                             <i class="fa fa-file m-r-xs"></i>
                             保存
                         </button>
-                        <button class="btn btn-default" (click)="add()">
+                        <button class="btn btn-primary" (click)="add()">
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
                         </button>
@@ -102,7 +102,7 @@
                             <th>天数</th>
                             <th>数量</th>
                         </tr>
-                        <tr *ngFor="let d of detailItem.demands; let i = index; trackBy:trackByIndex">
+                        <tr *ngFor="let d of getDemandsArray(); let i = index; trackBy:trackByIndex">
                             <td>第{{i}}天</td>
                             <td>
                                 <input id="demand_{{i}}" name="demand_{{i}}" type="number" [(ngModel)]="detailItem.demands[i]">
