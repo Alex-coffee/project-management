@@ -26,7 +26,7 @@ export class GanttDirective implements OnChanges, OnInit{
   blockSize = 40;
   defaultTimeUnitSize = 10;
   // blockScale = 0.25; //  1/4 hour
-  blockScale = 3; //  1/4 hour
+  blockScale = 3; //  3 hour
   // blockScaleArray = [0.25, 0.5, 1, 2, 3, 6, 12, 24];
   blockScaleArray = [
       {scale: 0.25, label: "15分钟"},
@@ -39,7 +39,7 @@ export class GanttDirective implements OnChanges, OnInit{
       {scale: 24, label: "1天"}
     ];
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef) { this.setBlockScale(3);}
 
   ngOnInit():any {
     this.createStructure();
@@ -56,8 +56,15 @@ export class GanttDirective implements OnChanges, OnInit{
       this.buildSlot();
       this.buildTimeline();
       this.buildGantt();
+      this.setBlockScale(undefined);
   }
-  
+
+  setBlockScale(scale: any){
+    if(scale){
+      this.blockScale = scale;
+    }
+    $("#scaleSelector").val(this.blockScale);
+  }
 
   //***************** build the elements that we need in page *****************
   createStructure(){
@@ -268,20 +275,36 @@ export class GanttDirective implements OnChanges, OnInit{
           return that.blockSize - 8;
         })
 
-      // ganttNodes.append("line")
-      //   .attr("x1", function(d){
-      //     return d.earlistFinishTime * that.blockSize;
-      //   })
-      //   .attr("y1", function(d){
-      //     return that.blockSize * that.getSlotDetail(d.processId).index + 2;
-      //   })
-      //   .attr("x2", function(d){
-      //     return d.earlistFinishTime * that.blockSize;
-      //   })
-      //   .attr("y2", function(d){
-      //     return that.blockSize * that.getSlotDetail(d.processId).index ++ - 2;
-      //   })
-      //   .attr("stroke", "red")
+      ganttNodes.append("text")
+        .attr("x", function(d){
+          return that.getItemLeft(d.startTime);
+        })
+        .attr("y", function(d){
+          return that.blockSize * d.rowIndex + 14;
+        })
+        .text(function(d){
+          return d.label;
+        })
+        .attr("transform", function(d){
+          let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+          return "translate(" + offset + ",0)" ;
+        })
+
+      ganttNodes.append("text")
+        .attr("x", function(d){
+          return that.getItemLeft(d.startTime);
+        })
+        .attr("y", function(d){
+          return that.blockSize * d.rowIndex + 25;
+        })
+        .text(function(d){
+          return "第" + d.content.time + "天, 数量: " + d.content.amount;
+        })
+        .attr("transform", function(d){
+          let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+          return "translate(" + offset + ",0)" ;
+        })
+
     
     $("#svgContainer, .ganttBG").css({
       width: this.blockSize * this.ganttSettings.totalBlock,

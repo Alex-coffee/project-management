@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild} from '@angular/core';
 import { BackendService } from 'app/services/backend.service';
 import { OptimizeService } from 'app/services/optimize.service';
 
@@ -6,6 +6,8 @@ import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { GanttDirective } from 'app/directive/gantt.directive';
+
 
 @Component({
   selector: 'app-production-schedule',
@@ -14,6 +16,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
   providers: [ BackendService, OptimizeService ]
 })
 export class ProductionScheduleComponent implements OnInit {
+  @ViewChild(GanttDirective) gantt: GanttDirective;
   errorMessage: string;
   ganttDataSet: GanttDataSet;
   currentType: string = "line";
@@ -32,6 +35,11 @@ export class ProductionScheduleComponent implements OnInit {
 
   setGanttType(type){
     this.currentType = type;
+    if(this.currentType == "order"){
+      this.gantt.setBlockScale(1);
+    }else{
+      this.gantt.setBlockScale(3);
+    }
     this.getGanttData();
   }
 
