@@ -13,7 +13,7 @@ export class GanttDirective implements OnChanges, OnInit{
   @Input() private ganttDataSet: GanttDataSet;
 
   slotMap: any = {};
-
+  type: string = "line";
   scenarioStartTime: number;
   scenarioEndTime: number;
 
@@ -56,7 +56,17 @@ export class GanttDirective implements OnChanges, OnInit{
       this.buildSlot();
       this.buildTimeline();
       this.buildGantt();
-      this.setBlockScale(undefined);
+      this.setGanttType("line");
+  }
+
+  setGanttType(type: string){
+    if(type == "line"){
+      this.type = "line";
+      this.setBlockScale(3);
+    }else{
+      this.type = "order";
+      this.setBlockScale(6);
+    }
   }
 
   setBlockScale(scale: any){
@@ -275,35 +285,67 @@ export class GanttDirective implements OnChanges, OnInit{
           return that.blockSize - 8;
         })
 
-      ganttNodes.append("text")
-        .attr("x", function(d){
-          return that.getItemLeft(d.startTime);
-        })
-        .attr("y", function(d){
-          return that.blockSize * d.rowIndex + 14;
-        })
-        .text(function(d){
-          return d.label;
-        })
-        .attr("transform", function(d){
-          let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
-          return "translate(" + offset + ",0)" ;
-        })
+      if(this.type == "line"){
+        ganttNodes.append("text")
+          .attr("x", function(d){
+            return that.getItemLeft(d.startTime);
+          })
+          .attr("y", function(d){
+            return that.blockSize * d.rowIndex + 14;
+          })
+          .text(function(d){
+            return d.label;
+          })
+          .attr("transform", function(d){
+            let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+            return "translate(" + offset + ",0)" ;
+          })
 
-      ganttNodes.append("text")
-        .attr("x", function(d){
-          return that.getItemLeft(d.startTime);
-        })
-        .attr("y", function(d){
-          return that.blockSize * d.rowIndex + 25;
-        })
-        .text(function(d){
-          return "第" + d.content.time + "天, 数量: " + d.content.amount;
-        })
-        .attr("transform", function(d){
-          let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
-          return "translate(" + offset + ",0)" ;
-        })
+        ganttNodes.append("text")
+          .attr("x", function(d){
+            return that.getItemLeft(d.startTime);
+          })
+          .attr("y", function(d){
+            return that.blockSize * d.rowIndex + 25;
+          })
+          .text(function(d){
+            return "第" + d.content.time + "天, 数量: " + d.content.amount;
+          })
+          .attr("transform", function(d){
+            let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+            return "translate(" + offset + ",0)" ;
+          })
+      }else{
+        ganttNodes.append("text")
+          .attr("x", function(d){
+            return that.getItemLeft(d.startTime);
+          })
+          .attr("y", function(d){
+            return that.blockSize * d.rowIndex + 14;
+          })
+          .text(function(d){
+            return "生产线" + d.content.line;
+          })
+          .attr("transform", function(d){
+            let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+            return "translate(" + offset + ",0)" ;
+          })
+
+        ganttNodes.append("text")
+          .attr("x", function(d){
+            return that.getItemLeft(d.startTime);
+          })
+          .attr("y", function(d){
+            return that.blockSize * d.rowIndex + 25;
+          })
+          .text(function(d){
+            return "第" + d.content.time + "天, 数量: " + d.content.amount;
+          })
+          .attr("transform", function(d){
+            let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
+            return "translate(" + offset + ",0)" ;
+          })
+      }
 
     
     $("#svgContainer, .ganttBG").css({

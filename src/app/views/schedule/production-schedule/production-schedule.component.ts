@@ -36,9 +36,9 @@ export class ProductionScheduleComponent implements OnInit {
   setGanttType(type){
     this.currentType = type;
     if(this.currentType == "order"){
-      this.gantt.setBlockScale(1);
+      this.gantt.setGanttType("order");
     }else{
-      this.gantt.setBlockScale(3);
+      this.gantt.setGanttType("line");
     }
     this.getGanttData();
   }
