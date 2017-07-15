@@ -11,8 +11,26 @@ var allowCrossDomain = function(req, res, next) {
     next();
 }
 
+var clearAllOutPutFile = function(){
+    let outPutFiles = fs.readdirSync(settings.outputPath);
+    outPutFiles.forEach(fileName => {
+        if(fileName.endsWith(".json")){
+            var fd = fs.openSync(settings.outputPath + fileName, "w");
+            let content = JSON.stringify([]);
+            var buf = new Buffer(content);
+            fs.writeSync(fd,buf,0,buf.length,0);
+            console.log("clear file: " + fileName);
+        }
+    })
+}
+
 module.exports = function(app) {
     app.use(allowCrossDomain);
+
+    // app.get('/api/clearOutput', function(req, res){
+    //     clearAllOutPutFile()
+    //     res.status(200).send({"message" : "输出文件已清除"});
+    // })
 
     app.post('/api/saveJSON', function(req, res){
         var fd = fs.openSync(settings.dataPath + req.body.fileUrl, "w");
@@ -23,6 +41,8 @@ module.exports = function(app) {
     })
 
     app.post('/api/runOR', function(req, res){
+        //set the output file to [] before runing or
+        clearAllOutPutFile();
         var orCommand = [];
         orCommand.push(settings.systemPath + settings.command);
         orCommand.push(settings.systemPath + "input/");
