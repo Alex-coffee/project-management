@@ -59,7 +59,7 @@ export class OrdersComponent implements OnInit {
     let targetIndex = this.dataList.findIndex(item => item.orderName == this.detailItem.orderName);
     if(this.detailItem.isNew){//add new item
       if(targetIndex > -1){
-        this.errMsg = "已存在ID相同的订单";
+        this.errMsg = "已存在ID相同的产品";
         return;
       }
       delete this.detailItem.isNew;

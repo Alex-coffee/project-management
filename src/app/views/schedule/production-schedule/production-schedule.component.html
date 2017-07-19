@@ -6,7 +6,7 @@
                 <div class="ibox-title">
                     <div class="btn-group btn-group-xs pull-left">
                         <button [ngClass]="{'btn-info': currentType == 'order', 'btn-default': currentType != 'order'}" class="btn" (click)="setGanttType('order')">
-                            订单角度
+                            产品角度
                         </button>
                         <button [ngClass]="{'btn-info': currentType == 'line', 'btn-default': currentType != 'line'}" class="btn" (click)="setGanttType('line')">
                             生产线角度
@@ -17,6 +17,31 @@
                 </div>
                 <div class="ibox-content">
                     <div appGanttDirective [ganttDataSet]="ganttDataSet"></div>
+                    
+                    <table class="table table-striped table-hover">
+                        <tr>
+                            <th>产品名称</th>
+                            <th>生产计划</th>
+                        </tr>
+                        
+                        <tr *ngFor="let ps of productionScheduleList">
+                            <td>{{ps.orderName}}</td>
+                            <td>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>天数</th>
+                                        <th>生产线</th>
+                                        <th>数量</th>
+                                    </tr>
+                                    <tr *ngFor="let plan of ps.plan">
+                                        <td>{{plan.time}}</td>
+                                        <td>{{plan.line}}</td>
+                                        <td>{{plan.amount}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

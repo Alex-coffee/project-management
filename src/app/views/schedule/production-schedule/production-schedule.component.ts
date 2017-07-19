@@ -19,6 +19,7 @@ export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;
   errorMessage: string;
   ganttDataSet: GanttDataSet;
+  productionScheduleList: any[] = [];
   currentType: string = "line";
   inProcess:boolean = false;
 
@@ -31,6 +32,7 @@ export class ProductionScheduleComponent implements OnInit {
 
   ngOnInit() {
     this.getGanttData();
+    this.getProductScheduleData();
   }
 
   setGanttType(type){
@@ -43,11 +45,20 @@ export class ProductionScheduleComponent implements OnInit {
     this.getGanttData();
   }
 
+  getProductScheduleData(){
+    this.backendService.getProductionScheduleResult().subscribe(data => {
+      this.productionScheduleList = data;
+      console.log(this.productionScheduleList);
+    }, error => {
+      console.log(error);
+      this.errorMessage = <any>error;
+    });
+  }
+
   getGanttData() {
     this.backendService.getGanttDataByType(this.currentType)
     .subscribe(ganttDataSet => {
       this.ganttDataSet = ganttDataSet;
-      console.log(ganttDataSet);
     }, error => {
       console.log(error);
       this.errorMessage = <any>error;

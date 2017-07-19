@@ -73,7 +73,7 @@ export class OrderRawMaterialsComponent implements OnInit {
     let targetIndex = this.dataList.findIndex(item => item.orderName == this.detailItem.orderName);
     if(this.detailItem.isNew){//add new item
       if(targetIndex > -1){
-        this.errMsg = "已存在相同的订单设置";
+        this.errMsg = "已存在相同的产品设置";
         return;
       }
       delete this.detailItem.isNew;
