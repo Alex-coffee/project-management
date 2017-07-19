@@ -43,19 +43,6 @@ export class ProductionScheduleComponent implements OnInit {
     this.getGanttData();
   }
 
-  runOR(){
-    this.inProcess = true;
-    this.optimizeService.runOR().subscribe(res => {
-      this.inProcess = false;
-      this.toastr.success(res.message);
-      console.log(res);
-    }, err => {
-      this.inProcess = false;
-      this.toastr.error("运行失败，请重试");
-      console.log(err);
-    })
-  }
-
   getGanttData() {
     this.backendService.getGanttDataByType(this.currentType)
     .subscribe(ganttDataSet => {

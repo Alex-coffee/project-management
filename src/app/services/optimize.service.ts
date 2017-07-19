@@ -8,8 +8,8 @@ import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
 export class OptimizeService {
-  // private HOST:string = "http://10.211.55.4:8001";
-  private HOST:string = "http://localhost:8001";
+  private HOST:string = "http://10.211.55.4:8001";
+  // private HOST:string = "http://localhost:8001";
 
   constructor(private http: Http) { }
 

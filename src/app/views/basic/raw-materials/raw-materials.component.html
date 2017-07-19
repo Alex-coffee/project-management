@@ -23,7 +23,7 @@
                                 <th>原材料号</th>
                                 <th>原材料名称</th>
                                 <th>初始库存量</th>
-                                <th>补充</th>
+                                <!-- <th>补充</th> -->
                                 <th></th>
                             </tr>
                         </thead>
@@ -32,9 +32,9 @@
                                 <td>{{d.rawId}}</td>
                                 <td>{{d.rawName}}</td>
                                 <td>{{d.initialStorage}}</td>
-                                <td>
+                                <!-- <td>
                                   <span peity [type]="peityType" [options]="peityOptions" [data]="d.supplys"></span>
-                                </td>
+                                </td> -->
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>

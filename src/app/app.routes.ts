@@ -3,13 +3,14 @@ import {Routes} from "@angular/router";
 //pages
 import { LineStaticComponent} from "app/views/basic/line-static/line-static.component";
 import { RawMaterialsComponent} from "app/views/basic/raw-materials/raw-materials.component";
-import { ParametersComponent} from "app/views/basic/parameters/parameters.component";
+
 
 import { OrdersComponent} from "app/views/order/orders/orders.component";
-import { OrderRawMaterialsComponent} from "app/views/order/order-raw-materials/order-raw-materials.component";
+import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/order-raw-materials.component";
 import { ProductStaticComponent} from "app/views/order/product-static/product-static.component";
 import { MaterialPurchasingComponent} from "app/views/order/material-purchasing/material-purchasing.component";
 
+import { ParametersComponent} from "app/views/schedule/parameters/parameters.component";
 import { ProductionScheduleComponent} from "app/views/schedule/production-schedule/production-schedule.component";
 import { RawMaterialDemandsComponent} from "app/views/schedule/raw-material-demands/raw-material-demands.component";
 import { StorageAmountComponent} from "app/views/schedule/storage-amount/storage-amount.component";
@@ -30,14 +31,13 @@ export const ROUTES:Routes = [
     children: [
       {path: 'line-static', component: LineStaticComponent},
       {path: 'raw-materials', component: RawMaterialsComponent},
-      {path: 'parameters', component: ParametersComponent}
+      {path: 'order-raw-materials', component: OrderRawMaterialsComponent}
     ]
   },
   {
     path: 'order', component: BasicLayoutComponent,
     children: [
       {path: 'orders', component: OrdersComponent},
-      {path: 'order-raw-materials', component: OrderRawMaterialsComponent},
       {path: 'material-purchasing', component: MaterialPurchasingComponent},
       {path: 'product-static', component: ProductStaticComponent}
     ]
@@ -45,6 +45,7 @@ export const ROUTES:Routes = [
   {
     path: 'schedule', component: BasicLayoutComponent,
     children: [
+      {path: 'parameters', component: ParametersComponent},
       {path: 'production-schedule', component: ProductionScheduleComponent},
       {path: 'raw-material-demands', component: RawMaterialDemandsComponent},
       {path: 'storage-amount', component: StorageAmountComponent},
