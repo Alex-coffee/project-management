@@ -73,7 +73,7 @@
 
                         <tr>
                             <td class="col-sm-4">
-                                isPenalizeForNumLineUsedOn
+                                是否最小化生产线使用数量
                             </td>
                             <td class="col-sm-8">
                                 <div class="switch">
@@ -91,7 +91,7 @@
 
                         <tr>
                             <td class="col-sm-4">
-                                isRawMaterialPrepareConstraintOn
+                                是否将原材料供应作为限制条件
                             </td>
                             <td class="col-sm-8">
                                 <div class="switch">
@@ -108,8 +108,9 @@
                         </tr>
                     </table>
 
-                    <button class="btn btn-success btn-block" (click)="runOR()">
-                        <i class="fa fa-lightbulb-o"></i>
+                    <button [disabled]="inProcess" class="btn btn-success btn-block" (click)="runOR()">
+                        <i *ngIf="!inProcess" class="fa fa-lightbulb-o"></i>
+                        <i *ngIf="inProcess" class="fa fa-spin fa-spinner"></i>
                         开始优化
                     </button>
 

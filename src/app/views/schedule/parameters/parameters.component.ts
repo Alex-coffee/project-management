@@ -42,8 +42,10 @@ export class ParametersComponent implements OnInit {
           this.inProcess = false;
           this.toastr.success(res.message);
           console.log(res);
-
-          this.router.navigateByUrl("/schedule/production-schedule");
+          
+          setTimeout(() => {
+            this.router.navigateByUrl("/schedule/production-schedule");
+          }, 1000);
         }, err => {
           this.inProcess = false;
           this.toastr.error("运行失败，请重试");
