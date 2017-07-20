@@ -15,6 +15,7 @@ import { ProductionScheduleComponent} from "app/views/schedule/production-schedu
 import { RawMaterialDemandsComponent} from "app/views/schedule/raw-material-demands/raw-material-demands.component";
 import { StorageAmountComponent} from "app/views/schedule/storage-amount/storage-amount.component";
 import { UncoveredDemandsComponent} from "app/views/schedule/uncovered-demands/uncovered-demands.component";
+import { KpiComponent} from "app/views/schedule/kpi/kpi.component";
 
 
 import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
@@ -47,6 +48,7 @@ export const ROUTES:Routes = [
     children: [
       {path: 'parameters', component: ParametersComponent},
       {path: 'production-schedule', component: ProductionScheduleComponent},
+      {path: 'kpi', component: KpiComponent},
       {path: 'raw-material-demands', component: RawMaterialDemandsComponent},
       {path: 'storage-amount', component: StorageAmountComponent},
       {path: 'uncovered-demands', component: UncoveredDemandsComponent}

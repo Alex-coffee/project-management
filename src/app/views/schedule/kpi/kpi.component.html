@@ -1,0 +1,62 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>生产线KPI</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>生产线</th>
+                                <th>生产线加工品种</th>
+                                <th>可工作时间（小时）</th>
+                                <th>所需加工时间（小时）</th>
+                                <th>OEE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let kpi of lineKPIList">
+                                <td>{{kpi.line}}</td>
+                                <td>{{kpi.numOrdersPorduced}}</td>
+                                <td>{{kpi.timeAvail}}</td>
+                                <td>{{kpi.timeUsed}}</td>
+                                <td>{{kpi.OEE | percent}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>制品库存资金占用</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>产品号</th>
+                                <th *ngFor="let d of days">
+                                    {{d}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let kpi of storageKPIList">
+                                <td>{{kpi.order}}</td>
+                                <td *ngFor="let value of kpi.moneyOccupy">
+                                  {{value}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

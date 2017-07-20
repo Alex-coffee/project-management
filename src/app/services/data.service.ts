@@ -14,6 +14,9 @@ export class DataService {
   private rawMaterialDemandsResultUrl = 'assets/or/output/RawMaterialDemandsResult.json';
   private storageAmountResultUrl = 'assets/or/output/StorageAmountResult.json';
   private uncoveredDemandsUrl = 'assets/or/output/UncoveredDemands.json';
+  private lineKPIUrl = 'assets/or/output/LineKPIs.json';
+  private storageKPIUrl = 'assets/or/output/storageKPIs.json';
+
   //order
   private ordersUrl = 'assets/or/input/Orders.json';
   private orderRawMaterialsUrl = 'assets/or/input/OrderRawMaterials.json';
@@ -61,6 +64,14 @@ export class DataService {
     return this.getFilesByUrl(this.parametersUrl);
   }
 
+  getLineKPI(): Observable<any[]> {
+    return this.getFilesByUrl(this.lineKPIUrl);
+  }
+
+  getStorageKPI(): Observable<any[]> {
+    return this.getFilesByUrl(this.storageKPIUrl);
+  }
+
   saveLineStaticData(content): Observable<any> {
     return this.saveFile(this.lineStaticDataUrl, content);
   }
@@ -83,6 +94,29 @@ export class DataService {
 
   saveOrderRawMaterials(content): Observable<any> {
     return this.saveFile(this.orderRawMaterialsUrl, content);
+  }
+
+  getKPI(): Observable<any> {
+    let kpi$ = new Observable(observer => {
+        Observable.forkJoin([
+          this.getLineKPI(),
+          this.getStorageKPI(),
+          this.getParameters()
+        ]).subscribe(res => {
+          let lineKPI = res[0];
+          let storageKPI = res[1];
+          let parameters = res[2];
+          const totalDays = parameters["numDays"];
+          
+          observer.next({
+            lineKPI: lineKPI,
+            storageKPI: storageKPI,
+            totalDays: totalDays
+          })
+
+        })
+    });
+    return kpi$;
   }
 
   getMaterialPurchaseData(): Observable<any> {

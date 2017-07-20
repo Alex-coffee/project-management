@@ -10,6 +10,7 @@ import { ParametersComponent } from './parameters/parameters.component';
 
 import { GanttDirective } from 'app/directive/gantt.directive';
 import { PeityModule } from 'app/components/charts/peity';
+import { KpiComponent } from './kpi/kpi.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { PeityModule } from 'app/components/charts/peity';
     FormsModule
   ],
   declarations: [GanttDirective, ProductionScheduleComponent, ParametersComponent,
-    RawMaterialDemandsComponent, StorageAmountComponent, UncoveredDemandsComponent]
+    RawMaterialDemandsComponent, StorageAmountComponent, UncoveredDemandsComponent, KpiComponent]
 })
 export class ScheduleModule { }
