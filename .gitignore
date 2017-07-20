@@ -1,1 +1,6 @@
 node_modules/
+src/assets/or/output/StorageAmountResult.json
+src/assets/or/output/LineKPIs.json
+src/assets/or/output/ProductionScheduleResult.json
+src/assets/or/output/RawMaterialDemandsResult.json
+src/assets/or/output/UncoveredDemands.json
