@@ -31,7 +31,7 @@ export const ROUTES:Routes = [
     children: [
       {path: 'line-static', component: LineStaticComponent},
       {path: 'raw-materials', component: RawMaterialsComponent},
-      {path: 'order-raw-materials', component: OrderRawMaterialsComponent}
+      {path: 'product-raw-materials', component: OrderRawMaterialsComponent}
     ]
   },
   {
