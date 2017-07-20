@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { HTTP_BASE } from 'app/config';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -8,7 +9,7 @@ import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
 export class DataService {
-  private HOST:string = "http://10.211.55.4:8001";
+  private HOST:string = HTTP_BASE;
   // private HOST:string = "http://localhost:8001";
   //schedule
   private rawMaterialDemandsResultUrl = 'assets/or/output/RawMaterialDemandsResult.json';
