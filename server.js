@@ -21,9 +21,13 @@ app.use(methodOverride());
 app.use(bodyParser.json());                                     // parse application/json
 // routes ==================================================
 //require('./config/uploader')(app);
-
 // var ws = require('./api/websockets');
-require('./src/api/local-api')(app); // pass our application into our routes
+
+global.rootRequire = function(name) {
+    return require(__dirname + '/' + name);
+}
+
+rootRequire("api/restful-api")(app);// pass our application into our routes
 
 var server = app.listen(DEFAULT_PORT, function(){
     console.log("App listening on port " + DEFAULT_PORT);
