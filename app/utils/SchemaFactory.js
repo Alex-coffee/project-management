@@ -5,14 +5,27 @@ let modelMap = {};
 var init = function (connectionMap) {
     mongoose.connect(settings.dbURL);
     var db = mongoose.connection;
+    
+    var Demand = rootRequire('app/model/demand');
+    var Item = rootRequire('app/model/item');
+    var ItemBOM = rootRequire('app/model/itemBOM');
+    var KPI = rootRequire('app/model/kpi');
+    var Line = rootRequire('app/model/line');
+    var Production = rootRequire('app/model/production');
+    var ProductionPlan = rootRequire('app/model/productionPlan');
     var Scenario = rootRequire('app/model/scenario');
-    // var BusSchema = rootRequire('app/schema/bus');
-    // var BusScheduleSchema = rootRequire('app/schema/busSchedule');
-    // var CrewSchema = rootRequire('app/schema/crew');
-    // var CrewPairingSchema = rootRequire('app/schema/crewPairing');
+    var UncoveredDemand = rootRequire('app/model/uncoveredDemand');
 
     modelMap["connection"] = mongoose.connection;
-    modelMap["Scenario"] = Scenario;
+    modelMap["demand"] = Demand;
+    modelMap["item"] = Item;
+    modelMap["itemBOM"] = ItemBOM;
+    modelMap["kpi"] = KPI;
+    modelMap["line"] = Line;
+    modelMap["production"] = Production;
+    modelMap["productionPlan"] = ProductionPlan;
+    modelMap["scenario"] = Scenario;
+    modelMap["uncoveredDemand"] = UncoveredDemand;
 }
 
 var getModel = function (name) {

@@ -1,12 +1,6 @@
 var q = require('q');
-let servicesMap = {};
-var ScenarioServices = rootRequire('app/services/ScenarioServices');
-
-servicesMap["scenario"] = ScenarioServices;
-
-var getService = function (name) {
-    return servicesMap[name];
-}
+var SchemaServices = rootRequire('app/services/SchemaServices');
+var SchemaFactory = rootRequire('app/utils/SchemaFactory');
 
 var apiInit = function(app){
 
@@ -14,11 +8,16 @@ var apiInit = function(app){
         let promiseArray = [];
         let name = req.query.model;
         if(name) name = name.toLowerCase();
-        let service = getService(name);
-        if(service){
-            promiseArray.push(service.count(req.query.conditions));
-            promiseArray.push(service.find(req.query.conditions, req.query.selectedFields, req.query.sortFields, req.query.populateFields,
-                req.query.currentPage, req.query.pageSize));
+        let model = SchemaFactory.getModel(name);
+        if(model){
+            promiseArray.push(SchemaServices.count(model, req.query.conditions));
+            promiseArray.push(SchemaServices.find(model, req.query.conditions, {
+                selectFields: req.query.selectedFields,
+                sortFields: req.query.sortFields,
+                populateFields: req.query.populateFields,
+                currentPage: req.query.currentPage,
+                pageSize: req.query.pageSize
+            }));
         }else{
             // res.reject({message: "service not found"})
             res.status(500).send({message: "service not found"});
@@ -40,9 +39,9 @@ var apiInit = function(app){
     app.post('/api/save/model', function(req, res) {
         let name = req.body.model;
         if(name) name = name.toLowerCase();
-        let service = getService(name);
-        if(service){
-            service.save(req.body.content).then(function(result){
+        let model = SchemaFactory.getModel(name);
+        if(model){
+            SchemaServices.save(model, req.body.content).then(function(result){
                 res.status(200).send(result);
             });
         }else{
@@ -53,9 +52,9 @@ var apiInit = function(app){
     app.post('/api/delete/model', function(req, res) {
         let name = req.body.model;
         if(name) name = name.toLowerCase();
-        let service = getService(name);
-        if(service){
-            service.remove(req.body.content).then(function(result){
+        let model = SchemaFactory.getModel(name);
+        if(model){
+            SchemaServices.remove(model, req.body.content).then(function(result){
                 res.status(200).send(result);
             });
         }else{
@@ -65,6 +64,5 @@ var apiInit = function(app){
 }
 
 module.exports = {
-    getService: getService,
     apiInit: apiInit
 };
