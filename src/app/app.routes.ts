@@ -5,6 +5,7 @@ import { LineStaticComponent} from "app/views/basic/line-static/line-static.comp
 import { RawMaterialsComponent} from "app/views/basic/raw-materials/raw-materials.component";
 
 import { ManagementComponent} from "app/views/scenario/management/management.component";
+import { CalendarComponent} from "app/views/scenario/calendar/calendar.component";
 
 import { OrdersComponent} from "app/views/order/orders/orders.component";
 import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/order-raw-materials.component";
@@ -32,6 +33,7 @@ export const ROUTES:Routes = [
     path: 'scenario', component: BasicLayoutComponent,
     children: [
       {path: 'management', component: ManagementComponent},
+      {path: 'calendar', component: CalendarComponent},
     ]
   },
   {

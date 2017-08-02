@@ -18,7 +18,6 @@ import {MaterialsModule} from "./views/materials/materials.module";
 import {BasicModule} from "./views/basic/basic.module";
 import {OrderModule} from "./views/order/order.module";
 import {ScheduleModule} from "./views/schedule/schedule.module";
-import {ScenarioModule} from "./views/scenario/scenario.module";
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
@@ -29,14 +28,17 @@ import { ToastrCustomOption } from 'app/options/ToastrCustomOption';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import { CustomFormsModule } from 'ng2-validation'
+import { CalendarModule } from 'angular-calendar';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
+import { CalendarComponent } from './views/scenario/calendar/calendar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ManagementComponent
+    ManagementComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,7 @@ import { ManagementComponent } from 'app/views/scenario/management/management.co
     RouterModule.forRoot(ROUTES),
     ModalModule.forRoot(),
     ToastModule.forRoot(),
-
+    CalendarModule.forRoot(),
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger' // set defaults here
     })

@@ -1,0 +1,55 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button class="btn btn-xs btn-default pull-right" (click)="add()">
+                      新增采购计划
+                    </button>
+                    <h5>生产计划表</h5>
+                </div>
+                <div class="ibox-content">
+                  <div [ngSwitch]="view">
+                    <mwl-calendar-month-view
+                      *ngSwitchCase="'month'"
+                      [viewDate]="viewDate"
+                      [events]="events"
+                      [refresh]="refresh"
+                      [activeDayIsOpen]="activeDayIsOpen"
+                      (dayClicked)="dayClicked($event.day)"
+                      (eventClicked)="handleEvent('Clicked', $event.event)"
+                      (eventTimesChanged)="eventTimesChanged($event)">
+                    </mwl-calendar-month-view>
+                  </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #eventModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">场景</h4>
+        <button type="button" class="close pull-right" (click)="eventModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #detailForm="ngForm" class="form-horizontal">
+            <!-- <div *ngIf="!detailForm.form.valid" class="alert alert-danger">
+                <p *ngIf="description.touched && description.errors?.required">
+                  场景描述字段为必填字段
+                </p>
+            </div> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button [disabled]="!detailForm.form.valid" type="submit" class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
+        <button class="btn btn-sm btn-default" (click)="eventModal.hide()">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
