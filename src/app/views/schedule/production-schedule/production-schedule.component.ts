@@ -2,6 +2,8 @@ import { Component, OnInit, ViewContainerRef, ViewChild} from '@angular/core';
 import { BackendService } from 'app/services/backend.service';
 import { OptimizeService } from 'app/services/optimize.service';
 
+import { ScenarioService } from 'app/services/scenario.service';
+
 import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
@@ -13,7 +15,7 @@ import { GanttDirective } from 'app/directive/gantt.directive';
   selector: 'app-production-schedule',
   templateUrl: './production-schedule.component.html',
   styleUrls: ['./production-schedule.component.css'],
-  providers: [ BackendService, OptimizeService ]
+  providers: [ BackendService, OptimizeService, ScenarioService]
 })
 export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;
@@ -26,6 +28,7 @@ export class ProductionScheduleComponent implements OnInit {
   constructor(
     private backendService: BackendService, 
     private optimizeService: OptimizeService, 
+    private scenarioService: ScenarioService,
     public toastr: ToastsManager, vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -33,6 +36,13 @@ export class ProductionScheduleComponent implements OnInit {
   ngOnInit() {
     this.getGanttData();
     this.getProductScheduleData();
+    this.getScenarios();
+  }
+
+  getScenarios(){
+    this.scenarioService.find({}).subscribe(data => {
+      console.log(data);
+    });
   }
 
   setGanttType(type){

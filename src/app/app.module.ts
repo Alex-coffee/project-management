@@ -18,7 +18,7 @@ import {MaterialsModule} from "./views/materials/materials.module";
 import {BasicModule} from "./views/basic/basic.module";
 import {OrderModule} from "./views/order/order.module";
 import {ScheduleModule} from "./views/schedule/schedule.module";
-
+import {ScenarioModule} from "./views/scenario/scenario.module";
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
@@ -27,10 +27,16 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import {ToastOptions} from 'ng2-toastr';
 import { ToastrCustomOption } from 'app/options/ToastrCustomOption';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
+import { CustomFormsModule } from 'ng2-validation'
+
+import { ManagementComponent } from 'app/views/scenario/management/management.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -40,12 +46,19 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     LayoutsModule,
     AppviewsModule,
 
+    // ScenarioModule,
     BasicModule,
     OrderModule,
     ScheduleModule,
+
+    CustomFormsModule,
     RouterModule.forRoot(ROUTES),
     ModalModule.forRoot(),
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+
+    ConfirmationPopoverModule.forRoot({
+      confirmButtonType: 'danger' // set defaults here
+    })
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},

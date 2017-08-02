@@ -4,6 +4,7 @@ import {Routes} from "@angular/router";
 import { LineStaticComponent} from "app/views/basic/line-static/line-static.component";
 import { RawMaterialsComponent} from "app/views/basic/raw-materials/raw-materials.component";
 
+import { ManagementComponent} from "app/views/scenario/management/management.component";
 
 import { OrdersComponent} from "app/views/order/orders/orders.component";
 import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/order-raw-materials.component";
@@ -24,9 +25,15 @@ import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavig
 
 export const ROUTES:Routes = [
   // Main redirect
-  {path: '', redirectTo: '/schedule/production-schedule', pathMatch: 'full'},
+  {path: '', redirectTo: '/scenario/management', pathMatch: 'full'},
 
   // App views
+  {
+    path: 'scenario', component: BasicLayoutComponent,
+    children: [
+      {path: 'management', component: ManagementComponent},
+    ]
+  },
   {
     path: 'basic', component: BasicLayoutComponent,
     children: [
@@ -56,5 +63,5 @@ export const ROUTES:Routes = [
   },
 
   // Handle all other routes
-  {path: '**',  redirectTo: '/schedule/production-schedule'}
+  {path: '**',  redirectTo: '/scenario/management'}
 ];

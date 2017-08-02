@@ -69,6 +69,13 @@
       </li>  -->
 
       <li routerLinkActive="active">
+        <a routerLink="/scenario/management" routerLinkActive="active">
+          <i class="fa fa-square-o"></i>
+          <span class="nav-label">场景</span>
+        </a>
+      </li>
+
+      <li routerLinkActive="active">
         <a href="#"><i class="fa fa-info-circle"></i> <span class="nav-label">信息输入</span> <span class="fa arrow"></span> </a>
         <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('basic')}">
           <li routerLinkActive="active"><a routerLink="/basic/product-raw-materials" routerLinkActive="active" >一级BOM原材料</a></li>
