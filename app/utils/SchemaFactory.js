@@ -19,13 +19,13 @@ var init = function (connectionMap) {
     modelMap["connection"] = mongoose.connection;
     modelMap["demand"] = Demand;
     modelMap["item"] = Item;
-    modelMap["itemBOM"] = ItemBOM;
+    modelMap["itembom"] = ItemBOM;
     modelMap["kpi"] = KPI;
     modelMap["line"] = Line;
     modelMap["production"] = Production;
-    modelMap["productionPlan"] = ProductionPlan;
+    modelMap["productionplan"] = ProductionPlan;
     modelMap["scenario"] = Scenario;
-    modelMap["uncoveredDemand"] = UncoveredDemand;
+    modelMap["uncovereddemand"] = UncoveredDemand;
 }
 
 var getModel = function (name) {

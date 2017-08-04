@@ -33,18 +33,18 @@
                                       加载场景
                                     </button>
                                     <button class="btn btn-info" (click)="modify(d)">
-                                      修改
+                                      <i class="fa fa-pencil"></i>
                                     </button>
                                     <button class="btn btn-danger" 
                                         mwlConfirmationPopover
-                                        [title]="'删除此场景'"
-                                        [message]="'确定要删除当前场景吗？'"
+                                        [title]="'删除此记录'"
+                                        [message]="'确定要删除当前记录吗？'"
                                         placement="top"
                                         (confirm)="delete(d)"
                                         [confirmText]="'确定'"
                                         [cancelText]="'取消'"
                                         [appendToBody]="true">
-                                      删除
+                                      <i class="fa fa-times"></i>
                                     </button>
                                   </div>
                                 </td>

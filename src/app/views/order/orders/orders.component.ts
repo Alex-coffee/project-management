@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import { DataService } from 'app/services/data.service';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
+import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
-  providers: [ DataService ]
+  providers: [ ItemService ]
 })
 export class OrdersComponent implements OnInit {
   @ViewChild('detailModal') public detailModal:ModalDirective;
@@ -15,10 +16,8 @@ export class OrdersComponent implements OnInit {
   totalDays: number;
   dataList: any[] = [];
   errMsg: string;
-  public peityType:string = "bar";
-  public peityOptions:any = { fill: ["#faa123"], width:100};
 
-  constructor(private dataService: DataService, public toastr: ToastsManager, 
+  constructor(private itemService: ItemService, public toastr: ToastsManager, 
             vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -27,25 +26,16 @@ export class OrdersComponent implements OnInit {
     this.loadData();
   }
 
-  save(){
-    this.dataService.saveOrderData(this.dataList)
-      .subscribe(res => {
-        this.toastr.success(res.message);
-      });
-  }
-
-  remove(item){
-    let i = this.dataList.findIndex(i => i.orderName == item.orderName)
-    this.dataList.splice(i,1);
+   remove(item){
+    this.itemService.remove(item).subscribe(res =>{
+      console.log(res);
+      this.loadData();
+    })
   }
 
   add(){
     this.errMsg = "";
-    let newDemands = [];
-    for(let i = 0; i < this.totalDays; i++){
-      newDemands.push(0);
-    }
-    this.detailItem = {isNew: true, demands: newDemands};
+    this.detailItem = {isNew: true};
     this.detailModal.show();
   }
 
@@ -56,47 +46,19 @@ export class OrdersComponent implements OnInit {
   }
 
   confirmChange(){
-    let targetIndex = this.dataList.findIndex(item => item.orderName == this.detailItem.orderName);
-    if(this.detailItem.isNew){//add new item
-      if(targetIndex > -1){
-        this.errMsg = "已存在ID相同的产品";
-        return;
-      }
-      delete this.detailItem.isNew;
-      this.dataList.push(this.detailItem);
-    }else{
-      this.dataList[targetIndex] = this.detailItem;
-    }
-    this.detailModal.hide();
-  }
-
-  trackByIndex(index: number, value: number) {
-    return index;
-  }
-
-  getDemandsArray(){
-    if(this.totalDays && this.totalDays > 0){
-      let result = [];
-      for(let i = 0; i < this.totalDays; i++){
-        result.push(i);
-      }
-      return result;
-    }else{
-      return [];
-    }
+    this.itemService.saveProduct(this.detailItem).subscribe(res =>{
+      console.log(res);
+      this.loadData();
+      this.detailModal.hide();
+    })
   }
 
   loadData(){
-    this.dataService.getOrders()
-      .subscribe(res => {
-        this.dataList = res;
+    this.itemService.findProduct({}).subscribe(res => {
+        console.log(res.count);
+        console.log(res.list);
+        this.dataList = res.list;
       });
-      
-    this.dataService.getParameters()
-      .subscribe(res => {
-        this.totalDays = res.numDays;
-      });
-    
   }
 
 }

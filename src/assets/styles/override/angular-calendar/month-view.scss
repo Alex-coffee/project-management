@@ -19,6 +19,7 @@
   .cal-cell-row .cal-cell:hover,
   .cal-cell.cal-has-events.cal-open {
     background-color: #ededed;
+    color: $label-badge-color;
   }
 
   .cal-days {
@@ -114,6 +115,7 @@
 
   .cal-day-cell.cal-today {
     background-color: #ededed;
+    color: $label-badge-color;
   }
 
   .cal-day-cell.cal-today .cal-day-number {
@@ -143,7 +145,7 @@
   .cal-out-month {
     .cal-day-badge,
     .cal-event {
-      opacity: 0.3;
+      opacity: 0.5;
     }
   }
 }

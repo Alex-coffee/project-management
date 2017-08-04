@@ -29,6 +29,11 @@ export class GeneralService {
   }
 
   protected save(model: string, content: any): Observable<any> {
+    let currentScenario;
+    currentScenario = localStorage.getItem('currentScenario');
+    if(currentScenario){
+      content.scenarioId = JSON.parse(currentScenario)._id;
+    }
     return this.http.post(this.saveURL, {model: model, content: content}).map((_response: Response) => {
       const data = _response.json()
       return _response.json();

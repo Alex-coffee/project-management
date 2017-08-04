@@ -29,16 +29,32 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import { CustomFormsModule } from 'ng2-validation'
 import { CalendarModule } from 'angular-calendar';
+import { PeityModule } from 'app/components/charts/peity';
+import { SelectModule } from 'ng-select';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
 import { CalendarComponent } from './views/scenario/calendar/calendar.component';
 
+import { LineStaticComponent } from 'app/views/basic/line-static/line-static.component';
+import { RawMaterialsComponent } from 'app/views/basic/raw-materials/raw-materials.component';
+import { OrderRawMaterialsComponent } from 'app/views/basic/order-raw-materials/order-raw-materials.component';
+
+
+import { OrdersComponent } from 'app/views/order/orders/orders.component';
+import { ProductStaticComponent } from 'app/views/order/product-static/product-static.component';
+import { MaterialPurchasingComponent } from 'app/views/order/material-purchasing/material-purchasing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ManagementComponent,
-    CalendarComponent
+    CalendarComponent,
+    LineStaticComponent,
+    RawMaterialsComponent,
+    OrderRawMaterialsComponent,
+    OrdersComponent,
+    ProductStaticComponent,
+    MaterialPurchasingComponent
   ],
   imports: [
     BrowserModule,
@@ -47,10 +63,11 @@ import { CalendarComponent } from './views/scenario/calendar/calendar.component'
     HttpModule,
     LayoutsModule,
     AppviewsModule,
+    SelectModule,
 
     // ScenarioModule,
-    BasicModule,
-    OrderModule,
+    // BasicModule,
+    // OrderModule,
     ScheduleModule,
 
     CustomFormsModule,
@@ -58,6 +75,7 @@ import { CalendarComponent } from './views/scenario/calendar/calendar.component'
     ModalModule.forRoot(),
     ToastModule.forRoot(),
     CalendarModule.forRoot(),
+    PeityModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger' // set defaults here
     })
