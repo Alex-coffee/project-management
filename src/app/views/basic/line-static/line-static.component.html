@@ -4,10 +4,6 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="btn-group btn-group-xs pull-right">
-                        <button class="btn btn-info" (click)="save()">
-                            <i class="fa fa-file m-r-xs"></i>
-                            保存
-                        </button>
                         <button class="btn btn-primary" (click)="add()">
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
@@ -21,15 +17,15 @@
                         <thead>
                             <tr>
                                 <th>生产线号</th>
-                                <th>可用小时数</th>
+                                <th>每日可用小时数</th>
                                 <th>换模小时数</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let d of dataList">
-                                <td>{{d.lineId}}</td>
-                                <td>{{d.availHours}}</td>
+                                <td>{{d.name}}</td>
+                                <td>{{d.availableHours}}</td>
                                 <td>{{d.turnHours}}</td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
@@ -50,41 +46,43 @@
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">生产线详情</h4>
+        <h4 class="modal-title pull-left">生产线信息</h4>
         <button type="button" class="close pull-right" (click)="detailModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal">
-            <div *ngIf="errMsg" class="alert alert-danger">
-                {{errMsg}}
+        <form #detailForm="ngForm" class="form-horizontal">
+            <!-- <div *ngIf="!detailForm.form.valid" class="alert alert-danger">
+                <p *ngIf="description.touched && description.errors?.required">
+                  场景描述字段为必填字段
+                </p>
+            </div> -->
+            <div class="form-group">
+                <label class="col-sm-4 control-label">生产线名</label>
+                <div class="col-sm-8">
+                    <input name="lineId" type="text" [(ngModel)]="detailItem.name" class="form-control" required>
+                </div>
             </div>
             
             <div class="form-group">
-                <label class="col-sm-4 control-label">生产线号</label>
+                <label class="col-sm-4 control-label">每日可用小时数</label>
                 <div class="col-sm-8">
-                    <input name="lineId" type="number" [(ngModel)]="detailItem.lineId" class="form-control">
+                    <input name="availHours" type="number" min="0" max="24" [(ngModel)]="detailItem.availableHours" class="form-control" required>
                 </div>
             </div>
-            <div class="hr-line-dashed"></div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label">可用小时数</label>
-                <div class="col-sm-8">
-                    <input name="availHours" type="number" [(ngModel)]="detailItem.availHours" class="form-control">
-                </div>
-            </div>
-            <div class="hr-line-dashed"></div>
+            
             <div class="form-group">
                 <label class="col-sm-4 control-label">换模小时数</label>
                 <div class="col-sm-8">
-                    <input name="turnHours" type="number" [(ngModel)]="detailItem.turnHours" class="form-control">
+                    <input name="turnHours" type="number" min="0" [(ngModel)]="detailItem.turnHours" class="form-control" required>
                 </div>
             </div>
+
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
+        <button [disabled]="!detailForm.form.valid" type="submit" class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
         <button class="btn btn-sm btn-default" (click)="detailModal.hide()">取消</button>
       </div>
     </div>

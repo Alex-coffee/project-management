@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { DataService } from 'app/services/data.service';
+import { ItemBOMService } from 'app/services/item-bom.service';
+import { ItemService } from 'app/services/item.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {IOption} from 'ng-select';
+
 
 @Component({
   selector: 'app-order-raw-materials',
   templateUrl: './order-raw-materials.component.html',
   styleUrls: ['./order-raw-materials.component.css'],
-  providers: [ DataService ]
+  providers: [ ItemBOMService, ItemService]
 })
 export class OrderRawMaterialsComponent implements OnInit {
   @ViewChild('detailModal') public detailModal:ModalDirective;
@@ -18,20 +20,16 @@ export class OrderRawMaterialsComponent implements OnInit {
   orderOptions: Array<IOption> = [];
   rawMaterialOptions: Array<IOption> = [];
 
-  constructor(private dataService: DataService, public toastr: ToastsManager, 
-            vcr: ViewContainerRef) { 
-              this.toastr.setRootViewContainerRef(vcr);
-            }
+  constructor(
+    private itemBOMService: ItemBOMService, 
+    private itemService: ItemService, 
+    public toastr: ToastsManager, 
+    vcr: ViewContainerRef) { 
+      this.toastr.setRootViewContainerRef(vcr);
+    }
 
   ngOnInit() {
     this.loadData();
-  }
-
-  save(){
-    this.dataService.saveOrderRawMaterials(this.dataList)
-      .subscribe(res => {
-        this.toastr.success(res.message);
-      });
   }
 
   remove(item){
@@ -47,7 +45,13 @@ export class OrderRawMaterialsComponent implements OnInit {
 
   modify(item){
     this.errMsg = "";
-    this.detailItem = Object.assign({}, item);
+    this.detailItem = JSON.parse(JSON.stringify(item));
+    this.detailItem.item = this.detailItem.item._id;
+    if(this.detailItem.materials && this.detailItem.materials.length > 0){
+      this.detailItem.materials.forEach(m => {
+        m.item = m.item._id;
+      })
+    }
     this.detailModal.show();
   }
 
@@ -56,65 +60,58 @@ export class OrderRawMaterialsComponent implements OnInit {
   }
 
   addNewRawMaterial(){
-    if(this.detailItem.raws){
-      this.detailItem.raws.push({
-        "rawName": "",
+    if(this.detailItem.materials){
+      this.detailItem.materials.push({
+        "item": "",
         "amount": 0
       });
     }else{
-      this.detailItem.raws = [{
-        "rawName": "",
+      this.detailItem.materials = [{
+        "item": "",
         "amount": 0
       }]
     }
   }
 
   confirmChange(){
-    let targetIndex = this.dataList.findIndex(item => item.orderName == this.detailItem.orderName);
-    if(this.detailItem.isNew){//add new item
-      if(targetIndex > -1){
-        this.errMsg = "已存在相同的产品设置";
-        return;
-      }
-      delete this.detailItem.isNew;
-      this.dataList.push(this.detailItem);
-    }else{
-      this.dataList[targetIndex] = this.detailItem;
-    }
-    this.detailModal.hide();
+    this.itemBOMService.save(this.detailItem).subscribe(res =>{
+      console.log(res);
+      this.loadData();
+      this.detailModal.hide();
+    })
   }
 
   loadData(){
-    this.dataService.getOrderRawMaterials()
-      .subscribe(res => {
-        this.dataList = res;
+    this.itemBOMService.find({}).subscribe(res => {
+        console.log(res.count);
+        console.log(res.list);
+        this.dataList = res.list;
       });
 
-    this.dataService.getOrders()
-      .subscribe(res => {
-        let orders = res;
+    this.itemService.findProduct({}).subscribe(res => {
+        let orders = res.list;;
         let orderOptionArray = [];
         orders.forEach(order => {
           orderOptionArray.push({
-            label: order.orderName,
-            value: order.orderName
+            label: order.name,
+            value: order._id
           })
         })
         this.orderOptions = orderOptionArray;
       });
 
-    this.dataService.getRawMaterials()
-      .subscribe(res => {
-        let rawMaterials = res;
+    this.itemService.findRawMaterial({}).subscribe(res => {
+        let materials = res.list;
         let rawMaterialOptionArray = [];
-        rawMaterials.forEach(rm => {
+        materials.forEach(material => {
           rawMaterialOptionArray.push({
-            label: rm.rawName,
-            value: rm.rawName
+            label: material.name,
+            value: material._id
           })
         })
         this.rawMaterialOptions = rawMaterialOptionArray;
       });
+
   }
 
 }

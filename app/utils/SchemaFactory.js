@@ -13,6 +13,9 @@ var init = function (connectionMap) {
     var Line = rootRequire('app/model/line');
     var Production = rootRequire('app/model/production');
     var ProductionPlan = rootRequire('app/model/productionPlan');
+    var OrderDemand = rootRequire('app/model/orderDemand');
+    var PurchasePlan = rootRequire('app/model/purchasePlan');
+    var ProductStatic = rootRequire('app/model/productStatic');
     var Scenario = rootRequire('app/model/scenario');
     var UncoveredDemand = rootRequire('app/model/uncoveredDemand');
 
@@ -24,6 +27,9 @@ var init = function (connectionMap) {
     modelMap["line"] = Line;
     modelMap["production"] = Production;
     modelMap["productionplan"] = ProductionPlan;
+    modelMap["orderdemand"] = OrderDemand;
+    modelMap["purchaseplan"] = PurchasePlan;
+    modelMap["productstatic"] = ProductStatic;
     modelMap["scenario"] = Scenario;
     modelMap["uncovereddemand"] = UncoveredDemand;
 }

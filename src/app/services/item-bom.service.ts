@@ -3,6 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { HTTP_BASE } from 'app/config';
 import { GeneralService } from 'app/services/general.service';
+import { RequestOptions } from 'app/model/request-options';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -13,7 +14,8 @@ export class ItemBOMService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("itemBOM", conditions);
+    let requestOption = new RequestOptions({populateFields: "item materials.item"});
+    return super.find("itemBOM", conditions, requestOption);
   }
 
   public save(obj: any){

@@ -87,16 +87,17 @@
         <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('basic')}">
           <li routerLinkActive="active"><a routerLink="/basic/product-raw-materials" routerLinkActive="active" >一级BOM原材料</a></li>
           <li routerLinkActive="active"><a routerLink="/basic/raw-materials" routerLinkActive="active" >原材料信息</a></li>
+          <li routerLinkActive="active"><a routerLink="/basic/orders" routerLinkActive="active" >订单信息</a></li>
           <li routerLinkActive="active"><a routerLink="/basic/line-static" routerLinkActive="active" >产线信息</a></li>
         </ul>
       </li>
 
       <li routerLinkActive="active">
         <a href="#"><i class="fa fa-industry"></i> <span class="nav-label">排产调度</span> <span class="fa arrow"></span> </a>
-        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('order')}">
-          <li routerLinkActive="active"><a routerLink="/order/orders" routerLinkActive="active" >需求计划</a></li>
-          <li routerLinkActive="active"><a routerLink="/order/material-purchasing" routerLinkActive="active" >原料采购</a></li>
-          <li routerLinkActive="active"><a routerLink="/order/product-static" routerLinkActive="active" >生产线设置</a></li>
+        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('production')}">
+          <!-- <li routerLinkActive="active"><a routerLink="/order/orders" routerLinkActive="active" >需求计划</a></li> -->
+          <li routerLinkActive="active"><a routerLink="/production/material-purchasing" routerLinkActive="active" >原料采购</a></li>
+          <li routerLinkActive="active"><a routerLink="/production/product-static" routerLinkActive="active" >生产线设置</a></li>
         </ul>
       </li>
 

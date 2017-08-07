@@ -12,8 +12,15 @@ import 'rxjs/add/observable/forkJoin'
 export class ScenarioService extends GeneralService{
   constructor(http: Http) { super(http); }
 
+  public findCurrentScenarioData(): Observable<any>{
+    let currentScenario = localStorage.getItem('currentScenario');
+    if(currentScenario){
+      return super.findById("scenario", JSON.parse(currentScenario)._id);
+    }
+  }
+
   public find(conditions: any){
-    return super.find("scenario", conditions);
+    return super.find("scenario", conditions, undefined);
   }
 
   public save(obj: any){

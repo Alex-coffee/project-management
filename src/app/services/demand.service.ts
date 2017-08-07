@@ -13,7 +13,7 @@ export class DemandService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("demand", conditions);
+    return super.find("demand", conditions, undefined);
   }
 
   public save(obj: any){

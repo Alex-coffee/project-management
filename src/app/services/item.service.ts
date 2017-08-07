@@ -13,17 +13,17 @@ export class ItemService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("item", conditions);
+    return super.find("item", conditions, undefined);
   }
 
   public findRawMaterial(conditions: any){
     if(conditions) conditions.type = "material";
-    return super.find("item", conditions);
+    return super.find("item", conditions, undefined);
   }
 
   public findProduct(conditions: any){
     if(conditions) conditions.type = "product";
-    return super.find("item", conditions);
+    return super.find("item", conditions, undefined);
   }
 
   public saveRawMaterial(obj: any){

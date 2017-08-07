@@ -57,7 +57,9 @@ export class ManagementComponent implements OnInit {
 
   modify(item){
     this.errMsg = "";
-    this.detailItem = Object.assign({}, item);
+    this.detailItem = JSON.parse(JSON.stringify(item));
+    this.detailItem.startDate = new Date(this.detailItem.startDate);
+    this.detailItem.endDate = new Date(this.detailItem.endDate);
     this.detailModal.show();
   }
 

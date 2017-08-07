@@ -4,10 +4,6 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="btn-group btn-group-xs pull-right">
-                        <button class="btn btn-info" (click)="save()">
-                            <i class="fa fa-file m-r-xs"></i>
-                            保存
-                        </button>
                         <button class="btn btn-primary" (click)="add()">
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
@@ -26,15 +22,15 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let d of dataList">
-                                <td>{{d.orderName}}</td>
+                                <td>{{d.item.name}}</td>
                                 <td>
                                   <table class="table table-striped">
                                     <tr>
                                       <th>原料</th>
                                       <th>数量</th>
                                     </tr>
-                                    <tr *ngFor="let r of d.raws">
-                                      <td>{{r.rawName}}</td>
+                                    <tr *ngFor="let r of d.materials">
+                                      <td>{{r.item.name}}</td>
                                       <td>{{r.amount}}</td>
                                     </tr>
                                   </table>
@@ -72,7 +68,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">产品名称</label>
                 <div class="col-sm-8">
-                  <ng-select name="orderName" [(ngModel)]="detailItem.orderName" required
+                  <ng-select name="item" [(ngModel)]="detailItem.item" required
                       [options]="orderOptions">
                   </ng-select>
                 </div>
@@ -87,15 +83,15 @@
                             <th>原材料名称</th>
                             <th>数量</th>
                         </tr>
-                        <tr *ngFor="let d of detailItem.raws; let i = index; trackBy:trackByIndex">
+                        <tr *ngFor="let d of detailItem.materials; let i = index; trackBy:trackByIndex">
                             <td>
-                                <ng-select name="rawId_{{i}}" [(ngModel)]="detailItem.raws[i].rawName" required
+                                <ng-select name="material_{{i}}" [(ngModel)]="detailItem.materials[i].item" required
                                     [options]="rawMaterialOptions">
                                 </ng-select>
                             </td>
                             <td>
-                                <input id="demand_{{i}}" name="demand_{{i}}" type="number" class="form-control"
-                                    [(ngModel)]="detailItem.raws[i].amount" required>
+                                <input name="amount_{{i}}" type="number" class="form-control"
+                                    [(ngModel)]="detailItem.materials[i].amount" required>
                             </td>
                         </tr>
                     </table>

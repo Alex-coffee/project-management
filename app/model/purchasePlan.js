@@ -2,17 +2,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // create a schema
-var LineSchema = new Schema({
-    name: {type: String},
-    availableHours: {type: Number},
-    turnHours: {type: Number},
+var PurchasePlanSchema = new Schema({
+    date: {type: Date},
+    amount: {type: Number},
+    item: { type: Schema.Types.ObjectId, ref: 'Item'},
     scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
 
-LineSchema.pre('save', function(next) {
+PurchasePlanSchema.pre('save', function(next) {
     var currentDate = new Date();
     this.updatedAt = currentDate;
 
@@ -21,6 +21,6 @@ LineSchema.pre('save', function(next) {
     next();
 });
 
-var Line = mongoose.model('Line', LineSchema);
+var PurchasePlan = mongoose.model('PurchasePlan', PurchasePlanSchema);
 
-module.exports = Line;
+module.exports = PurchasePlan;

@@ -15,14 +15,13 @@ import {AppviewsModule} from "./views/appviews/appviews.module";
 import {ProcessManagementViewModule} from "./views/processManagement/processManagement.views.module";
 import {MaterialsModule} from "./views/materials/materials.module";
 
-import {BasicModule} from "./views/basic/basic.module";
-import {OrderModule} from "./views/order/order.module";
 import {ScheduleModule} from "./views/schedule/schedule.module";
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
 
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import { DateValueAccessorModule } from 'angular-date-value-accessor';
 import {ToastOptions} from 'ng2-toastr';
 import { ToastrCustomOption } from 'app/options/ToastrCustomOption';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -37,12 +36,11 @@ import { CalendarComponent } from './views/scenario/calendar/calendar.component'
 
 import { LineStaticComponent } from 'app/views/basic/line-static/line-static.component';
 import { RawMaterialsComponent } from 'app/views/basic/raw-materials/raw-materials.component';
+import { OrdersComponent } from 'app/views/basic/orders/orders.component';
 import { OrderRawMaterialsComponent } from 'app/views/basic/order-raw-materials/order-raw-materials.component';
 
-
-import { OrdersComponent } from 'app/views/order/orders/orders.component';
-import { ProductStaticComponent } from 'app/views/order/product-static/product-static.component';
-import { MaterialPurchasingComponent } from 'app/views/order/material-purchasing/material-purchasing.component';
+import { ProductStaticComponent } from 'app/views/production/product-static/product-static.component';
+import { MaterialPurchasingComponent } from 'app/views/production/material-purchasing/material-purchasing.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +69,7 @@ import { MaterialPurchasingComponent } from 'app/views/order/material-purchasing
     ScheduleModule,
 
     CustomFormsModule,
+    DateValueAccessorModule,
     RouterModule.forRoot(ROUTES),
     ModalModule.forRoot(),
     ToastModule.forRoot(),

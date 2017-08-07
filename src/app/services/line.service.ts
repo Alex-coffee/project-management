@@ -9,19 +9,19 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
-export class UncoveredDemandService extends GeneralService{
+export class LineService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("uncoveredDemand", conditions, undefined);
+    return super.find("line", conditions, undefined);
   }
 
   public save(obj: any){
-    return super.save("uncoveredDemand", obj);
+    return super.save("line", obj);
   }
 
   public remove(obj: any){
-    return super.remove("uncoveredDemand", obj);
+    return super.remove("line", obj);
   }
   
 }

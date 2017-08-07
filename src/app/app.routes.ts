@@ -3,14 +3,14 @@ import {Routes} from "@angular/router";
 //pages
 import { LineStaticComponent} from "app/views/basic/line-static/line-static.component";
 import { RawMaterialsComponent} from "app/views/basic/raw-materials/raw-materials.component";
+import { OrdersComponent} from "app/views/basic/orders/orders.component";
+import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/order-raw-materials.component";
 
 import { ManagementComponent} from "app/views/scenario/management/management.component";
 import { CalendarComponent} from "app/views/scenario/calendar/calendar.component";
 
-import { OrdersComponent} from "app/views/order/orders/orders.component";
-import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/order-raw-materials.component";
-import { ProductStaticComponent} from "app/views/order/product-static/product-static.component";
-import { MaterialPurchasingComponent} from "app/views/order/material-purchasing/material-purchasing.component";
+import { ProductStaticComponent} from "app/views/production/product-static/product-static.component";
+import { MaterialPurchasingComponent} from "app/views/production/material-purchasing/material-purchasing.component";
 
 import { ParametersComponent} from "app/views/schedule/parameters/parameters.component";
 import { ProductionScheduleComponent} from "app/views/schedule/production-schedule/production-schedule.component";
@@ -41,13 +41,13 @@ export const ROUTES:Routes = [
     children: [
       {path: 'line-static', component: LineStaticComponent},
       {path: 'raw-materials', component: RawMaterialsComponent},
+      {path: 'orders', component: OrdersComponent},
       {path: 'product-raw-materials', component: OrderRawMaterialsComponent}
     ]
   },
   {
-    path: 'order', component: BasicLayoutComponent,
+    path: 'production', component: BasicLayoutComponent,
     children: [
-      {path: 'orders', component: OrdersComponent},
       {path: 'material-purchasing', component: MaterialPurchasingComponent},
       {path: 'product-static', component: ProductStaticComponent}
     ]

@@ -13,7 +13,7 @@ export class ProductionService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("production", conditions);
+    return super.find("production", conditions, undefined);
   }
 
   public save(obj: any){

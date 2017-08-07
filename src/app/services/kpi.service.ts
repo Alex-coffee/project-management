@@ -13,7 +13,7 @@ export class KpiService extends GeneralService{
   constructor(http: Http) { super(http); }
 
   public find(conditions: any){
-    return super.find("kpi", conditions);
+    return super.find("kpi", conditions, undefined);
   }
 
   public save(obj: any){
