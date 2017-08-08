@@ -83,6 +83,9 @@ var save = function(schema, data){
             if(todo == undefined){
                 todo = new schema(data);
             }else{
+                for(let key in data){
+                    if(data[key] == "undefined") data[key] = undefined;
+                }
                 Object.assign(todo, data);
             }
 

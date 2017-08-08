@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { DataService } from 'app/services/data.service';
+import { ProductStaticService } from 'app/services/product-static.service';
+import { ItemService } from 'app/services/item.service';
+import { LineService } from 'app/services/line.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {IOption} from 'ng-select';
@@ -8,7 +10,7 @@ import {IOption} from 'ng-select';
   selector: 'app-product-static',
   templateUrl: './product-static.component.html',
   styleUrls: ['./product-static.component.css'],
-  providers: [ DataService ]
+  providers: [ ProductStaticService, ItemService, LineService ]
 })
 export class ProductStaticComponent implements OnInit {
   @ViewChild('detailModal') public detailModal:ModalDirective;
@@ -16,26 +18,30 @@ export class ProductStaticComponent implements OnInit {
   dataList: any[] = [];
   errMsg: string;
   orderOptions: Array<IOption> = [];
+  lineOptions: Array<IOption> = [];
+  subLineOptions: Array<IOption> = [];
 
-  constructor(private dataService: DataService, public toastr: ToastsManager, 
-            vcr: ViewContainerRef) { 
-              this.toastr.setRootViewContainerRef(vcr);
-            }
+  constructor(
+    private productStaticService: ProductStaticService, 
+    private itemService: ItemService, 
+    private lineService: LineService, 
+    public toastr: ToastsManager, 
+    vcr: ViewContainerRef
+  ) { 
+      this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.loadData();
-  }
-
-  save(){
-    this.dataService.saveProductStaticData(this.dataList)
-      .subscribe(res => {
-        this.toastr.success(res.message);
-      });
+    this.prepareOrders();
+    this.prepareLines();
   }
 
   remove(item){
-    let i = this.dataList.findIndex(i => i.orderName == item.orderName)
-    this.dataList.splice(i,1);
+    this.productStaticService.remove(item).subscribe(res =>{
+      console.log(res);
+      this.loadData();
+    })
   }
 
   add(){
@@ -47,41 +53,73 @@ export class ProductStaticComponent implements OnInit {
   modify(item){
     this.errMsg = "";
     this.detailItem = Object.assign({}, item);
+    this.detailItem.product = this.detailItem.product._id;
+    this.detailItem.mainLine = this.detailItem.mainLine._id;
+    if(this.detailItem.subLine) {
+      this.detailItem.subLine = this.detailItem.subLine._id;
+    }else{
+      this.detailItem.subLine = "undefined";
+    }
     this.detailModal.show();
   }
 
   confirmChange(){
-    let targetIndex = this.dataList.findIndex(item => item.orderName == this.detailItem.orderName);
-    if(this.detailItem.isNew){//add new item
-      if(targetIndex > -1){
-        this.errMsg = "已存在ID相同的数据";
-        return;
-      }
-      delete this.detailItem.isNew;
-      this.dataList.push(this.detailItem);
-    }else{
-      this.dataList[targetIndex] = this.detailItem;
-    }
-    this.detailModal.hide();
+    if(this.detailItem.subLine == undefined) delete this.detailItem.subLine;
+    this.productStaticService.save(this.detailItem).subscribe(res => {
+      console.log(res);
+      this.loadData();
+      this.detailModal.hide();
+    })
   }
 
   loadData(){
-    this.dataService.getProductStatic()
-      .subscribe(res => {
-        this.dataList = res;
-      });
+    this.productStaticService.find({}).subscribe(res => {
+      console.log(res.count);
+        console.log(res.list);
+        this.dataList = res.list;
+    });
+  }
 
-    this.dataService.getOrders()
-      .subscribe(res => {
-        let orders = res;
-        let orderOptionArray = [];
-        orders.forEach(order => {
-          orderOptionArray.push({
-            label: order.orderName,
-            value: order.orderName
+  prepareOrders(){
+    this.itemService.findProduct({}).subscribe(res => {
+        let products = res.list;
+        let optionArray = [];
+        products.forEach(material => {
+          optionArray.push({
+            label: material.name,
+            value: material._id
           })
         })
-        this.orderOptions = orderOptionArray;
+        this.orderOptions = optionArray;
       });
   }
+
+  prepareLines(){
+    this.lineService.find({}).subscribe(res => {
+        let lines = res.list;
+        let optionArray = [];
+        let subLineOptionArray = [];
+
+        subLineOptionArray.push({
+          label: "不使用",
+          value: "undefined"
+        })
+
+        lines.forEach(line => {
+          optionArray.push({
+            label: line.name,
+            value: line._id
+          })
+
+          subLineOptionArray.push({
+            label: line.name,
+            value: line._id
+          })
+        })
+        this.lineOptions = optionArray;
+        this.subLineOptions = subLineOptionArray;
+      });
+  }
+
+  
 }

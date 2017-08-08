@@ -4,10 +4,6 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="btn-group btn-group-xs pull-right">
-                        <button class="btn btn-info" (click)="save()">
-                            <i class="fa fa-file m-r-xs"></i>
-                            保存
-                        </button>
                         <button class="btn btn-primary" (click)="add()">
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
@@ -29,10 +25,13 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let d of dataList">
-                                <td>{{d.orderName}}</td>
+                                <td>{{d.product.name}}</td>
                                 <td>{{d.unitTime}}</td>
-                                <td>{{d.mainLine}}</td>
-                                <td>{{d.subLine}}</td>
+                                <td>{{d.mainLine.name}}</td>
+                                <td>
+                                    <span *ngIf="d.subLine">{{d.subLine.name}}</span>
+                                    <span *ngIf="!d.subLine">不使用</span>
+                                </td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
@@ -66,7 +65,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">产品名称</label>
                 <div class="col-sm-8">
-                  <ng-select name="orderName" [(ngModel)]="detailItem.orderName" required
+                  <ng-select name="product" [(ngModel)]="detailItem.product" required
                       [options]="orderOptions">
                   </ng-select>
                 </div>
@@ -76,11 +75,9 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">主要生产线</label>
                 <div class="col-sm-8">
-                    <select name="mainLine" [(ngModel)]="detailItem.mainLine" required class="form-control">
-                        <option *ngFor="let i of [1,2,3,4,5,6,7,8]" value="{{i}}">
-                            生产线{{i}}
-                        </option>
-                    </select>
+                    <ng-select name="mainLine" [(ngModel)]="detailItem.mainLine" required
+                      [options]="lineOptions">
+                    </ng-select>
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
@@ -88,12 +85,9 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">次要生产线</label>
                 <div class="col-sm-8">
-                    <select name="subLine" [(ngModel)]="detailItem.subLine" required class="form-control">
-                        <option value="-1">无</option>
-                        <option *ngFor="let i of [1,2,3,4,5,6,7,8]" value="{{i}}">
-                            生产线{{i}}
-                        </option>
-                    </select>
+                    <ng-select name="subLine" [(ngModel)]="detailItem.subLine" required
+                      [options]="subLineOptions">
+                    </ng-select>
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
