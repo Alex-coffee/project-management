@@ -80,6 +80,12 @@ export class CalendarComponent implements OnInit {
     })
   }
 
+  runOR(): void{
+    this.scheduleService.runOR().subscribe(res => {
+      this.events = res.calenderEvents;
+    })
+  }
+
   activeDayIsOpen: boolean = true;
 
   handleEvent(action: string, event: CalendarEvent): void {

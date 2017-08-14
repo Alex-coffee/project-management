@@ -14,6 +14,12 @@
                     </div>
                     
                     <h5>生产计划表</h5>
+
+                    <div class="btn-group btn-group-xs m-l-sm">
+                      <button class="btn btn-success" (click)="runOR()">
+                        <i class="fa fa-lightbulb-o"></i>生产计划自动优化
+                      </button>
+                    </div>
                 </div>
                 <div class="ibox-content">
                   <div [ngSwitch]="view">

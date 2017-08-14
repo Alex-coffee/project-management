@@ -8,6 +8,7 @@ var SchemaFactory = rootRequire('app/utils/SchemaFactory');
 SchemaFactory.init();
 
 var ServicesFactory = rootRequire('app/utils/ServicesFactory');
+var ORFactory = rootRequire('app/utils/ORFactory');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
@@ -32,6 +33,7 @@ var clearAllOutPutFile = function(){
 module.exports = function(app) {
     app.use(allowCrossDomain);
     ServicesFactory.apiInit(app);
+    ORFactory.apiInit(app);
 
     app.get('/api/test', function(req, res){
         res.status(200).send({"message" : "测试输出"});

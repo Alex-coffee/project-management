@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { HTTP_BASE } from 'app/config';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin'
 import {PurchasePlanService} from 'app/services/purchase-plan.service';
 import {OrderDemandService} from 'app/services/order-demand.service';
+import {ToolsService} from 'app/utils/tools.service';
+
 
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
@@ -27,11 +31,29 @@ const colors: any = {
 
 @Injectable()
 export class ScheduleService {
+  private HOST:string = HTTP_BASE;
+  private runORURL = this.HOST + '/api/or/run';
 
   constructor(
+    private http: Http,
     private purchasePlanService: PurchasePlanService,
-    private orderDemandService: OrderDemandService
+    private orderDemandService: OrderDemandService,
+    private toolsService: ToolsService
   ) { }
+
+  runOR(): Observable<any>{
+    let currentScenario = localStorage.getItem('currentScenario');
+    if(currentScenario){
+
+      return this.http.post(this.runORURL, {
+          id: JSON.parse(currentScenario)._id,
+          numDays: this.toolsService.getScenarioDates
+        }).map((_response: Response) => {
+        const data = _response.json()
+        return _response.json();
+      });
+    }
+  }
 
   getAllScheduleData(): Observable<any>{
     let currentScenario = localStorage.getItem('currentScenario');
