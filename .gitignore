@@ -4,3 +4,9 @@ src/assets/or/output/LineKPIs.json
 src/assets/or/output/ProductionScheduleResult.json
 src/assets/or/output/RawMaterialDemandsResult.json
 src/assets/or/output/UncoveredDemands.json
+src/assets/or/temp/LineStaticData.json
+src/assets/or/temp/OrderRawMaterials.json
+src/assets/or/temp/Orders.json
+src/assets/or/temp/Parameters.json
+src/assets/or/temp/ProductStaticData.json
+src/assets/or/temp/RawMaterials.json
