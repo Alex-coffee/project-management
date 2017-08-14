@@ -39,12 +39,14 @@ const colors: any = {
 export class CalendarComponent implements OnInit {
   @ViewChild('purchaseMaterialModal') public purchaseMaterialModal:ModalDirective;
   @ViewChild('orderDemandModal') public orderDemandModal:ModalDirective;
+  @ViewChild('orSettingsModal') public orSettingsModal:ModalDirective;
   materialPurchaseDetailItem: any = {};
   orderDemandDetailItem: any = {};
   view: string = 'month';
   viewDate: Date = new Date();
   rawMaterialOptions: Array<IOption> = [];
   orderOptions: Array<IOption> = [];
+  parameters: any = {};
 
   dateRange: Date[];
   modalData: {
@@ -72,25 +74,30 @@ export class CalendarComponent implements OnInit {
   }
 
   loadData(){
-    // this.scenarioService.findCurrentScenarioData().subscribe(res => {
-    //   console.log(res);
-    // })
+    this.scenarioService.findCurrentScenarioData().subscribe(res => {
+      this.parameters = res;
+    })
+
     this.scheduleService.getAllScheduleData().subscribe(res => {
       this.events = res.calenderEvents;
+      this.refresh.next()
     })
   }
 
   runOR(): void{
-    this.scheduleService.runOR().subscribe(res => {
-      this.events = res.calenderEvents;
+    this.scenarioService.save(this.parameters).subscribe(result => {
+      localStorage.setItem('currentScenario', JSON.stringify(result));
+      this.scheduleService.runOR().subscribe(res => {
+        this.events = res.calenderEvents;
+      })
     })
   }
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen: boolean = false;
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    // this.eventModal.show();
+    this.orderDemandModal.show();
     // this.modal.open(this.modalContent, { size: 'lg' });
   }
 

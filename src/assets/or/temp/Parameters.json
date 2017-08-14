@@ -1,1 +1,1 @@
-{"numDays":6,"penaltyForLineModeChange":0,"isPenalizeForNumLineModeChangeOn":false,"isPenalizeForStorageOn":false,"penaltyForLineUsage":0,"isPenalizeForNumLineUsedOn":false,"isRawMaterialPrepareConstraintOn":false}
+{"numDays":6,"penaltyForLineModeChange":100,"isPenalizeForNumLineModeChangeOn":true,"isPenalizeForStorageOn":false,"penaltyForLineUsage":200,"isPenalizeForNumLineUsedOn":true,"isRawMaterialPrepareConstraintOn":true}
