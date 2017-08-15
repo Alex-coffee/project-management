@@ -40,6 +40,8 @@ export class CalendarComponent implements OnInit {
   @ViewChild('purchaseMaterialModal') public purchaseMaterialModal:ModalDirective;
   @ViewChild('orderDemandModal') public orderDemandModal:ModalDirective;
   @ViewChild('orSettingsModal') public orSettingsModal:ModalDirective;
+  @ViewChild('calendarDetailModal') public calendarDetailModal:ModalDirective;
+  
   materialPurchaseDetailItem: any = {};
   orderDemandDetailItem: any = {};
   view: string = 'month';
@@ -47,6 +49,7 @@ export class CalendarComponent implements OnInit {
   rawMaterialOptions: Array<IOption> = [];
   orderOptions: Array<IOption> = [];
   parameters: any = {};
+  currentCalendarEvent: any;
 
   dateRange: Date[];
   modalData: {
@@ -80,6 +83,9 @@ export class CalendarComponent implements OnInit {
 
     this.scheduleService.getAllScheduleData().subscribe(res => {
       this.events = res.calenderEvents;
+      this.events.forEach(event => {
+        event.actions = this.actions;
+      })
       this.refresh.next()
     })
   }
@@ -95,9 +101,25 @@ export class CalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = false;
 
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('edit', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('delete', event);
+      }
+    }
+  ];
+
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.orderDemandModal.show();
+    this.currentCalendarEvent = event.meta;
+    this.calendarDetailModal.show();
     // this.modal.open(this.modalContent, { size: 'lg' });
   }
 
@@ -114,22 +136,6 @@ export class CalendarComponent implements OnInit {
       }
     }
   }
-
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      }
-    }
-  ];
 
   refresh: Subject<any> = new Subject();
 

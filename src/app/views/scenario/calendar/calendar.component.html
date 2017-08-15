@@ -270,3 +270,32 @@
     </div>
   </div>
 </div>
+
+<div bsModal #calendarDetailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div *ngIf="currentCalendarEvent" class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">{{currentCalendarEvent.date | date:"yyyy-MM-dd"}}计划</h4>
+          <button type="button" class="close pull-right" (click)="calendarDetailModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #calendarDetailForm="ngForm" class="form-horizontal">
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">{{currentCalendarEvent.item.name}}</label>
+                  <div class="col-sm-8">
+                      <input type="number" id="calendarEventAmount" name="calendarEventAmount" 
+                       min="0" [(ngModel)]="currentCalendarEvent.amount" required>
+                  </div>
+              </div>
+              
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="!calendarDetailForm.form.valid" type="submit" class="btn btn-sm btn-info" (click)="confirmPurchasePlan()">确定</button>
+          <button class="btn btn-sm btn-default" (click)="calendarDetailModal.hide()">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>

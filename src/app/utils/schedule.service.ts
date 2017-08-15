@@ -71,6 +71,7 @@ export class ScheduleService {
             let events: CalendarEvent[] = [];
             purchasePlanList.forEach(pp => {
               events.push({
+                meta: pp,
                 start: startOfDay(new Date(pp.date)),
                 end: endOfDay(new Date(pp.date)),
                 title: '原料采购: ' + pp.item.name + " 数量: " + pp.amount,
@@ -82,6 +83,7 @@ export class ScheduleService {
             //order demands
             orderDemandList.forEach(od => {
               events.push({
+                meta: od,
                 start: startOfDay(new Date(od.date)),
                 end: endOfDay(new Date(od.date)),
                 title: '订单计划: ' + od.item.name + " 数量: " + od.amount,
