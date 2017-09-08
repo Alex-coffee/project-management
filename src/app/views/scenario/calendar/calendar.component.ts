@@ -79,6 +79,7 @@ export class CalendarComponent implements OnInit {
   loadData(){
     this.scenarioService.findCurrentScenarioData().subscribe(res => {
       this.parameters = res;
+      this.viewDate = new Date(this.parameters.startDate);
     })
 
     this.scheduleService.getAllScheduleData().subscribe(res => {

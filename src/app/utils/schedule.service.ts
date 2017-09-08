@@ -101,6 +101,68 @@ export class ScheduleService {
     }
   }
 
+  getPurchasePlanData(): Observable<any>{
+    let currentScenario = localStorage.getItem('currentScenario');
+    if(currentScenario){
+      // return this.purchasePlanService.find({"scenario": JSON.parse(currentScenario)._id});
+      let data$ = new Observable(observer => {
+        this.orderDemandService.find({"scenario": JSON.parse(currentScenario)._id})
+        .subscribe(res => {
+            let orderDemandList = res.list;
+            
+            //raw material purchase
+            let events: CalendarEvent[] = [];
+            orderDemandList.forEach(od => {
+              events.push({
+                meta: od,
+                start: startOfDay(new Date(od.date)),
+                end: endOfDay(new Date(od.date)),
+                title: '订单计划: ' + od.item.name + " 数量: " + od.amount,
+                color: colors.blue,
+                // actions: this.actions
+              });
+            })
+          
+            observer.next({
+              calenderEvents: events
+            });
+          })
+      });
+      return data$;
+    }
+  }
+
+  getOrderDemandData(): Observable<any>{
+    let currentScenario = localStorage.getItem('currentScenario');
+    if(currentScenario){
+      // return this.purchasePlanService.find({"scenario": JSON.parse(currentScenario)._id});
+      let data$ = new Observable(observer => {
+        this.purchasePlanService.find({"scenario": JSON.parse(currentScenario)._id})
+        .subscribe(res => {
+            let purchasePlanList = res.list;
+            
+            //raw material purchase
+            let events: CalendarEvent[] = [];
+            purchasePlanList.forEach(pp => {
+              events.push({
+                meta: pp,
+                start: startOfDay(new Date(pp.date)),
+                end: endOfDay(new Date(pp.date)),
+                title: '原料采购: ' + pp.item.name + " 数量: " + pp.amount,
+                color: colors.red,
+                // actions: this.actions
+              });
+            })
+          
+            observer.next({
+              calenderEvents: events
+            });
+          })
+      });
+      return data$;
+    }
+  }
+
   // let kpi$ = new Observable(observer => {
   //       Observable.forkJoin([
   //         this.getLineKPI(),

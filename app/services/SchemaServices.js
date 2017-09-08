@@ -81,6 +81,9 @@ var save = function(schema, data){
             deferred.reject();
         } else {
             if(todo == undefined){
+                for(let key in data){
+                    if(data[key] == "undefined") data[key] = undefined;
+                }
                 todo = new schema(data);
             }else{
                 for(let key in data){

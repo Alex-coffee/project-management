@@ -12,8 +12,6 @@
                         新增订单生产计划
                       </button>
                     </div>
-                    
-                    <!-- <h5>生产计划表</h5> -->
 
                     <div class="btn-group btn-group-xs m-l-sm">
                       <button class="btn btn-success" (click)="orSettingsModal.show()">
@@ -22,6 +20,7 @@
                     </div>
                 </div>
                 <div class="ibox-content">
+                <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'cn' }}</h3>
                   <div [ngSwitch]="view">
                     <mwl-calendar-month-view
                       *ngSwitchCase="'month'"

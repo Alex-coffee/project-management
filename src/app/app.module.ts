@@ -30,6 +30,7 @@ import { CustomFormsModule } from 'ng2-validation'
 import { CalendarModule } from 'angular-calendar';
 import { PeityModule } from 'app/components/charts/peity';
 import { SelectModule } from 'ng-select';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
 import { CalendarComponent } from './views/scenario/calendar/calendar.component';
@@ -41,6 +42,8 @@ import { OrderRawMaterialsComponent } from 'app/views/basic/order-raw-materials/
 
 import { ProductStaticComponent } from 'app/views/production/product-static/product-static.component';
 import { MaterialPurchasingComponent } from 'app/views/production/material-purchasing/material-purchasing.component';
+import { MaterialCalendarComponent } from 'app/views/scenario/material-calendar/material-calendar.component';
+import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-calendar.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,9 @@ import { MaterialPurchasingComponent } from 'app/views/production/material-purch
     OrderRawMaterialsComponent,
     OrdersComponent,
     ProductStaticComponent,
-    MaterialPurchasingComponent
+    MaterialPurchasingComponent,
+    MaterialCalendarComponent,
+    OrderCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +67,8 @@ import { MaterialPurchasingComponent } from 'app/views/production/material-purch
     LayoutsModule,
     AppviewsModule,
     SelectModule,
+
+    ChartsModule,
 
     // ScenarioModule,
     // BasicModule,

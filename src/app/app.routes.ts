@@ -8,6 +8,8 @@ import { OrderRawMaterialsComponent} from "app/views/basic/order-raw-materials/o
 
 import { ManagementComponent} from "app/views/scenario/management/management.component";
 import { CalendarComponent} from "app/views/scenario/calendar/calendar.component";
+import { MaterialCalendarComponent } from 'app/views/scenario/material-calendar/material-calendar.component';
+import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-calendar.component';
 
 import { ProductStaticComponent} from "app/views/production/product-static/product-static.component";
 import { MaterialPurchasingComponent} from "app/views/production/material-purchasing/material-purchasing.component";
@@ -34,6 +36,8 @@ export const ROUTES:Routes = [
     children: [
       {path: 'management', component: ManagementComponent},
       {path: 'calendar', component: CalendarComponent},
+      {path: 'material-calendar', component: MaterialCalendarComponent},
+      {path: 'order-calendar', component: OrderCalendarComponent}
     ]
   },
   {

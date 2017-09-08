@@ -65,12 +65,13 @@ var apiInit = function(app){
             //process ProductStaticData
             function(arg1, callback){
                 let productStatic = SchemaFactory.getModel("productstatic");
-                SchemaServices.find(productStatic, {"scenario": scenarioId, "isDeleted": false}, {}).then(res => {
+                SchemaServices.find(productStatic, {"scenario": scenarioId, "isDeleted": false}, {"populateFields": "product"})
+                .then(res => {
                     let productStaticList = res;
                     let productStaticData = [];
                     productStaticList.forEach(ps => {
                         productStaticData.push({
-                            orderName: ps.product,
+                            orderName: ps.product.name,
                             mainLine: ps.mainLine,
                             subLine: ps.subLine ? ps.subLine : -1,
                             unitTime: ps.unitTime
