@@ -42,19 +42,19 @@ var apiInit = function(app){
             //process OrderRawMaterials
             function(callback){
                 let itemBOM = SchemaFactory.getModel("itembom");
-                SchemaServices.find(itemBOM, {"scenario": scenarioId, "isDeleted": false}, {}).then(res => {
+                SchemaServices.find(itemBOM, {"scenario": scenarioId, "isDeleted": false}, {"populateFields": "item materials.item"}).then(res => {
                     let itemBOMList = res;
                     let orderRawMaterials = [];
                     itemBOMList.forEach(itemBOM => {
                         let raws = [];
                         itemBOM.materials.forEach(m => {
                             raws.push({
-                                rawName: m.item,
+                                rawName: m.item.name,
                                 amount: m.amount
                             })
                         })
                         orderRawMaterials.push({
-                            orderName: itemBOM.item,
+                            orderName: itemBOM.item.name,
                             raws: raws
                         })
                     })                    
@@ -73,7 +73,7 @@ var apiInit = function(app){
                         productStaticData.push({
                             orderName: ps.product.name,
                             mainLine: ps.mainLine,
-                            subLine: ps.subLine ? ps.subLine : -1,
+                            subLine: ps.subLine ? ps.subLine : "-1",
                             unitTime: ps.unitTime
                         })
                     });
