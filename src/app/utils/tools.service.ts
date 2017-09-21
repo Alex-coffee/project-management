@@ -22,7 +22,10 @@ export class ToolsService {
     let currentScenarioStr = localStorage.getItem("currentScenario");
     if(currentScenarioStr){
       let currentScenario = JSON.parse(currentScenarioStr);
-      return this.getDateArrayByRange(new Date(currentScenario.startDate), new Date(currentScenario.endDate));
+      const startDate = new Date(currentScenario.startDate);
+      const endDate = new Date(currentScenario.endDate);
+      endDate.setDate(endDate.getDate() + 1);
+      return this.getDateArrayByRange(startDate, endDate);
     }else{
       return undefined;
     }

@@ -27,15 +27,29 @@ export class WizardComponent implements OnInit {
     } else if ('or' === itemToShow) {
       this.showORConent = true;
     } else if ('result' === itemToShow) {
-      this.showResultConent = true;
+      // this.showResultConent = true;
     }
 
     this.formWizard.next();
   }
 
+  orProcessEnded = false;
   public runOR() {
-    // this.parameter.runOR();
-    this.showResultConent = true;
     this.formWizard.next();
+    this.parameter.runOR();
+    
+    // setTimeout(() => { 
+    //   this.orProcessEnded = true; 
+    //   this.showResultConent = true;
+    //   this.formWizard.next(); 
+    // }, 5000);
+  }
+
+  public wizardORCallback() {
+    setTimeout(() => { 
+      this.orProcessEnded = true; 
+      this.showResultConent = true;
+      this.formWizard.next(); 
+    }, 5000);
   }
 }

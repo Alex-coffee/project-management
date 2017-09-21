@@ -35,7 +35,7 @@
                                     </tr>
                                     <tr *ngFor="let plan of ps.plan">
                                         <td>{{plan.time}}</td>
-                                        <td>{{plan.line}}</td>
+                                        <td>{{lineMap[plan.line].name}}</td>
                                         <td>{{plan.amount}}</td>
                                     </tr>
                                 </table>

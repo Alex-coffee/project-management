@@ -25,11 +25,13 @@ export class ProductionScheduleComponent implements OnInit {
   productionScheduleList: any[] = [];
   currentType: string = "line";
   inProcess:boolean = false;
+  lineMap: any = {};
 
   constructor(
     private backendService: BackendService, 
     private optimizeService: OptimizeService, 
     private scenarioService: ScenarioService,
+    private lineService: LineService,
     public toastr: ToastsManager, vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -37,12 +39,15 @@ export class ProductionScheduleComponent implements OnInit {
   ngOnInit() {
     this.getGanttData();
     this.getProductScheduleData();
-    this.getScenarios();
+    this.getLineInfo();
   }
 
-  getScenarios(){
-    this.scenarioService.find({}).subscribe(data => {
-      console.log(data);
+  getLineInfo(){
+    this.lineService.find({}).subscribe(data => {
+      const lines = data.list;
+      lines.forEach(line => {
+        this.lineMap[line._id] = line; 
+      })
     });
   }
 

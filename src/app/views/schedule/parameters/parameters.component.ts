@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, EventEmitter, Output} from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { OptimizeService } from 'app/services/optimize.service';
@@ -19,6 +19,8 @@ import { Router } from '@angular/router';
 export class ParametersComponent implements OnInit {
   parameters: any = {};
   inProcess:boolean = false;
+  @Output()
+  private orCallback: EventEmitter<any>;
 
   constructor(
     private dataService: DataService, 
@@ -29,6 +31,7 @@ export class ParametersComponent implements OnInit {
     public toastr: ToastsManager, 
             vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
+              this.orCallback  = new EventEmitter<any>();
             }
 
   ngOnInit() {
@@ -46,7 +49,7 @@ export class ParametersComponent implements OnInit {
     this.scenarioService.save(this.parameters).subscribe(result => {
       localStorage.setItem('currentScenario', JSON.stringify(result));
       this.scheduleService.runOR().subscribe(res => {
-        console.log(res);
+        this.orCallback.emit(); 
       });
     });
   }

@@ -1,87 +1,87 @@
-<form-wizard #formWizard>
-  <wizard-step [title]="'基础数据'" [isValid]="true">
-      <button class="btn btn-primary pull-right" (click)="next('plan')">
-          基础数据已就绪，下一步
-      </button>
-    <tabset type="pills">
-      <tab heading='原材料信息'>
-        <app-raw-materials></app-raw-materials>
-      </tab>
-      <tab heading='订单信息'>
-        <app-orders></app-orders>
-      </tab>
-      <tab heading='一级BOM原材料'>
-          <app-order-raw-materials></app-order-raw-materials>
-        </tab>
-      <tab heading='产线信息'>
-        <app-line-static></app-line-static>
-      </tab>
-    </tabset>
-  </wizard-step>
-
-  <wizard-step [title]="'生产计划'" [isValid]="true" >
-    <button class="btn btn-primary pull-right" (click)="next('config')">
-      生产计划已就绪，下一步
-    </button>
-
-    <div (*ngIf)="showPlanConent">
+<div class="m-t-md"> 
+  <form-wizard #formWizard>
+    <wizard-step [title]="'基础数据'" [isValid]="true">
+        <button class="btn btn-primary pull-right" (click)="next('plan')">
+            基础数据已就绪，下一步
+        </button>
       <tabset type="pills">
-        <tab heading='订单生产计划'>
-          <app-order-calendar></app-order-calendar>
+        <tab heading='原材料信息'>
+          <app-raw-materials></app-raw-materials>
         </tab>
-        <tab heading='原材料采购计划'>
-          <app-material-calendar></app-material-calendar>
+        <tab heading='订单信息'>
+          <app-orders></app-orders>
+        </tab>
+        <tab heading='一级BOM原材料'>
+            <app-order-raw-materials></app-order-raw-materials>
+          </tab>
+        <tab heading='产线信息'>
+          <app-line-static></app-line-static>
+        </tab>
+        <tab heading='订单产线设置'>
+          <app-product-static></app-product-static>
         </tab>
       </tabset>
-    </div>
+    </wizard-step>
 
-  </wizard-step>
+    <wizard-step [title]="'生产计划'" [isValid]="true" >
+      <button class="btn btn-primary pull-right" (click)="next('config')">
+        生产计划已就绪，下一步
+      </button>
 
-  <wizard-step [title]="'配置参数'"  >
-    <button class="btn btn-success pull-right" (click)="runOR()">
-      配置参数已就绪，开始优化
-    </button>
-    <div (*ngIf)="showORConent" >
-      <app-parameters #parameter></app-parameters>
-    </div>
-  </wizard-step>
-
-  <wizard-step [title]="'优化求解'" >
-    <button class="btn btn-primary pull-right" (click)="next('result')">
-      优化结束，查看结果
-    </button>
-
-    <h1 (*ngIf)="showORConent">求解中</h1>
-    <div class="sk-spinner sk-spinner-wave">
-        <div class="sk-rect1"></div>
-        <div class="sk-rect2"></div>
-        <div class="sk-rect3"></div>
-        <div class="sk-rect4"></div>
-        <div class="sk-rect5"></div>
-    </div>
-  </wizard-step>
-
-  <wizard-step [title]="'结果输出及KPI'" >
-      <tabset (*ngIf)="showResultConent" type="pills">
-          <tab heading='产线计划'>
-            <app-production-schedule></app-production-schedule>
+      <div *ngIf="showPlanConent">
+        <tabset type="pills">
+          <tab heading='订单生产计划'>
+            <app-order-calendar></app-order-calendar>
           </tab>
-          <tab heading='库存'>
-            <div class="row">
-              <div class="col-lg-6">
-                  <app-storage-amount></app-storage-amount>
-              </div>
-              <div class="col-lg-6">
-                  <app-raw-material-demands></app-raw-material-demands>
-              </div>
-            </div>>
+          <tab heading='原材料采购计划'>
+            <app-material-calendar></app-material-calendar>
           </tab>
-          <tab heading='未覆盖订单'>
-            <app-uncovered-demands></app-uncovered-demands>
-          </tab>
-          <tab heading='KPI'>
-            <app-kpi></app-kpi>
-          </tab>
-      </tabset>
-  </wizard-step>
-</form-wizard>
+        </tabset>
+      </div>
+
+    </wizard-step>
+
+    <wizard-step [title]="'配置参数'"  >
+      <button class="btn btn-success pull-right" (click)="runOR()">
+        配置参数已就绪，开始优化
+      </button>
+      <div class="clearfix"></div>
+      <div *ngIf="showConfigConent" class="m-t-md"> 
+        <app-parameters #parameter (orCallback)="wizardORCallback()"></app-parameters>
+      </div>
+    </wizard-step>
+
+    <wizard-step [title]="'优化求解'" >
+      <div>
+          <div *ngIf="!orProcessEnded" class="text-center" style="margin-top: 200px;">
+            <div class="m-b-md"><i class="fa fa-spin fa-spinner fa-4x"></i></div>
+            <h2>优化求解中，请稍后...</h2>
+          </div>
+      </div>
+    </wizard-step>
+
+    <wizard-step [title]="'结果输出及KPI'" >
+        <tabset *ngIf="showResultConent" type="pills">
+            <tab heading='产线计划'>
+              <app-production-schedule></app-production-schedule>
+            </tab>
+            <tab heading='库存'>
+              <div class="row">
+                <div class="col-lg-6">
+                    <app-storage-amount></app-storage-amount>
+                </div>
+                <div class="col-lg-6">
+                    <app-raw-material-demands></app-raw-material-demands>
+                </div>
+              </div>>
+            </tab>
+            <tab heading='未覆盖订单'>
+              <app-uncovered-demands></app-uncovered-demands>
+            </tab>
+            <tab heading='KPI'>
+              <app-kpi></app-kpi>
+            </tab>
+        </tabset>
+    </wizard-step>
+  </form-wizard>
+</div>

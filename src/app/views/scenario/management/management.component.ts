@@ -72,7 +72,7 @@ export class ManagementComponent implements OnInit {
 
   confirmChange(){
     this.scenarioService.save(this.detailItem).subscribe(res =>{
-      console.log(res);
+      localStorage.setItem('currentScenario', JSON.stringify(res));
       this.getScenarios();
       this.detailModal.hide();
     })
