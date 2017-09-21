@@ -21,6 +21,8 @@ import { StorageAmountComponent} from "app/views/schedule/storage-amount/storage
 import { UncoveredDemandsComponent} from "app/views/schedule/uncovered-demands/uncovered-demands.component";
 import { KpiComponent} from "app/views/schedule/kpi/kpi.component";
 
+import { WizardComponent} from "app/views/wizard/wizard.component";
+
 
 import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
 import {BasicLayoutComponent} from "./components/common/layouts/basicLayout.component";
@@ -31,6 +33,12 @@ export const ROUTES:Routes = [
   {path: '', redirectTo: '/scenario/management', pathMatch: 'full'},
 
   // App views
+  {
+    path: 'wizard', component: BasicLayoutComponent,
+    children: [
+      {path: 'step', component: WizardComponent}
+    ]
+  },
   {
     path: 'scenario', component: BasicLayoutComponent,
     children: [

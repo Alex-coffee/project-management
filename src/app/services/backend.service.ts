@@ -11,17 +11,25 @@ import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
 
+import { ScenarioService } from 'app/services/scenario.service';
+import { LineService } from 'app/services/line.service';
+
+
 @Injectable()
 export class BackendService {
-  private lineStaticDataUrl = 'assets/or/input/LineStaticData.json';
-  private ordersUrl = 'assets/or/input/Orders.json';
-  private productStaticDataUrl = 'assets/or/input/ProductStaticData.json';
+  private lineStaticDataUrl = 'assets/or/temp/LineStaticData.json';
+  private ordersUrl = 'assets/or/temp/Orders.json';
+  private productStaticDataUrl = 'assets/or/temp/ProductStaticData.json';
 
   private productionScheduleUrl = 'assets/or/output/ProductionScheduleResult.json';
   private storageAmountUrl = 'assets/or/output/StorageAmountResult.json';
   private uncoveredDemandsUrl = 'assets/or/output/UncoveredDemands.json';
   
-  constructor (private http: Http) {}
+  constructor (
+    private http: Http,
+    private scenarioService: ScenarioService,
+    private lineService: LineService
+  ) {}
 
   //*********** apis ****************/
   getOrderData(): Observable<any[]> {
@@ -57,26 +65,21 @@ export class BackendService {
   }
 
   getOrderGanttData(): Observable<GanttDataSet>{
-    let ganttData$ = new Observable(observer => {
+    let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
         this.http.get(this.ordersUrl).map(res => res.json()),
-        this.http.get(this.productionScheduleUrl).map(res => res.json())
+        this.http.get(this.productionScheduleUrl).map(res => res.json()),
+        this.scenarioService.findCurrentScenarioData(),
         ]).subscribe(res => {
           let orders = res[0];
           let productionScheduleResult = res[1];
+          const scenarioData = res[2];
           let ganttItems: GanttItem[] = [], slots = [], ganttSlots: GanttSlot[] = [];;
           let i = 0;
 
-          let today = new Date();
-          today.setHours(0);
-          today.setMinutes(0);
-          today.setSeconds(0);
-          today.setMilliseconds(0);
-          let todayTime = today.getTime();
-
           orders.forEach(order => {
               slots.push(order.orderName)
-              let slotItem = new GanttSlot({
+              const slotItem = new GanttSlot({
                   id: i++,
                   label: order.orderName,
                   content: order
@@ -87,11 +90,11 @@ export class BackendService {
           i = 0;
           productionScheduleResult.forEach(productSchedule => {
               productSchedule.plan.forEach(p => {
-                  let item = new GanttItem({
+                  const item = new GanttItem({
                       id: i++,
                       rowIndex: slots.indexOf(productSchedule.orderName),
-                      startTime: todayTime + p.time * 24 * 3600 * 1000,
-                      endTime: todayTime + (p.time + 1) * 24 * 3600 * 1000,
+                      startTime: new Date(scenarioData.startDate).getTime() + p.time * 24 * 3600 * 1000,
+                      endTime: new Date(scenarioData.startDate).getTime() + (p.time + 1) * 24 * 3600 * 1000,
                       assignedSlot: productSchedule.orderName,
                       label: productSchedule.orderName,
                       content: p
@@ -100,8 +103,8 @@ export class BackendService {
               })
           })
 
-          const startTime = d3.min(ganttItems, function(d) { return d.startTime; })
-          const endTime = d3.max(ganttItems, function(d) { return d.endTime; })
+          const startTime = new Date(scenarioData.startDate).getTime();
+          const endTime = new Date(scenarioData.endDate).getTime();
           
           observer.next(new GanttDataSet(ganttItems, ganttSlots, startTime, endTime));
       })
@@ -111,48 +114,44 @@ export class BackendService {
   }
 
   getLineOrderGanttData(): Observable<GanttDataSet>{
-    let ganttData$ = new Observable(observer => {
+    let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
         this.http.get(this.productStaticDataUrl).map(res => res.json()),
-        this.http.get(this.productionScheduleUrl).map(res => res.json())
+        this.http.get(this.productionScheduleUrl).map(res => res.json()),
+        this.lineService.find({}),
+        this.scenarioService.findCurrentScenarioData(),
         ]).subscribe(res => {
-
           let productStaticData = res[0];
           let productionScheduleResult = res[1];
-          let ganttItems: GanttItem[] = [], 
-            slots = [1,2,3,4,5,6,7,8], 
+          let lines = res[2].list;
+          const scenarioData = res[3];
+
+          let ganttItems: GanttItem[] = [],
             ganttSlots: GanttSlot[] = [],
             productStaticMap ={};
           let i = 0;
 
-          let today = new Date();
-          today.setHours(0);
-          today.setMinutes(0);
-          today.setSeconds(0);
-          today.setMilliseconds(0);
-          let todayTime = today.getTime();
-
-          slots.forEach(slot => {
-              let slotItem = new GanttSlot({
-                  id: i++,
-                  label: slot,
-                  content: slot
+          lines.forEach(line => {
+              const slotItem = new GanttSlot({
+                  id: line._id,
+                  label: line.name,
+                  content: line
               });
               ganttSlots.push(slotItem);
-          })
+          });
 
           productStaticData.forEach(ps => {
               productStaticMap[ps.orderName] = ps;
-          })
+          });
 
           i = 0;
           productionScheduleResult.forEach(productSchedule => {
               productSchedule.plan.forEach(p => {
                   p.produceTime = p.amount * productStaticMap[productSchedule.orderName].unitTime * 1000;
-                  let item = new GanttItem({
+                  const item = new GanttItem({
                       id: i++,
-                      rowIndex: slots.indexOf(p.line),
-                      startTime: todayTime + p.time * 24 * 3600 * 1000,
+                      rowIndex: lines.findIndex(line => line._id === p.line),
+                      startTime: new Date(scenarioData.startDate).getTime() + p.time * 24 * 3600 * 1000,
                       assignedSlot: p.line,
                       label: productSchedule.orderName,
                       content: p,
@@ -163,9 +162,8 @@ export class BackendService {
 
           this.processOrderInSameDay(ganttItems);
 
-          const startTime = d3.min(ganttItems, function(d) { return d.startTime; })
-          const endTime = d3.max(ganttItems, function(d) { return d.endTime; })
-          
+          const startTime = new Date(scenarioData.startDate).getTime();
+          const endTime = new Date(scenarioData.endDate).getTime();
           observer.next(new GanttDataSet(ganttItems, ganttSlots, startTime, endTime));
       })
 
@@ -200,8 +198,8 @@ export class BackendService {
                     endTime: item.startTime + item.content.produceTime
                 }
             }else{
-                let startTime = result[item.content.line][item.content.time][result[item.content.line][item.content.time].length - 1].endTime + gapDuration;
-                let endTime = startTime + item.content.produceTime;
+                const startTime = result[item.content.line][item.content.time][result[item.content.line][item.content.time].length - 1].endTime + gapDuration;
+                const endTime = startTime + item.content.produceTime;
                 result[item.content.line][item.content.time].push({
                     startTime: startTime,
                     endTime: endTime
@@ -228,7 +226,7 @@ export class BackendService {
   }
 
   private extractData(res: Response) {
-    let body = res.json();
+    const body = res.json();
     return body || { };
   }
   private handleError (error: Response | any) {

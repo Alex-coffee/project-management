@@ -17,10 +17,10 @@ export class RawMaterialDemandsComponent implements OnInit {
   }
 
   loadData(){
-    this.dataService.getRawMaterialDemandsResult()
-      .subscribe(res => {
-        this.dataList = res;
-      });
+    // this.dataService.getRawMaterialDemandsResult()
+    //   .subscribe(res => {
+    //     this.dataList = res;
+    //   });
   }
 
 }

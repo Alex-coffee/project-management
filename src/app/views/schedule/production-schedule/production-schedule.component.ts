@@ -3,6 +3,7 @@ import { BackendService } from 'app/services/backend.service';
 import { OptimizeService } from 'app/services/optimize.service';
 
 import { ScenarioService } from 'app/services/scenario.service';
+import { LineService } from 'app/services/line.service';
 
 import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
@@ -15,7 +16,7 @@ import { GanttDirective } from 'app/directive/gantt.directive';
   selector: 'app-production-schedule',
   templateUrl: './production-schedule.component.html',
   styleUrls: ['./production-schedule.component.css'],
-  providers: [ BackendService, OptimizeService, ScenarioService]
+  providers: [ BackendService, OptimizeService, ScenarioService, LineService]
 })
 export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;

@@ -15,8 +15,6 @@ import {AppviewsModule} from "./views/appviews/appviews.module";
 import {ProcessManagementViewModule} from "./views/processManagement/processManagement.views.module";
 import {MaterialsModule} from "./views/materials/materials.module";
 
-import {ScheduleModule} from "./views/schedule/schedule.module";
-
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
 
@@ -25,12 +23,14 @@ import { DateValueAccessorModule } from 'angular-date-value-accessor';
 import {ToastOptions} from 'ng2-toastr';
 import { ToastrCustomOption } from 'app/options/ToastrCustomOption';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
-import { CustomFormsModule } from 'ng2-validation'
+import { CustomFormsModule } from 'ng2-validation';
 import { CalendarModule } from 'angular-calendar';
 import { PeityModule } from 'app/components/charts/peity';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { FormWizardModule } from 'angular2-wizard';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
 import { CalendarComponent } from './views/scenario/calendar/calendar.component';
@@ -40,10 +40,20 @@ import { RawMaterialsComponent } from 'app/views/basic/raw-materials/raw-materia
 import { OrdersComponent } from 'app/views/basic/orders/orders.component';
 import { OrderRawMaterialsComponent } from 'app/views/basic/order-raw-materials/order-raw-materials.component';
 
+import { ParametersComponent } from 'app/views/schedule/parameters/parameters.component';
+import { ProductionScheduleComponent } from 'app/views/schedule/production-schedule/production-schedule.component';
+import { KpiComponent } from 'app/views/schedule/kpi/kpi.component';
+import { RawMaterialDemandsComponent } from 'app/views/schedule/raw-material-demands/raw-material-demands.component';
+import { StorageAmountComponent } from 'app/views/schedule/storage-amount/storage-amount.component';
+import { UncoveredDemandsComponent } from 'app/views/schedule/uncovered-demands/uncovered-demands.component';
+import { GanttDirective } from 'app/directive/gantt.directive';
+
 import { ProductStaticComponent } from 'app/views/production/product-static/product-static.component';
 import { MaterialPurchasingComponent } from 'app/views/production/material-purchasing/material-purchasing.component';
 import { MaterialCalendarComponent } from 'app/views/scenario/material-calendar/material-calendar.component';
 import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-calendar.component';
+
+import { WizardComponent } from 'app/views/wizard/wizard.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +67,15 @@ import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-
     ProductStaticComponent,
     MaterialPurchasingComponent,
     MaterialCalendarComponent,
-    OrderCalendarComponent
+    OrderCalendarComponent,
+    ParametersComponent,
+    ProductionScheduleComponent,
+    UncoveredDemandsComponent,
+    KpiComponent,
+    RawMaterialDemandsComponent,
+    StorageAmountComponent,
+    GanttDirective,
+    WizardComponent
   ],
   imports: [
     BrowserModule,
@@ -73,15 +91,17 @@ import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-
     // ScenarioModule,
     // BasicModule,
     // OrderModule,
-    ScheduleModule,
-
+    // ScheduleModule,
+    
     CustomFormsModule,
     DateValueAccessorModule,
     RouterModule.forRoot(ROUTES),
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
     ToastModule.forRoot(),
     CalendarModule.forRoot(),
     PeityModule,
+    FormWizardModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger' // set defaults here
     })

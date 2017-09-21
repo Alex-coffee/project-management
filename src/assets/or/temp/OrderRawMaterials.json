@@ -1,1 +1,1 @@
-[{"orderName":"p1","raws":[{"rawName":"raw2","amount":10}]},{"orderName":"p2","raws":[{"rawName":"raw3","amount":10},{"rawName":"raw1","amount":5}]}]
+[{"orderName":"p1","raws":[{"rawName":"raw2","amount":10}]},{"orderName":"p2","raws":[{"rawName":"raw3","amount":10},{"rawName":"raw1","amount":5},{"rawName":"orderRaw","amount":10}]},{"orderName":"new_product","raws":[{"rawName":"orderRaw","amount":5},{"rawName":"raw1","amount":5}]}]

@@ -1,15 +1,17 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'app/services/material.service';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
+import { ModalDirective } from 'ngx-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { ScheduleService } from 'app/utils/schedule.service';
 import { PurchasePlanService } from 'app/services/purchase-plan.service';
-import {OrderDemandService} from 'app/services/order-demand.service';
+import { OrderDemandService } from 'app/services/order-demand.service';
 import { ItemService } from 'app/services/item.service';
 
 import { ToolsService } from 'app/utils/tools.service';
 import { ScenarioService } from 'app/services/scenario.service';
+import { IOption } from 'ng-select';
 
 const colors: any = {
   red: {
@@ -35,7 +37,10 @@ const colors: any = {
     PurchasePlanService, ItemService]
 })
 export class MaterialCalendarComponent implements OnInit {
+  @ViewChild('purchaseMaterialModal') public purchaseMaterialModal: ModalDirective;
+
   dataList: any[] = [];
+  dateRange: Date[];
   totalSize: number = 0;
   view: string = 'month';
   errorMessage: any;
@@ -44,8 +49,10 @@ export class MaterialCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = false;
   parameters: any = {};
+  materialPurchaseDetailItem: any = {};
+  rawMaterialOptions: Array<IOption> = [];
 
-  constructor(private materialService: MaterialService, 
+  constructor(private materialService: MaterialService,
     private toolsService: ToolsService,
     private purchasePlanService: PurchasePlanService,
     private itemService: ItemService,
@@ -54,6 +61,7 @@ export class MaterialCalendarComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    this.prepareMaterials();
   }
 
   refresh: Subject<any> = new Subject();
@@ -78,8 +86,8 @@ export class MaterialCalendarComponent implements OnInit {
           //   event.actions = this.actions;
           // })
           this.refresh.next()
-        })
-    })
+        });
+    });
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -99,14 +107,56 @@ export class MaterialCalendarComponent implements OnInit {
   filterCalendarItem(material){
     this.calendarEvents = this.events.filter(event => {
       return event.meta.item.name == material.name;
-    })
+    });
     this.refresh.next();
+  }
+
+  purchaseMaterial(){
+    const dates = this.toolsService.getScenarioDates();
+    this.dateRange = dates;
+
+    this.materialPurchaseDetailItem.purchasePlans = [];
+    this.dateRange.forEach(d => {
+      this.materialPurchaseDetailItem.purchasePlans.push({
+        date: d,
+        amount: 0
+      });
+    })
+    this.purchaseMaterialModal.show();
+  }
+
+  confirmPurchasePlan(){
+    const batchPlans = [];
+    this.materialPurchaseDetailItem.purchasePlans.forEach(plan => {
+      plan.item = this.materialPurchaseDetailItem.item;
+      if (plan.amount > 0) batchPlans.push(plan);
+    });
+    this.purchasePlanService.batchInsert(batchPlans).subscribe(res => {
+      console.log(res);
+      this.loadData();
+      this.purchaseMaterialModal.hide();
+    });
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
     // this.currentCalendarEvent = event.meta;
     // this.calendarDetailModal.show();
     // this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  //**** prepare select items
+  prepareMaterials(){
+    this.itemService.findRawMaterial({}).subscribe(res => {
+        let materials = res.list;
+        let rawMaterialOptionArray = [];
+        materials.forEach(material => {
+          rawMaterialOptionArray.push({
+            label: material.name,
+            value: material._id
+          })
+        })
+        this.rawMaterialOptions = rawMaterialOptionArray;
+      });
   }
 
 }

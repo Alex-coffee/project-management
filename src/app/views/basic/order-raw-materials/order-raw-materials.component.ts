@@ -38,19 +38,19 @@ export class OrderRawMaterialsComponent implements OnInit {
   }
 
   add(){
-    this.errMsg = "";
-    this.detailItem = {isNew: true};
+    this.errMsg = '';
+    this.detailItem = {isNew: true, type: 'raw'};
     this.detailModal.show();
   }
 
-  modify(item){
-    this.errMsg = "";
+  modify(item) {
+    this.errMsg = '';
     this.detailItem = JSON.parse(JSON.stringify(item));
     this.detailItem.item = this.detailItem.item._id;
-    if(this.detailItem.materials && this.detailItem.materials.length > 0){
+    if (this.detailItem.materials && this.detailItem.materials.length > 0) {
       this.detailItem.materials.forEach(m => {
         m.item = m.item._id;
-      })
+      });
     }
     this.detailModal.show();
   }
@@ -59,7 +59,7 @@ export class OrderRawMaterialsComponent implements OnInit {
     return index;
   }
 
-  addNewRawMaterial(){
+  addNewRawMaterial() {
     if(this.detailItem.materials){
       this.detailItem.materials.push({
         "item": "",
@@ -89,7 +89,7 @@ export class OrderRawMaterialsComponent implements OnInit {
       });
 
     this.itemService.findProduct({}).subscribe(res => {
-        let orders = res.list;;
+        let orders = res.list;
         let orderOptionArray = [];
         orders.forEach(order => {
           orderOptionArray.push({

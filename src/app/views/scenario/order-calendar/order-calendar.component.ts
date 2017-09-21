@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'app/services/material.service';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
@@ -10,6 +10,9 @@ import { ItemService } from 'app/services/item.service';
 
 import { ToolsService } from 'app/utils/tools.service';
 import { ScenarioService } from 'app/services/scenario.service';
+import { ModalDirective } from 'ngx-bootstrap';
+
+import { IOption } from 'ng-select';
 
 const colors: any = {
   red: {
@@ -35,7 +38,10 @@ const colors: any = {
     PurchasePlanService, ItemService]
 })
 export class OrderCalendarComponent implements OnInit {
+  @ViewChild('orderDemandModal') public orderDemandModal: ModalDirective;
+
   dataList: any[] = [];
+  dateRange: Date[];
   totalSize: number = 0;
   view: string = 'month';
   errorMessage: any;
@@ -44,16 +50,20 @@ export class OrderCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = false;
   parameters: any = {};
+  orderDemandDetailItem: any = {};
+  orderOptions: Array<IOption> = [];
 
   constructor(private materialService: MaterialService, 
     private toolsService: ToolsService,
     private purchasePlanService: PurchasePlanService,
+    private orderDemandService: OrderDemandService,
     private itemService: ItemService,
     private scenarioService: ScenarioService,
     private scheduleService: ScheduleService) { }
 
   ngOnInit() {
     this.loadData();
+    this.prepareOrders();
   }
 
   refresh: Subject<any> = new Subject();
@@ -101,6 +111,47 @@ export class OrderCalendarComponent implements OnInit {
       return event.meta.item.name == material.name;
     })
     this.refresh.next();
+  }
+
+  orderDemand(){
+    var dates = this.toolsService.getScenarioDates();
+    this.dateRange = dates;
+
+    this.orderDemandDetailItem.orderDemands = [];
+    this.dateRange.forEach(d => {
+      this.orderDemandDetailItem.orderDemands.push({
+        date: d,
+        amount: 0
+      });
+    })
+    this.orderDemandModal.show();
+  }
+
+  confirmOrderDemand(){
+    let batchDemands = [];
+    this.orderDemandDetailItem.orderDemands.forEach(od => {
+      od.item = this.orderDemandDetailItem.item;
+      if(od.amount > 0) batchDemands.push(od);
+    })
+    this.orderDemandService.batchInsert(batchDemands).subscribe(res => {
+      console.log(res);
+      this.loadData();
+      this.orderDemandModal.hide();
+    });
+  }
+
+  prepareOrders(){
+    this.itemService.findProduct({}).subscribe(res => {
+        let products = res.list;
+        let optionArray = [];
+        products.forEach(material => {
+          optionArray.push({
+            label: material.name,
+            value: material._id
+          })
+        })
+        this.orderOptions = optionArray;
+      });
   }
 
   handleEvent(action: string, event: CalendarEvent): void {

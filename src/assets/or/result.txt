@@ -1,0 +1,16 @@
+Following order demand cannot be delivered:
+Order p1 Time 0 Amount 900
+Order p1 Time 1 Amount 1500
+Order p1 Time 4 Amount 1485
+Order p2 Time 0 Amount 4370
+
+Production Plan:
+Order 0 p1 (6,0,15) 
+
+Line Schedule:
+Line 0 (6,0,15) 
+
+Storage Track:
+Order 0 p1 100 0 0 0 0 985 0 
+Order 1 p2 100 4370 4350 350 50 30 0 
+Order 2 new_product 1000 1000 1000 1000 1000 1000 0 

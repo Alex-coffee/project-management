@@ -3,9 +3,9 @@ var settings = rootRequire('config/settings');
 let modelMap = {};
 
 var init = function (connectionMap) {
-    mongoose.connect(settings.dbURL);
+    mongoose.connect(settings.dbURL, {useMongoClient: true});
     var db = mongoose.connection;
-    
+
     var Demand = rootRequire('app/model/demand');
     var Item = rootRequire('app/model/item');
     var ItemBOM = rootRequire('app/model/itemBOM');

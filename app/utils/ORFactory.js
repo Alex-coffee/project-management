@@ -1,6 +1,8 @@
 var q = require('q');
 var async = require('async');
 var fs = require('fs');
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
 var SchemaServices = rootRequire('app/services/SchemaServices');
 var SchemaFactory = rootRequire('app/utils/SchemaFactory');
 var settings = rootRequire('config/settings');
@@ -155,13 +157,15 @@ var apiInit = function(app){
                 let Item = SchemaFactory.getModel("item");
 
                 q.all([
-                    SchemaServices.find(Item, {"type": ItemType.MATERIAL, "scenario": scenarioId, "isDeleted": false}, {}),
+                    SchemaServices.find(Item, {"type": ItemType.MATERIAL, "scenario": scenarioId, "isDeleted": false}, {"populateFields": "refItem"}),
                     SchemaServices.find(PurchasePlan, {"scenario": scenarioId, "isDeleted": false}, {})
                 ]).then(resArray => {
                     let materialList = resArray[0];
                     let purchasePlans = resArray[1];
 
                     let rawMaterialData = [];
+                    let rawOrderData = [];
+
                     materialList.forEach(material => {
                         let supplys = [];
                         let currentMaterialPlan = purchasePlans.filter(pp => {
@@ -178,6 +182,13 @@ var apiInit = function(app){
                             }
                         })
 
+                        if(material.useItem && material.refItem){
+                            rawOrderData.push({
+                                "orderName": material.refItem.name,
+                                "rawName": material.name
+                            })
+                        }
+
                         rawMaterialData.push({
                             "rawId": material._id,
                             "rawName": material.name,
@@ -190,6 +201,7 @@ var apiInit = function(app){
                     });
 
                     writeFile("RawMaterials.json", rawMaterialData);
+                    writeFile("RawOrderMap.json", rawOrderData);
                     callback(null, numDays);
                 }) 
             },
@@ -211,15 +223,47 @@ var apiInit = function(app){
                 }, err => {
                     callback(null, 500);
                 });
-            }
+            },
+            //run OR
+            function(numDays, callback){
+                var orCommand = [];
+                orCommand.push(settings.systemPath + settings.command);
+                orCommand.push(settings.systemPath + "temp/");
+                orCommand.push(settings.systemPath + "output/");
+                orCommand.push("optimize");
+                console.log("command: " + orCommand.join(" "));
 
+                var bat = spawn('cmd', ['/c', orCommand.join(" ")],{
+                    cwd: settings.systemPath
+                });
+
+                bat.stdout.on('data', function (data) {
+                    console.log(data.toString());
+                });
+        
+                bat.stderr.on('error', function (data) {
+                    console.log(data.toString());
+                });
+        
+                bat.on('exit', function (code) {
+                    console.log("Code: " + code);
+                    if(code == 0){
+                        callback(null, 200);
+                    }else{
+                        callback(500, code);
+                    }
+                });
+            }
             
         ],
         function(err, results) {
-            console.log(results);
-            res.status(200).send({
-                message: "已生成结果"
-            });
+            if(err){
+                res.status(500).send({message: "运行失败, code: " + err});
+            }else{
+                res.status(200).send({
+                    message: "已生成结果"
+                });
+            }
         });
     });
 

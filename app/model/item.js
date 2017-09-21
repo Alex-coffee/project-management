@@ -9,6 +9,8 @@ var ItemSchema = new Schema({
     storageCost: {type: Number},
     saftyStorage: {type: Number},
     initialStorage: {type: Number, default: 0},
+    useItem: {type: Boolean, default: false},
+    refItem: { type: Schema.Types.ObjectId, ref: 'Item'},
     scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
 
     isDeleted: {type: Boolean, default: false},
