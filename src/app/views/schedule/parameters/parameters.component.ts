@@ -49,7 +49,7 @@ export class ParametersComponent implements OnInit {
     this.scenarioService.save(this.parameters).subscribe(result => {
       localStorage.setItem('currentScenario', JSON.stringify(result));
       this.scheduleService.runOR().subscribe(res => {
-        this.orCallback.emit(); 
+        this.orCallback.emit();
       });
     });
   }

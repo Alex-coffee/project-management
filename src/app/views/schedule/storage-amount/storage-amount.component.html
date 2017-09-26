@@ -17,7 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
+                            <tr *ngFor="let d of dataList | paginate: {id: 'storageAmountPaging', itemsPerPage: 5, currentPage: p }">
                                 <!-- <td>{{d.orderId}}</td> -->
                                 <td>{{d.orderName}}</td>
                                 <td>{{d.safeStorage}}</td>
@@ -38,6 +38,8 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <pagination-controls id="storageAmountPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>

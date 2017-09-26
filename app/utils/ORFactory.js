@@ -137,7 +137,7 @@ var apiInit = function(app){
                         })
 
                         ordersData.push({
-                            "orderId": product._id,
+                            "orderId": product._id.toString(),
                             "orderName": product.name,
                             "unitCost": product.cost,
                             "safeStorage": product.safeStorage,
@@ -190,7 +190,7 @@ var apiInit = function(app){
                         }
 
                         rawMaterialData.push({
-                            "rawId": material._id,
+                            "rawId": material._id.toString(),
                             "rawName": material.name,
                             "unitCost": material.cost,
                             "safeStorage": material.safeStorage,
@@ -214,7 +214,8 @@ var apiInit = function(app){
                     lines.forEach(line => {
                         lineStaticData.push({
                             "availHours": line.availableHours * numDays,
-                            "lineId": line._id, 
+                            "lineId": line._id.toString(), 
+                            "name": line.name, 
                             "turnHours": line.turnHours
                         })
                     })
@@ -254,7 +255,6 @@ var apiInit = function(app){
                     }
                 });
             }
-            
         ],
         function(err, results) {
             if(err){

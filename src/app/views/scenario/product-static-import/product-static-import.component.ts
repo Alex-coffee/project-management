@@ -15,13 +15,17 @@ export class ProductStaticImportComponent implements OnInit {
     url: HTTP_BASE + '/api/data/productstatic/import',
   };
 
-  constructor(private toolsService: ToolsService) { }
+  constructor(
+    private toolsService: ToolsService,
+  ) { }
 
   ngOnInit() {
   }
 
   public onUploadSuccess() {
-    this.toolsService.processImportedProductStaticData();
+    this.toolsService.processImportedProductStaticData().then(res => {
+      location.reload();
+    });
   }
 
   public onUploadError() {

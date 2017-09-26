@@ -15,13 +15,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
+                            <tr *ngFor="let d of dataList | paginate: {id: 'materialDemandsPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.rawName}}</td>
                                 <td>{{d.day}}</td>
                                 <td>{{d.amountNeeded}}</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <pagination-controls id="materialDemandsPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>

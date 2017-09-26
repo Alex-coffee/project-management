@@ -59,7 +59,6 @@ const generateOrderDemands = function(rawData, itemId, scenarioId){
             })
         }
     }
-    console.log(orderDemands);
     return orderDemands;
 }
 
@@ -111,11 +110,6 @@ const parseOrderData = function(scenarioId, res){
     try{
         fs.createReadStream(path.join(settings.uploadPath, orderDataFileName))
         .pipe(csv())
-        .on('headers', function (headerList) {
-          console.log('header: ', headerList)
-          //process datas
-  
-        })
         .on('data', function (productRawData) {
           const product = {
               name: productRawData.orderName,
@@ -132,11 +126,9 @@ const parseOrderData = function(scenarioId, res){
                       if(result.length > 0){//if item exists get the id 
                           const order = result[0];
                           counts.productExists += 1;
-                          callback(null, order._id);
                       }else{//create new item and return the id
-                          counts.productAdd += 1;
                           SchemaServices.save(itemModel, product).then(function(newItem){
-                              callback(null, newItem._id);
+                              callback(null, newItem._id.toString());
                           });
                       }
                   });
@@ -147,7 +139,6 @@ const parseOrderData = function(scenarioId, res){
                   counts.orderDemandsNum = orderDemands.length;
 
                   SchemaServices.insertMany(orderDemand, orderDemands).then(result => {
-                      counts.orderDemandsNum += result.length;
                       callback(null, result);
                   })
               }
@@ -158,7 +149,6 @@ const parseOrderData = function(scenarioId, res){
           orderData.push(productRawData);
         })
         .on('end', function (data) {
-          console.log(counts);
           res.status(200).send({"message" : "已生成优化结果"});
         })
     }catch(err){
@@ -186,33 +176,44 @@ var apiInit = function(app){
 
     app.post('/api/data/order/import', upload.array('file', 20),function(req, res){
         if (req.files != undefined) {
-            console.log(req.files);
             res.sendStatus(200);
         }
     });
 
     app.post('/api/data/productstatic/import', productStaticUpload.array('file', 20),function(req, res){
         if (req.files != undefined) {
-            console.log(req.files);
             res.sendStatus(200);
         }
     });
 
     app.post('/api/data/orderprocess', function(req, res){
-        // const itemModel = SchemaFactory.getModel("item");
-        // const productstatic = SchemaFactory.getModel("productstatic");
-        // const orderdemand = SchemaFactory.getModel("orderdemand");
-        // SchemaServices.removeByCondition(itemModel, {scenario: req.body.scenarioId,})
-        // .then(function(result){
-        //     console.log(result);
-        // });
-        // SchemaServices.removeByCondition(itemModel, {scenario: req.body.scenarioId,})
-        // .then(function(result){
-        //     console.log(result);
-        // });
-
-        parseOrderData(req.body.scenarioId, res);
-        // parseProductLineData(req.body.scenarioId, res)
+        const itemModel = SchemaFactory.getModel("item");
+        const productstatic = SchemaFactory.getModel("productstatic");
+        const orderdemand = SchemaFactory.getModel("orderdemand");
+        async.parallel({
+            clearItem: function(callback) {
+                SchemaServices.removeByCondition(itemModel, {scenario: req.body.scenarioId,}).then(res => {
+                    callback(null, res);
+                });
+            },
+            clearProductStatic: function(callback) {
+                SchemaServices.removeByCondition(productstatic, {scenario: req.body.scenarioId,}).then(res => {
+                    callback(null, res);
+                });
+            },
+            clearOrderDemand: function(callback) {
+                SchemaServices.removeByCondition(orderdemand, {scenario: req.body.scenarioId,}).then(res => {
+                    callback(null, res);
+                });
+            }
+        }, function(err, results) {
+            if (err) {
+                res.status(500).send(err);
+            }else{
+                console.log(results)
+                parseOrderData(req.body.scenarioId, res);
+            }
+        });
     });
 
     app.post('/api/data/productstatic', function(req, res){

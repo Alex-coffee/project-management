@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { HTTP_BASE } from 'app/config';
+import { ToolsService } from 'app/utils/tools.service';
 
 @Component({
   selector: 'app-order-import',
   templateUrl: './order-import.component.html',
-  styleUrls: ['./order-import.component.css']
+  styleUrls: ['./order-import.component.css'],
+  providers: [ToolsService]
 })
 export class OrderImportComponent implements OnInit {
 
@@ -13,13 +15,17 @@ export class OrderImportComponent implements OnInit {
     url: HTTP_BASE + '/api/data/order/import',
   };
 
-  constructor() { }
+  constructor(
+    private toolsService: ToolsService,
+  ) { }
 
   ngOnInit() {
   }
 
   public onUploadSuccess() {
-    console.log('success');
+    this.toolsService.processImportedOrderData().then(res => {
+      location.reload();
+    });
   }
 
   public onUploadError() {

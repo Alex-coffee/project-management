@@ -24,7 +24,7 @@
                             <th>生产计划</th>
                         </tr>
                         
-                        <tr *ngFor="let ps of productionScheduleList">
+                        <tr *ngFor="let ps of productionScheduleList | paginate: {id: 'productionSchedulePaging', itemsPerPage: 5, currentPage: p }">
                             <td>{{ps.orderName}}</td>
                             <td>
                                 <table class="table table-striped">
@@ -35,13 +35,19 @@
                                     </tr>
                                     <tr *ngFor="let plan of ps.plan">
                                         <td>{{plan.time}}</td>
-                                        <td>{{lineMap[plan.line].name}}</td>
+                                        <td>
+                                            <span *ngIf="lineMap[plan.line]">
+                                                {{lineMap[plan.line].name}}
+                                            </span>
+                                        </td>
                                         <td>{{plan.amount}}</td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                     </table>
+
+                    <pagination-controls id="productionSchedulePaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>

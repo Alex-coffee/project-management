@@ -17,7 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let kpi of lineKPIList">
+                            <tr *ngFor="let kpi of lineKPIList | paginate: {id: 'lineKPIPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{kpi.line}}</td>
                                 <td>{{kpi.numOrdersPorduced}}</td>
                                 <td>{{kpi.timeAvail}}</td>
@@ -26,6 +26,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination-controls id="lineKPIPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>
@@ -47,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let kpi of storageKPIList">
+                            <tr *ngFor="let kpi of storageKPIList | paginate: {id: 'storageKPIPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{kpi.order}}</td>
                                 <td *ngFor="let value of kpi.moneyOccupy">
                                   {{value}}
@@ -55,6 +56,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination-controls id="storageKPIPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>
