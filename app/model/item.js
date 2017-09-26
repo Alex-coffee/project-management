@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 // create a schema
 var ItemSchema = new Schema({
     name: {type: String},
+    desc: {type: String},
     type: {type: String},
     cost: {type: Number},
     storageCost: {type: Number},

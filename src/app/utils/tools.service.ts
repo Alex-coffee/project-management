@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HTTP_BASE } from 'app/config';
+import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
 
 @Injectable()
 export class ToolsService {
+  private HOST:string = HTTP_BASE;
 
-  constructor() { }
+  constructor(private http: Http) { }
 
   getDateArrayByRange(startDate: Date, endDate: Date): Date[]{
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){
@@ -29,6 +32,20 @@ export class ToolsService {
     }else{
       return undefined;
     }
+  }
+
+  processImportedOrderData() {
+    const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('scenarioId', currentScenario._id);
+    return this.http.post(this.HOST + '/api/data/orderprocess', params).toPromise();
+  }
+
+  processImportedProductStaticData() {
+    const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('scenarioId', currentScenario._id);
+    return this.http.post(this.HOST + '/api/data/productstatic', params).toPromise();
   }
 
 }

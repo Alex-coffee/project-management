@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
+                            <tr *ngFor="let d of dataList | paginate: {id: 'lineStaticPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.name}}</td>
                                 <td>{{d.availableHours}}</td>
                                 <td>{{d.turnHours}}</td>
@@ -36,6 +36,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination-controls id="lineStaticPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>

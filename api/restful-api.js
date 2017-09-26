@@ -9,11 +9,12 @@ SchemaFactory.init();
 
 var ServicesFactory = rootRequire('app/utils/ServicesFactory');
 var ORFactory = rootRequire('app/utils/ORFactory');
+var ScenarioFactory = rootRequire('app/utils/ScenarioFactory');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Disposition');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Cache-Control,Content-Disposition,X-Requested-With');
     next();
 }
 
@@ -34,6 +35,7 @@ module.exports = function(app) {
     app.use(allowCrossDomain);
     ServicesFactory.apiInit(app);
     ORFactory.apiInit(app);
+    ScenarioFactory.apiInit(app);
 
     app.get('/api/test', function(req, res){
         res.status(200).send({"message" : "测试输出"});

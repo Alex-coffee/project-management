@@ -8,6 +8,11 @@
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
                         </button>
+                        <button class="btn btn-success" (click)="dataImportModal.show()">
+                            <i class="fa fa-download m-r-xs"></i>
+                            数据导入
+                        </button>
+                        
                     </div>
 
                     <h5>产品列表</h5>
@@ -25,7 +30,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
+                            <tr *ngFor="let d of dataList | paginate: {id: 'ordersPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.name}}</td>
                                 <td>{{d.cost}}</td>
                                 <td>{{d.storageCost}}</td>
@@ -50,6 +55,8 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <pagination-controls id="ordersPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>
@@ -115,4 +122,28 @@
       </div>
     </div>
   </div>
+</div>
+
+<div bsModal #dataImportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">订单数据导入</h4>
+            <button type="button" class="close pull-right" (click)="dataImportModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger">
+                <i class="fa fa-warning m-r-xs"></i>
+                导入数据会覆盖当前的产品数据
+            </div>
+            <app-order-import></app-order-import>
+        </div>
+        <div class="modal-footer">
+            <!-- <button class="btn btn-sm btn-success pull-left" (click)="orderDataProcess()">订单处理</button> -->
+            <button class="btn btn-sm btn-default" (click)="dataImportModal.hide()">关闭</button>
+        </div>
+        </div>
+    </div>
 </div>

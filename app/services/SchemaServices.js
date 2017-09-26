@@ -75,33 +75,39 @@ var findById = function(schema, id){
 var save = function(schema, data){
     var deferred = q.defer();
 
-    schema.findById(data._id, function (err, todo) {
-        // Handle any possible database errors
-        if (err) {
-            deferred.reject();
-        } else {
-            if(todo == undefined){
-                for(let key in data){
-                    if(data[key] == "undefined") data[key] = undefined;
+    try{
+        schema.findById(data._id, function (err, todo) {
+            // Handle any possible database errors
+            if (err) {
+                deferred.reject();
+            } else {
+                if(todo == undefined){
+                    for(let key in data){
+                        if(data[key] == "undefined") data[key] = undefined;
+                    }
+                    todo = new schema(data);
+                }else{
+                    for(let key in data){
+                        if(data[key] == "undefined") data[key] = undefined;
+                    }
+                    Object.assign(todo, data);
                 }
-                todo = new schema(data);
-            }else{
-                for(let key in data){
-                    if(data[key] == "undefined") data[key] = undefined;
-                }
-                Object.assign(todo, data);
+    
+                // Save the updated document back to the database
+                todo.save(function (err, todo) {
+                    if (err) {
+                        console.log(err);
+                        deferred.reject(err);
+                    }
+                    deferred.resolve(todo);
+                });
             }
-
-            // Save the updated document back to the database
-            todo.save(function (err, todo) {
-                if (err) {
-                    console.log(err);
-                    deferred.reject(err);
-                }
-                deferred.resolve(todo);
-            });
-        }
-    });
+        });
+    } catch(err) {
+        console.log(error);
+        deferred.reject(err);
+    }
+    
     return deferred.promise;
 }
 
@@ -115,6 +121,18 @@ var remove = function(schema, data){
         deferred.resolve(ip);
     });
 
+    return deferred.promise;
+}
+
+var removeByCondition = function(schema, conditions){
+    var deferred = q.defer();
+
+    schema.remove(conditions, function (err) {
+        if (err) {
+            deferred.reject(err);
+        }
+        deferred.resolve("success");
+    });
     return deferred.promise;
 }
 
@@ -158,6 +176,7 @@ module.exports = {
     findById: findById,
     save: save,
     remove: remove,
+    removeByCondition: removeByCondition,
     insertMany: insertMany,
     batchUpsert: batchUpsert
 };

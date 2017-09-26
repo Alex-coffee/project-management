@@ -4,7 +4,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <button class="btn btn-default btn-sm" (click)="orderDemand()">
-                        新增订单计划
+                        新增订单需求
                     </button>
                     <button class="btn btn-info btn-xs pull-right" (click)="loadData()">
                         加载全部
@@ -23,7 +23,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let d of dataList">
+                        <tr *ngFor="let d of dataList | paginate: {id: 'orderPlanCalendar', itemsPerPage: 15, currentPage: p }">
                             <td>{{d.name}}</td>
                             <td>{{d.initialStorage}}</td>
                             <td>
@@ -34,6 +34,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    <pagination-controls id="orderPlanCalendar" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
                 <div class="col-lg-8">
                   <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'cn' }}</h3>
@@ -60,7 +61,7 @@
         <div class="modal-dialog ">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title pull-left">订单生产计划</h4>
+              <h4 class="modal-title pull-left">订单需求</h4>
               <button type="button" class="close pull-right" (click)="orderDemandModal.hide()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

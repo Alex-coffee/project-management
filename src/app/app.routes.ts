@@ -30,7 +30,7 @@ import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavig
 
 export const ROUTES:Routes = [
   // Main redirect
-  {path: '', redirectTo: '/scenario/management', pathMatch: 'full'},
+  {path: '', redirectTo: '/wizard/step', pathMatch: 'full'},
 
   // App views
   {

@@ -4,7 +4,7 @@
         <button class="btn btn-primary pull-right" (click)="next('plan')">
             基础数据已就绪，下一步
         </button>
-      <tabset type="pills">
+      <tabset type="pills"> 
         <tab heading='原材料信息'>
           <app-raw-materials></app-raw-materials>
         </tab>
@@ -23,17 +23,17 @@
       </tabset>
     </wizard-step>
 
-    <wizard-step [title]="'生产计划'" [isValid]="true" >
+    <wizard-step [title]="'订单及原材料需求'" [isValid]="true" >
       <button class="btn btn-primary pull-right" (click)="next('config')">
-        生产计划已就绪，下一步
+          订单需求已就绪，下一步
       </button>
 
       <div *ngIf="showPlanConent">
         <tabset type="pills">
-          <tab heading='订单生产计划'>
+          <tab heading='订单需求'>
             <app-order-calendar></app-order-calendar>
           </tab>
-          <tab heading='原材料采购计划'>
+          <tab heading='原材料需求'>
             <app-material-calendar></app-material-calendar>
           </tab>
         </tabset>

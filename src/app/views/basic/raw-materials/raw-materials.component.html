@@ -25,7 +25,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let d of dataList">
+                            <tr *ngFor="let d of dataList | paginate: {id: 'rawMaterialsPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.name}}</td>
                                 <td>{{d.cost}}</td>
                                 <td>{{d.storageCost}}</td>
@@ -50,6 +50,8 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination-controls id="rawMaterialsPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
+
                 </div>
             </div>
         </div>

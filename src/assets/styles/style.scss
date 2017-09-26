@@ -36,3 +36,40 @@ ng-select > div > div.single{
 .card-block .nav-pills .nav-item{border: none !important;}
 .card-block .nav-pills .nav-item a{padding: 10px 15px;}
 .card-block .nav-pills>li.active>a, .nav-pills>li.active>a:hover{background-image: linear-gradient(#78cc78,#62c462 60%,#53be53);}
+
+//paging
+.ngx-pagination > li.current > a,
+.ngx-pagination > li:hover > a,
+.ngx-pagination > li:focus > a {
+    color: #333 !important;
+    cursor: pointer;
+    z-index: 2;
+}
+.ngx-pagination > li.current{
+    padding: 4px 10px !important;
+}
+.ngx-pagination > li:first-child > a{
+    border-radius: 3px 0 0 3px;
+}
+.ngx-pagination > li:last-child > a{
+    border-radius: 0 3px 3px 0;
+}
+.ngx-pagination > li {
+    margin-right: 3px !important;
+}
+.ngx-pagination > li > a{
+    background-image: linear-gradient(#8a9196,#7a8288 60%,#70787d);
+    border-color: rgba(0,0,0,.6);
+    color: inherit;
+    line-height: 1.42857;
+    margin-left: -1px;
+    padding: 4px 10px;
+    position: relative;
+    text-decoration: none;
+}
+
+dropzone.dz-wrapper > .dropzone .dz-message {
+    background: none !important;
+    color: white;
+    padding: 30px;
+}

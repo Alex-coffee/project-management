@@ -1,23 +1,28 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-
+import { ToolsService } from 'app/utils/tools.service';
 import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
-  providers: [ ItemService ]
+  providers: [ ItemService, ToolsService ]
 })
 export class OrdersComponent implements OnInit {
-  @ViewChild('detailModal') public detailModal:ModalDirective;
+  @ViewChild('detailModal') public detailModal: ModalDirective;
+  @ViewChild('dataImportModal') public dataImportModal: ModalDirective;
+  
   detailItem: any = {demands:[]};
   totalDays: number;
   dataList: any[] = [];
   errMsg: string;
 
-  constructor(private itemService: ItemService, public toastr: ToastsManager, 
+  constructor(
+    private itemService: ItemService, 
+    public toastr: ToastsManager, 
+    private toolsService: ToolsService, 
             vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -61,4 +66,7 @@ export class OrdersComponent implements OnInit {
       });
   }
 
+  public orderDataProcess() {
+    this.toolsService.processImportedOrderData();
+  }
 }

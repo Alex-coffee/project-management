@@ -4,7 +4,8 @@ module.exports = {
     dataPath : "src/",
     outputPath : "src/assets/or/output/",
     orInputPath : "src/assets/or/temp/",
-    systemPath: "Z:/Users/Alex.Chen/git/project-management/src/assets/or/",
-    // systemPath: "src/assets/or/",
+    // systemPath: "Z:/Users/Alex.Chen/git/project-management/src/assets/or/",
+    systemPath: "src/assets/or/",
+    uploadPath: "src/assets/or/upload/",
     command: "ProductionPlan"
 }

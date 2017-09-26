@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {ROUTES} from "./app.routes";
 import { AppComponent } from './app.component';
+import { HTTP_BASE } from './config';
 
 // App views
 import {DashboardsModule} from "./views/dashboards/dashboards.module";
@@ -31,6 +32,7 @@ import { PeityModule } from 'app/components/charts/peity';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { FormWizardModule } from 'angular2-wizard';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
 import { CalendarComponent } from './views/scenario/calendar/calendar.component';
@@ -55,6 +57,17 @@ import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-
 
 import { WizardComponent } from 'app/views/wizard/wizard.component';
 
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { OrderImportComponent } from './views/scenario/order-import/order-import.component';
+import { ProductStaticImportComponent } from './views/scenario/product-static-import/product-static-import.component';
+
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address:
+  maxFilesize: 1,
+  acceptedFiles: '.csv'
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,7 +88,9 @@ import { WizardComponent } from 'app/views/wizard/wizard.component';
     RawMaterialDemandsComponent,
     StorageAmountComponent,
     GanttDirective,
-    WizardComponent
+    WizardComponent,
+    OrderImportComponent,
+    ProductStaticImportComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +100,7 @@ import { WizardComponent } from 'app/views/wizard/wizard.component';
     LayoutsModule,
     AppviewsModule,
     SelectModule,
-
+    NgxPaginationModule,
     ChartsModule,
 
     // ScenarioModule,
@@ -96,6 +111,7 @@ import { WizardComponent } from 'app/views/wizard/wizard.component';
     CustomFormsModule,
     DateValueAccessorModule,
     RouterModule.forRoot(ROUTES),
+    DropzoneModule.forRoot(DROPZONE_CONFIG),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     ToastModule.forRoot(),
