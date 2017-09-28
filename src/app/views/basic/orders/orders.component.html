@@ -22,6 +22,7 @@
                         <thead>
                             <tr>
                                 <th>产品名称</th>
+                                <th>产品描述</th>
                                 <th>单位价格</th>
                                 <th>单位仓储成本</th>
                                 <th>安全库存</th>
@@ -32,6 +33,7 @@
                         <tbody>
                             <tr *ngFor="let d of dataList | paginate: {id: 'ordersPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.name}}</td>
+                                <th>{{d.desc}}</th>
                                 <td>{{d.cost}}</td>
                                 <td>{{d.storageCost}}</td>
                                 <td>{{d.saftyStorage}}</td>
@@ -83,6 +85,13 @@
                 <label class="col-sm-4 control-label">产品名称</label>
                 <div class="col-sm-8">
                     <input name="name" type="text" [(ngModel)]="detailItem.name" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">产品描述</label>
+                <div class="col-sm-8">
+                    <input name="desc" type="text" [(ngModel)]="detailItem.desc" class="form-control" required>
                 </div>
             </div>
 

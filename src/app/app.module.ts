@@ -48,6 +48,7 @@ import { KpiComponent } from 'app/views/schedule/kpi/kpi.component';
 import { RawMaterialDemandsComponent } from 'app/views/schedule/raw-material-demands/raw-material-demands.component';
 import { StorageAmountComponent } from 'app/views/schedule/storage-amount/storage-amount.component';
 import { UncoveredDemandsComponent } from 'app/views/schedule/uncovered-demands/uncovered-demands.component';
+import { OrderScheduleComponent } from 'app/views/schedule/order-schedule/order-schedule.component';
 import { GanttDirective } from 'app/directive/gantt.directive';
 
 import { ProductStaticComponent } from 'app/views/production/product-static/product-static.component';
@@ -91,6 +92,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     WizardComponent,
     OrderImportComponent,
     ProductStaticImportComponent,
+    OrderScheduleComponent,
   ],
   imports: [
     BrowserModule,

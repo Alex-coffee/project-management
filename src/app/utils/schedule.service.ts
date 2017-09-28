@@ -9,7 +9,7 @@ import 'rxjs/add/observable/forkJoin'
 import {PurchasePlanService} from 'app/services/purchase-plan.service';
 import {OrderDemandService} from 'app/services/order-demand.service';
 import {ToolsService} from 'app/utils/tools.service';
-
+import { ItemService } from 'app/services/item.service';
 
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
@@ -38,6 +38,7 @@ export class ScheduleService {
     private http: Http,
     private purchasePlanService: PurchasePlanService,
     private orderDemandService: OrderDemandService,
+    private itemService: ItemService,
     private toolsService: ToolsService
   ) { }
 
@@ -96,6 +97,50 @@ export class ScheduleService {
               calenderEvents: events
             });
           })
+      });
+      return data$;
+    }
+  }
+
+  getOrderSchedulePlanData(): Observable<any>{
+    const currentScenario = localStorage.getItem('currentScenario');
+    if (currentScenario) {
+      const data$ = new Observable(observer => {
+        Observable.forkJoin([
+          this.itemService.findProduct({'scenario': JSON.parse(currentScenario)._id}),
+          this.orderDemandService.find({'scenario': JSON.parse(currentScenario)._id})
+        ]).subscribe(res => {
+            const orderList = res[0].list;
+            const orderDemandList = res[1].list;
+            const currentScenarioObj = JSON.parse(currentScenario);
+            const dateRanges = this.toolsService.getDateArrayByRange(new Date(currentScenarioObj.startDate), 
+              new Date(currentScenarioObj.endDate));
+
+            let orderScheduleList = [];
+            orderList.forEach(order => {
+              const scheduleArray = [];
+              dateRanges.forEach(date => {
+                const schedule = orderDemandList.find(od => {
+                  return od.item._id === order._id && new Date(od.date).getTime() === date.getTime();
+                });
+                scheduleArray.push(schedule);
+              });
+
+              const orderSchedule = {
+                order: order,
+                scheduleArray: scheduleArray
+              };
+              orderScheduleList.push(orderSchedule);
+            });
+
+            console.log(orderScheduleList);
+
+            observer.next({
+              orderList: orderList,
+              orderDemandList: orderDemandList,
+              orderScheduleList: orderScheduleList
+            });
+          });
       });
       return data$;
     }
