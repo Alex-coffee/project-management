@@ -19,6 +19,9 @@ ng-select > div > div.single{
     height: 38px !important;
 }
 
+.popover{
+    z-index: 3999 !important;
+}
 //wizard
 .card { height: 100%; }
 .card-header { padding: 0; font-size: 1.25rem; background: transparent !important;}
