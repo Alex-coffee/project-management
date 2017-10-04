@@ -62,6 +62,7 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { OrderImportComponent } from './views/scenario/order-import/order-import.component';
 import { ProductStaticImportComponent } from './views/scenario/product-static-import/product-static-import.component';
+import { DataSheetDirective } from './directive/data-sheet.directive';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -93,6 +94,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     OrderImportComponent,
     ProductStaticImportComponent,
     OrderScheduleComponent,
+    DataSheetDirective,
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@ import { ItemService } from 'app/services/item.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from 'ng-select';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { DataSheetDirective } from 'app/directive/data-sheet.directive';
 
 @Component({
   selector: 'app-order-schedule',
@@ -18,6 +19,8 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 })
 export class OrderScheduleComponent implements OnInit {
   @ViewChild('orderScheduleModal') public orderScheduleModal: ModalDirective;
+  @ViewChild(DataSheetDirective) dataSheet: DataSheetDirective;
+
   dataList: any[];
   dateRanges: any[];
   errorMessage: any;

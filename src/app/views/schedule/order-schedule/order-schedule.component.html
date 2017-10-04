@@ -12,6 +12,11 @@
                     <h5>订单生成计划</h5>
                 </div>
                 <div class="ibox-content">
+                    <div appDataSheet
+                        [sheetContent]="dataList"
+                        [dateRange]="dateRanges"
+                    ></div>
+
                     <table class="table table-striped table-hover" style="width: auto;">
                         <thead>
                             <tr>
