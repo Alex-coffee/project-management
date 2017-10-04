@@ -140,7 +140,7 @@ var apiInit = function(app){
                             "orderId": product._id.toString(),
                             "orderName": product.name,
                             "unitCost": product.cost,
-                            "safeStorage": product.safeStorage,
+                            "safeStorage": product.saftyStorage,
                             "initialStorage": product.initialStorage,
                             "storageCost": product.storageCost,
                             "demands" : demands

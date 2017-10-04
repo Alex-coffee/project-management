@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
+import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-wizard',
   templateUrl: './wizard.component.html',
-  styleUrls: ['./wizard.component.css']
+  styleUrls: ['./wizard.component.css'],
+  providers: [ ItemService]
 })
 export class WizardComponent implements OnInit {
   @ViewChild('formWizard') public formWizard;
