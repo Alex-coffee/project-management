@@ -261,14 +261,14 @@ var apiInit = function(app){
             },
             // run OR
             function(numDays, callback){
-                const outputPath = path.join(settings.outputPath, scenarioId);
+                const outputPath = path.join(settings.systemPath, 'output', scenarioId);
                 if (!fs.existsSync(outputPath)){
                     fs.mkdirSync(outputPath);
                 }
                 var orCommand = [];
                 orCommand.push(settings.systemPath + settings.command);
                 orCommand.push(settings.systemPath + "temp/");
-                orCommand.push(outputPath);
+                orCommand.push(outputPath + "/");
                 orCommand.push("optimize");
                 console.log("command: " + orCommand.join(" "));
 
