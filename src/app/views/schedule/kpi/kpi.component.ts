@@ -1,22 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { OrResultService } from 'app/services/or-result.service';
-
+import { ToolsService } from 'app/utils/tools.service';
 
 @Component({
   selector: 'app-kpi',
   templateUrl: './kpi.component.html',
   styleUrls: ['./kpi.component.css'],
-  providers: [ DataService, OrResultService ]
+  providers: [ DataService, OrResultService, ToolsService ]
 })
 export class KpiComponent implements OnInit {
   lineKPIList: any[] = [];
   storageKPIList: any[] = [];
   totalDays: number = 0;
   days:string[] = [];
+  dateRanges: any[] = [];
 
   constructor(
     private dataService: DataService,
+    private toolsService: ToolsService,
     private orResultService: OrResultService
   ) { }
 
@@ -37,10 +39,17 @@ export class KpiComponent implements OnInit {
     //     }
     //   });
 
+    const currentScenarioObj = JSON.parse(localStorage.getItem('currentScenario'));
+    this.dateRanges = this.toolsService.getDateArrayByRange(new Date(currentScenarioObj.startDate),
+    new Date(currentScenarioObj.endDate));
+
       this.orResultService.getCurrentScenarioResult().subscribe(res => {
         console.log(res)
-        this.lineKPIList = res.lineKPI;
-        this.storageKPIList = res.storageKPI;
+        if(res.list.length > 0){
+          var orResult = res.list[0];
+          this.lineKPIList = orResult.LineKPIs;
+          this.storageKPIList = orResult.storageKPIs;
+        }
       });
   }
 
