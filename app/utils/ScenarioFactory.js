@@ -122,7 +122,7 @@ const parseOrderData = function(scenarioId, res){
   
           async.waterfall([
               function(callback) {
-                  SchemaServices.find(itemModel, {name: productRawData.orderName}).then(function(result){
+                  SchemaServices.find(itemModel, {name: productRawData.orderName, scenario: scenarioId}).then(function(result){
                       if(result.length > 0){//if item exists get the id 
                           const order = result[0];
                           counts.productExists += 1;
@@ -143,7 +143,9 @@ const parseOrderData = function(scenarioId, res){
                   })
               }
           ], function (err, result){
-              
+              if(err){
+                console.log(err);
+              }
           })
           
           orderData.push(productRawData);
@@ -192,18 +194,18 @@ var apiInit = function(app){
         const orderdemand = SchemaFactory.getModel("orderdemand");
         async.parallel({
             clearItem: function(callback) {
-                SchemaServices.removeByCondition(itemModel, {scenario: req.body.scenarioId,}).then(res => {
-                    callback(null, res);
+                SchemaServices.removeByCondition(itemModel, {scenario: req.body.scenarioId,}).then(result => {
+                    callback(null, result);
                 });
             },
             clearProductStatic: function(callback) {
-                SchemaServices.removeByCondition(productstatic, {scenario: req.body.scenarioId,}).then(res => {
-                    callback(null, res);
+                SchemaServices.removeByCondition(productstatic, {scenario: req.body.scenarioId,}).then(result => {
+                    callback(null, result);
                 });
             },
             clearOrderDemand: function(callback) {
-                SchemaServices.removeByCondition(orderdemand, {scenario: req.body.scenarioId,}).then(res => {
-                    callback(null, res);
+                SchemaServices.removeByCondition(orderdemand, {scenario: req.body.scenarioId,}).then(result => {
+                    callback(null, result);
                 });
             }
         }, function(err, results) {

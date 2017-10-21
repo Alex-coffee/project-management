@@ -38,13 +38,13 @@ export class WizardComponent implements OnInit {
   orProcessEnded = false;
   public runOR() {
     this.formWizard.next();
-    this.parameter.runOR();
+    //this.parameter.runOR();
     
-    // setTimeout(() => { 
-    //   this.orProcessEnded = true; 
-    //   this.showResultConent = true;
-    //   this.formWizard.next(); 
-    // }, 5000);
+    setTimeout(() => { 
+      this.orProcessEnded = true; 
+      this.showResultConent = true;
+      this.formWizard.next(); 
+    }, 5000);
   }
 
   public wizardORCallback() {

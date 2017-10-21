@@ -26,7 +26,15 @@ export class DataSheetDirective implements OnChanges, OnInit{
   }
 
   buildStructure() {
-    const rootContainer = $('<div>', {'id': 'dataSheet'});
+    const rootContainer = $('<div>', {'class': 'dataSheet'});
+    const frameWidth = $(this.el.nativeElement).width();
+
+    const slotContainer = $('<div>', {'class': 'slotContainer'});
+    const contentContainer = $('<div>', {'class': 'contentContainer'});
+
+    rootContainer.append(slotContainer);
+    rootContainer.append(contentContainer);
+
     // rootContainer.text(123);
     $(this.el.nativeElement).append(rootContainer);
   }

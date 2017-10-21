@@ -1,0 +1,14 @@
+$dataSheet-height: 500px;
+$dataCell-height: 40px;
+
+
+.dataSheet { position: relative; height: $dataSheet-height;}
+.slotContainer, .contentContainer { position: absolute; top:0; height: $dataSheet-height; border: 1px solid #ccc;}
+.slotContainer { left:0; width: 25%; overflow: hidden}
+.contentContainer { left: 25%; width: 75%; overflow-x: auto;}
+.dataSheet table tr td, .dataSheet table tr th{
+    white-space: nowrap;
+    padding: 8px 20px;
+    text-align: center;
+    height: $dataCell-height;
+}

@@ -6,8 +6,16 @@ var exec = require('child_process').exec;
 var SchemaServices = rootRequire('app/services/SchemaServices');
 var SchemaFactory = rootRequire('app/utils/SchemaFactory');
 var settings = rootRequire('config/settings');
+var path = require('path');
 
 const ItemType = {"PRODUCT": "product", "MATERIAL": "material"};
+
+const toCamelCase = function(str) {
+    return str
+        .replace(/\s(.)/g, function($1) { return $1.toUpperCase(); })
+        .replace(/\s/g, '')
+        .replace(/^(.)/, function($1) { return $1.toLowerCase(); });
+}
 
 function getDateArrayByRange(startDate, endDate){
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){
@@ -34,6 +42,32 @@ function writeFile(fileName, content){
     }catch(e){
         console.log(e);
     }
+}
+
+function saveORResult(scenarioId){
+    var deferred = q.defer();
+    const outputPath = path.join(settings.outputPath, scenarioId);
+    if (!fs.existsSync(outputPath)){
+        fs.mkdirSync(outputPath);
+    }
+    let outputFiles = fs.readdirSync(outputPath);
+    let ORResult = {};
+
+    outputFiles.forEach(file => {
+        let content = fs.readFileSync(path.join(outputPath, file));
+        let keyName = file.substring(0, file.indexOf("."));
+        if(keyName != ""){
+            ORResult[keyName] = JSON.parse(content.toString());
+        }
+    })
+
+    let ORResultModel = SchemaFactory.getModel("orresult");
+    SchemaServices.save(ORResultModel, ORResult).then(result => {
+        deferred.resolve(result);
+    }, err => {
+        deferred.reject(err);
+    })
+    return deferred.promise;
 }
 
 var apiInit = function(app){
@@ -225,12 +259,16 @@ var apiInit = function(app){
                     callback(null, 500);
                 });
             },
-            //run OR
+            // run OR
             function(numDays, callback){
+                const outputPath = path.join(settings.outputPath, scenarioId);
+                if (!fs.existsSync(outputPath)){
+                    fs.mkdirSync(outputPath);
+                }
                 var orCommand = [];
                 orCommand.push(settings.systemPath + settings.command);
                 orCommand.push(settings.systemPath + "temp/");
-                orCommand.push(settings.systemPath + "output/");
+                orCommand.push(outputPath);
                 orCommand.push("optimize");
                 console.log("command: " + orCommand.join(" "));
 
@@ -254,6 +292,14 @@ var apiInit = function(app){
                         callback(500, code);
                     }
                 });
+            },
+
+            function(orResultCode, callback){
+                saveORResult(scenarioId).then(result => {
+                    callback(null, result);
+                }, err => {
+                    callback(500, "save result failed");
+                })
             }
         ],
         function(err, results) {

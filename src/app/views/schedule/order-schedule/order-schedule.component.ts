@@ -81,7 +81,7 @@ export class OrderScheduleComponent implements OnInit {
     });
   }
 
-  prepareOrders(){
+  prepareOrders() {
     this.itemService.findProduct({}).subscribe(res => {
         const products = res.list;
         const optionArray = [];
