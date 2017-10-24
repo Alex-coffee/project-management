@@ -8,6 +8,13 @@ export class ToolsService {
 
   constructor(private http: Http) { }
 
+  exportORResult(){
+    let currentScenarioStr = localStorage.getItem("currentScenario");
+    let currentScenario = JSON.parse(currentScenarioStr);
+    return this.http.post(this.HOST + '/api/data/result/generate', 
+        {scenario: currentScenario, scenarioDates: this.getScenarioDates()}).toPromise();
+  }
+
   getDateArrayByRange(startDate: Date, endDate: Date): Date[]{
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){
     let result = [];

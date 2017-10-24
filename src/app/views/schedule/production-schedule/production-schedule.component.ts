@@ -4,7 +4,7 @@ import { OptimizeService } from 'app/services/optimize.service';
 
 import { ScenarioService } from 'app/services/scenario.service';
 import { LineService } from 'app/services/line.service';
-
+import { ToolsService } from 'app/utils/tools.service';
 import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
@@ -16,7 +16,7 @@ import { GanttDirective } from 'app/directive/gantt.directive';
   selector: 'app-production-schedule',
   templateUrl: './production-schedule.component.html',
   styleUrls: ['./production-schedule.component.css'],
-  providers: [ BackendService, OptimizeService, ScenarioService, LineService]
+  providers: [ BackendService, OptimizeService, ScenarioService, LineService, ToolsService]
 })
 export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;
@@ -25,6 +25,7 @@ export class ProductionScheduleComponent implements OnInit {
   productionScheduleList: any[] = [];
   currentType: string = "line";
   inProcess:boolean = false;
+  fileGenerated:boolean = false;
   lineMap: any = {};
 
   constructor(
@@ -32,6 +33,7 @@ export class ProductionScheduleComponent implements OnInit {
     private optimizeService: OptimizeService, 
     private scenarioService: ScenarioService,
     private lineService: LineService,
+    private toolsService: ToolsService,
     public toastr: ToastsManager, vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -40,6 +42,13 @@ export class ProductionScheduleComponent implements OnInit {
     this.getGanttData();
     this.getProductScheduleData();
     this.getLineInfo();
+  }
+
+  exportORResult(){
+    this.toolsService.exportORResult().then(res => {
+      console.log(res);
+      this.fileGenerated = true;
+    });
   }
 
   getLineInfo(){

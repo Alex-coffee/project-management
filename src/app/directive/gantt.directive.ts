@@ -208,15 +208,13 @@ export class GanttDirective implements OnChanges, OnInit{
         return d.x;
       })
       .attr("y2", function(d){
-        if(dateFormat(d.time, "HH:MM") == '00:00'){
-          return that.blockSize - 115;
-        }else{
+        
           if(d.x % that.blockSize == 0){
             return that.blockSize - 10;
           }else{
             return that.blockSize - 5;
           }
-        }
+        
       })
       ;
 
@@ -328,7 +326,7 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 14;
           })
           .text(function(d){
-            return "生产线" + d.content.line;
+            return d.metaData.name;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
