@@ -17,13 +17,13 @@ import { LineService } from 'app/services/line.service';
 
 @Injectable()
 export class BackendService {
-  private lineStaticDataUrl = 'assets/or/temp/LineStaticData.json';
-  private ordersUrl = 'assets/or/temp/Orders.json';
-  private productStaticDataUrl = 'assets/or/temp/ProductStaticData.json';
+  private lineStaticDataUrl = this.getInputPath() + 'LineStaticData.json';
+  private ordersUrl = this.getInputPath() + 'Orders.json';
+  private productStaticDataUrl = this.getInputPath() + 'ProductStaticData.json';
 
-  private productionScheduleUrl = 'assets/or/output/ProductionScheduleResult.json';
-  private storageAmountUrl = 'assets/or/output/StorageAmountResult.json';
-  private uncoveredDemandsUrl = 'assets/or/output/UncoveredDemands.json';
+  private productionScheduleUrl = this.getOutputPath() + 'ProductionScheduleResult.json';
+  private storageAmountUrl = this.getOutputPath() + 'StorageAmountResult.json';
+  private uncoveredDemandsUrl = this.getOutputPath() + 'UncoveredDemands.json';
   
   constructor (
     private http: Http,
@@ -31,29 +31,47 @@ export class BackendService {
     private lineService: LineService
   ) {}
 
+  getInputPath(): string {
+    let currentScenarioStr = localStorage.getItem("currentScenario");
+    if(currentScenarioStr){
+      let currentScenario = JSON.parse(currentScenarioStr);
+      return 'assets/or/temp/' + currentScenario._id + '/';
+    }
+    return 'assets/or/temp/';
+  }
+
+  getOutputPath(): string {
+    let currentScenarioStr = localStorage.getItem("currentScenario");
+    if(currentScenarioStr){
+      let currentScenario = JSON.parse(currentScenarioStr);
+      return 'assets/or/output/' + currentScenario._id + '/';
+    }
+    return 'assets/or/output/';
+  }
+
   //*********** apis ****************/
   getOrderData(): Observable<any[]> {
-    return this.getFilesByUrl(this.ordersUrl);
+    return this.getFilesByUrl(this.getInputPath() + 'Orders.json');
   }
 
   getLineStaticData(): Observable<any[]> {
-    return this.getFilesByUrl(this.lineStaticDataUrl);
+    return this.getFilesByUrl(this.getInputPath() + 'LineStaticData.json');
   }
 
   getProductStaticData(): Observable<any[]> {
-    return this.getFilesByUrl(this.productStaticDataUrl);
+    return this.getFilesByUrl(this.getInputPath() + 'ProductStaticData.json');
   }
 
   getProductionScheduleResult(): Observable<any[]> {
-    return this.getFilesByUrl(this.productionScheduleUrl);
+    return this.getFilesByUrl(this.getOutputPath() + 'ProductionScheduleResult.json');
   }
 
   getStorageAmountResult(): Observable<any[]> {
-    return this.getFilesByUrl(this.storageAmountUrl);
+    return this.getFilesByUrl(this.getOutputPath() + 'StorageAmountResult.json');
   }
 
   getUncoveredDemands(): Observable<any[]> {
-    return this.getFilesByUrl(this.uncoveredDemandsUrl);
+    return this.getFilesByUrl(this.getOutputPath() + 'UncoveredDemands.json');
   }
 
   getGanttDataByType(type: string): Observable<GanttDataSet>{

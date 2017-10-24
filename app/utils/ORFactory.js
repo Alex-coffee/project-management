@@ -32,7 +32,7 @@ function getDateArrayByRange(startDate, endDate){
 
 function writeFile(scenarioId, fileName, content){
     try{
-        let inputPath = path.join(scenarioId, settings.orInputPath);
+        let inputPath = path.join(settings.systemPath, 'temp', scenarioId);
         if (!fs.existsSync(inputPath)){
             fs.mkdirSync(inputPath);
         }
@@ -47,7 +47,7 @@ function writeFile(scenarioId, fileName, content){
 
 function saveORResult(scenarioId){
     var deferred = q.defer();
-    const outputPath = path.join(settings.outputPath, scenarioId);
+    const outputPath = path.join(settings.systemPath, 'output', scenarioId);
     if (!fs.existsSync(outputPath)){
         fs.mkdirSync(outputPath);
     }
@@ -277,7 +277,7 @@ var apiInit = function(app){
                 }
                 var orCommand = [];
                 orCommand.push(settings.systemPath + settings.command);
-                orCommand.push(settings.systemPath + "temp/");
+                orCommand.push(path.join(settings.systemPath, 'temp', scenarioId) + "/");
                 orCommand.push(outputPath + "/");
                 orCommand.push("optimize");
                 console.log("command: " + orCommand.join(" "));
