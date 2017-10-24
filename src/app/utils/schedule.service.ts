@@ -87,7 +87,7 @@ export class ScheduleService {
                 meta: od,
                 start: startOfDay(new Date(od.date)),
                 end: endOfDay(new Date(od.date)),
-                title: '订单计划: ' + od.item.name + " 数量: " + od.amount,
+                title: '产品计划: ' + od.item.name + " 数量: " + od.amount,
                 color: colors.blue,
                 // actions: this.actions
               });
@@ -162,7 +162,7 @@ export class ScheduleService {
                 meta: od,
                 start: startOfDay(new Date(od.date)),
                 end: endOfDay(new Date(od.date)),
-                title: '订单计划: ' + od.item.name + " 数量: " + od.amount,
+                title: '产品计划: ' + od.item.name + " 数量: " + od.amount,
                 color: colors.blue,
                 // actions: this.actions
               });

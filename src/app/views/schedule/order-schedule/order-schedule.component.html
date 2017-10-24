@@ -9,7 +9,7 @@
                             新增
                         </button>
                     </div> -->
-                    <h5>订单生成计划</h5>
+                    <h5>产品生成计划</h5>
                 </div>
                 <div class="ibox-content">
                     <!-- <div appDataSheet
@@ -98,7 +98,7 @@
         <div class="modal-dialog ">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title pull-left">订单需求</h4>
+              <h4 class="modal-title pull-left">产品需求</h4>
               <button type="button" class="close pull-right" (click)="orderScheduleModal.hide()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -107,7 +107,7 @@
               <form #orderScheduleForm="ngForm" class="form-horizontal">
       
                   <div class="form-group">
-                      <label class="col-sm-4 control-label">订单号</label>
+                      <label class="col-sm-4 control-label">产品号</label>
                       <div class="col-sm-8">
                         <ng-select name="order" [(ngModel)]="detailItem.item" required
                             [options]="orderOptions">
