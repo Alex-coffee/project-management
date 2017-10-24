@@ -8,7 +8,7 @@
         <tab heading='原材料信息'>
           <app-raw-materials></app-raw-materials>
         </tab>
-        <tab heading='订单信息'>
+        <tab heading='产品信息'>
           <app-orders></app-orders>
         </tab>
         <tab heading='一级BOM原材料'>
@@ -17,20 +17,20 @@
         <tab heading='产线信息'>
           <app-line-static></app-line-static>
         </tab>
-        <tab heading='订单产线设置'>
+        <tab heading='产品产线设置'>
           <app-product-static></app-product-static>
         </tab>
       </tabset>
     </wizard-step>
 
-    <wizard-step [title]="'订单生产计划'" [isValid]="true" >
+    <wizard-step [title]="'产品生产计划'" [isValid]="true" >
       <button class="btn btn-primary pull-right" (click)="next('config')">
-          订单生产计划已就绪，下一步
+          产品生产计划已就绪，下一步
       </button>
       <div class="clearfix"></div>
       <div *ngIf="showPlanConent" class="m-t-md">
         <!-- <tabset type="pills">
-          <tab heading='订单需求'>
+          <tab heading='产品需求'>
             <app-order-calendar></app-order-calendar>
           </tab>
           <tab heading='原材料需求'>
@@ -76,7 +76,7 @@
                 </div>
               </div>
             </tab>
-            <tab heading='未覆盖订单'>
+            <tab heading='未覆盖产品'>
               <app-uncovered-demands></app-uncovered-demands>
             </tab>
             <tab heading='KPI'>
