@@ -12,54 +12,6 @@
                     <h5>产品生成计划</h5>
                 </div>
                 <div class="ibox-content">
-                    <!-- <div appDataSheet
-                        [sheetContent]="dataList"
-                        [dateRange]="dateRanges"
-                    ></div> -->
-
-                    <div class="dataSheet">
-                        <div class="slotContainer">
-                            <table class="table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>产品名称</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="height: 460px; overflow:hidden;">
-                                    <tr *ngFor="let d of dataList">
-                                        <td>{{d.order.name}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="contentContainer">
-                            <table class="table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="dataCell" *ngFor="let day of dateRanges">
-                                            {{day | date: "yyyy-MM-dd"}}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody style="height: 460px; overflow-y:auto;">
-                                    <tr *ngFor="let d of dataList">
-                                        <td class="dataCell" *ngFor="let s of d.scheduleArray; let i = index; trackBy:trackByIndex">
-                                            <button *ngIf="s" class="btn btn-primary btn-xs odAmountBtn" 
-                                                (click)="modifyOrderSchedule(s, dateRanges[i], d)">
-                                                 {{s.amount}}
-                                            </button>
-                                            <button *ngIf="!s" class="btn btn-primary btn-xs odAmountBtn" 
-                                                (click)="modifyOrderSchedule(s, dateRanges[i], d)">
-                                                    0
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-<!-- 
                     <table class="table table-striped table-hover" style="width: auto;">
                         <thead>
                             <tr>
@@ -87,7 +39,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <pagination-controls id="orderSchedulePaging" autoHide="true" (pageChange)="p = $event"></pagination-controls> -->
+                    <pagination-controls id="orderSchedulePaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
                 </div>
             </div>
         </div>
