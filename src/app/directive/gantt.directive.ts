@@ -309,7 +309,7 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 25;
           })
           .text(function(d){
-            return "第" + d.content.time + "天, 数量: " + d.content.amount;
+            return "数量: " + d.content.amount;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
@@ -339,7 +339,7 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 25;
           })
           .text(function(d){
-            return "第" + d.content.time + "天, 数量: " + d.content.amount;
+            return "数量: " + d.content.amount;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
