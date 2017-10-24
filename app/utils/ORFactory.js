@@ -52,7 +52,7 @@ function saveORResult(scenarioId){
         fs.mkdirSync(outputPath);
     }
     let outputFiles = fs.readdirSync(outputPath);
-    let ORResult = {};
+    let ORResult = {scenario: scenarioId};
 
     outputFiles.forEach(file => {
         let content = fs.readFileSync(path.join(outputPath, file));
@@ -243,8 +243,8 @@ var apiInit = function(app){
             //process LineStaticData
             function(numDays, callback){
                 let line = SchemaFactory.getModel("line");
-                SchemaServices.find(line, {"scenario": scenarioId, "isDeleted": false}, {}).then(res => {
-                    let lines = res;
+                SchemaServices.find(line, {"scenario": scenarioId, "isDeleted": false}, {}).then(result => {
+                    let lines = result;
                     let lineStaticData = [];
                     lines.forEach(line => {
                         lineStaticData.push({
@@ -256,6 +256,15 @@ var apiInit = function(app){
                     })
                     writeFile(scenarioId, "LineStaticData.json", lineStaticData);
                     callback(null, numDays);
+                }, err => {
+                    callback(null, 500);
+                });
+            },
+            //clear current result
+            function(numDays, callback){
+                let orResultModel = SchemaFactory.getModel("orresult");
+                SchemaServices.removeByCondition(orResultModel, {"scenario": scenarioId}).then(result => {
+                    callback(null, result);
                 }, err => {
                     callback(null, 500);
                 });

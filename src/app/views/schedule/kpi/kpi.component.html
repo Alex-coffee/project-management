@@ -42,13 +42,13 @@
                         <thead>
                             <tr>
                                 <th>产品号</th>
-                                <th *ngFor="let d of days">
-                                    {{d}}
+                                <th class="dataCell" *ngFor="let day of dateRanges">
+                                    {{day | date: "yyyy-MM-dd"}}
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let kpi of storageKPIList | paginate: {id: 'storageKPIPaging', itemsPerPage: 10, currentPage: p }">
+                            <tr *ngFor="let kpi of storageKPIList | paginate: {id: 'storageKPIPaging', itemsPerPage: 10, currentPage: p2 }">
                                 <td>{{kpi.order}}</td>
                                 <td *ngFor="let value of kpi.moneyOccupy">
                                   {{value}}
@@ -56,7 +56,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <pagination-controls id="storageKPIPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
+                    <pagination-controls id="storageKPIPaging" autoHide="true" (pageChange)="p2 = $event"></pagination-controls>
                 </div>
             </div>
         </div>
