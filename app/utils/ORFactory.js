@@ -30,12 +30,13 @@ function getDateArrayByRange(startDate, endDate){
     return undefined;
 }
 
-function writeFile(fileName, content){
+function writeFile(scenarioId, fileName, content){
     try{
-        if (!fs.existsSync(settings.orInputPath)){
-            fs.mkdirSync(settings.orInputPath);
+        let inputPath = path.join(scenarioId, settings.orInputPath);
+        if (!fs.existsSync(inputPath)){
+            fs.mkdirSync(inputPath);
         }
-        let fd = fs.openSync(settings.orInputPath + fileName, "w");
+        let fd = fs.openSync(path.join(inputPath, fileName), "w");
         var points = JSON.stringify(content);
         var buf = new Buffer(points);
         fs.writeSync(fd,buf,0,buf.length,0);
@@ -94,7 +95,7 @@ var apiInit = function(app){
                             raws: raws
                         })
                     })                    
-                    writeFile("OrderRawMaterials.json", orderRawMaterials);
+                    writeFile(scenarioId, "OrderRawMaterials.json", orderRawMaterials);
                     callback(null, orderRawMaterials.length);
                 });
             },
@@ -114,7 +115,7 @@ var apiInit = function(app){
                         })
                     });
 
-                    writeFile("ProductStaticData.json", productStaticData);
+                    writeFile(scenarioId, "ProductStaticData.json", productStaticData);
                     callback(null, productStaticData.length);
                 });
             },
@@ -137,7 +138,7 @@ var apiInit = function(app){
                         "isRawMaterialPrepareConstraintOn": scenario.isRawMaterialPrepareConstraintOn
                     }
 
-                    writeFile("Parameters.json", parameters);
+                    writeFile(scenarioId, "Parameters.json", parameters);
                     callback(null, scenarioNumDays, dateRangeArray);
                 });
             },
@@ -181,7 +182,7 @@ var apiInit = function(app){
                         })
                     });
 
-                    writeFile("Orders.json", ordersData);
+                    writeFile(scenarioId, "Orders.json", ordersData);
                     callback(null, numDays, dateRangeArray);
                 }) 
             },
@@ -234,8 +235,8 @@ var apiInit = function(app){
                         });
                     });
 
-                    writeFile("RawMaterials.json", rawMaterialData);
-                    writeFile("RawOrderMap.json", rawOrderData);
+                    writeFile(scenarioId, "RawMaterials.json", rawMaterialData);
+                    writeFile(scenarioId, "RawOrderMap.json", rawOrderData);
                     callback(null, numDays);
                 }) 
             },
@@ -253,7 +254,7 @@ var apiInit = function(app){
                             "turnHours": line.turnHours
                         })
                     })
-                    writeFile("LineStaticData.json", lineStaticData);
+                    writeFile(scenarioId, "LineStaticData.json", lineStaticData);
                     callback(null, numDays);
                 }, err => {
                     callback(null, 500);
