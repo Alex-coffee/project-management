@@ -1,0 +1,186 @@
+<div class="wrapper wrapper-content">
+  <div class="row">
+      <div class="col-lg-12">
+          <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                  <div class="btn-group btn-group-xs pull-right">
+                      <button class="btn btn-primary" (click)="add()">
+                          <i class="fa fa-plus m-r-xs"></i>
+                          新增
+                      </button>
+                  </div>
+                  
+                  <h5>用户列表</h5>
+              </div>
+              <div class="ibox-content">
+                  <table class="table table-striped table-hover">
+                      <thead>
+                          <tr>
+                              <th>邮箱</th>
+                              <th>姓</th>
+                              <th>名</th>
+                              <th>用户类型</th>
+                              <th>是否激活</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let d of dataList | paginate: {id: 'userPaging', itemsPerPage: 10, currentPage: p }">
+                              <td>{{d.email}}</td>
+                              <td>{{d.lastName}}</td>
+                              <td>{{d.firstName}}</td>
+                              <td>{{d.type}}</td>
+                              <td>
+                                  <span *ngIf="d.isActive" class="label label-success">已激活</span>
+                                  <span *ngIf="!d.isActive" class="label label-default">未激活</span>
+                                </td>
+                              <td>
+                                  <div class="btn-group btn-group-xs">
+                                      <button class="btn btn-info" (click)="modify(d)">修改信息</button>
+                                      <button class="btn btn-info" (click)="resetPwdModal(d)">修改密码</button>
+                                      <button class="btn btn-danger" 
+                                            mwlConfirmationPopover
+                                            [title]="'删除此记录'"
+                                            [message]="'确定要删除当前记录吗？'"
+                                            placement="top"
+                                            (confirm)="remove(d)"
+                                            [confirmText]="'确定'"
+                                            [cancelText]="'取消'"
+                                            [appendToBody]="true">删除用户</button>
+                                  </div>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <pagination-controls id="userPaging" autoHide="true" (pageChange)="p = $event"></pagination-controls>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div bsModal #detailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog ">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">用户信息</h4>
+      <button type="button" class="close pull-right" (click)="detailModal.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #detailForm="ngForm" class="form-horizontal">
+          <!-- <div *ngIf="!detailForm.form.valid" class="alert alert-danger">
+              {<p *ngIf="description.touched && description.errors?.required">
+                场景描述字段为必填字段
+              </p>}
+          </div> -->
+          <div class="form-group">
+              <label class="col-sm-4 control-label">电子邮箱</label>
+              <div class="col-sm-8">
+                  <input name="email" type="email" #email="ngModel" [(ngModel)]="detailItem.email" class="form-control" required email>
+                  <p class="text-danger" *ngIf="email.touched && email.errors">必填项，请输入正确格式的邮箱地址</p>
+              </div>
+          </div>
+
+          <div *ngIf="detailItem.isNew else emptyContent" class="form-group">
+              <label class="col-sm-4 control-label">密码</label>
+              <div class="col-sm-8">
+                  <input name="pwd" type="password" [(ngModel)]="detailItem.pwd" #pwd="ngModel" [rangeLength]="[6, 16]"
+                  class="form-control" required>
+                  <p class="text-danger" *ngIf="pwd.touched && pwd.errors">请输入6到16位登录密码</p>
+              </div>
+          </div>
+
+          <div *ngIf="detailItem.isNew else emptyContent" class="form-group">
+              <label class="col-sm-4 control-label">重复密码</label>
+              <div class="col-sm-8">
+                  <input name="repeatPwd" type="password" #rptPwd="ngModel" [(ngModel)]="detailItem.repeatPwd"
+                   class="form-control" [equalTo]="pwd" required>
+                   <p class="text-danger" *ngIf="rptPwd.touched && rptPwd.errors">两次输入密码不一致</p>
+              </div>
+          </div>
+
+            <ng-template #emptyContent></ng-template>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">姓</label>
+            <div class="col-sm-8">
+                <input name="lastName" type="lastName" #lastName="ngModel" [(ngModel)]="detailItem.lastName" class="form-control" required>
+                <p class="text-danger" *ngIf="lastName.touched && lastName.errors">请输入用户的姓</p>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-4 control-label">名</label>
+            <div class="col-sm-8">
+                <input name="firstName" type="firstName" #firstName="ngModel" [(ngModel)]="detailItem.firstName" class="form-control" required>
+                <p class="text-danger" *ngIf="firstName.touched && firstName.errors">请输入用户的姓</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">类型</label>
+            <div class="col-sm-8">
+              <select name="type" #type="ngModel" [(ngModel)]="detailItem.type" class="form-control" required>
+                <option value="0">管理员</option>
+                <option value="1">排版员</option>
+              </select>
+              <p class="text-danger" *ngIf="type.touched && type.errors">请选择用户类型</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+              <label class="col-sm-4 control-label">是否激活</label>
+              <div class="col-sm-8">
+                  <input name="isActive" type="checkbox" [(ngModel)]="detailItem.isActive" class="form-control" >
+              </div>
+          </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="!detailForm.form.valid" type="submit" class="btn btn-sm btn-info" (click)="confirmChange()">确定</button>
+      <button class="btn btn-sm btn-default" (click)="detailModal.hide()">取消</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div bsModal #pwdModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">设定密码</h4>
+            <button type="button" class="close pull-right" (click)="pwdModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #pwdDetailForm="ngForm" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">密码</label>
+                    <div class="col-sm-8">
+                        <input name="resetPassword" type="password" [(ngModel)]="userItem.pwd" #resetPassword="ngModel" [rangeLength]="[6, 16]"
+                        class="form-control" required>
+                        <p class="text-danger" *ngIf="resetPassword.touched && resetPassword.errors">请输入6到16位登录密码</p>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">重复密码</label>
+                    <div class="col-sm-8">
+                        <input name="resetRptPassword" type="password" #resetRptPwd="ngModel" [(ngModel)]="userItem.repeatPwd"
+                        class="form-control" [equalTo]="resetPassword" required>
+                        <p class="text-danger" *ngIf="resetRptPwd.touched && resetRptPwd.errors">两次输入密码不一致</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button [disabled]="!pwdDetailForm.form.valid" type="submit" class="btn btn-sm btn-info" (click)="confirmReset()">确定</button>
+            <button class="btn btn-sm btn-default" (click)="pwdModal.hide()">取消</button>
+        </div>
+        </div>
+    </div>
+</div>
