@@ -89,7 +89,7 @@ export class BackendService {
         this.http.get(this.ordersUrl),
         this.http.get(this.productionScheduleUrl),
         this.scenarioService.findCurrentScenarioData(),
-        this.http.get(this.lineStaticDataUrl).map(res => res.json()),
+        this.http.get(this.lineStaticDataUrl),
         ]).subscribe(res => {
           let orders = res[0];
           let productionScheduleResult = res[1];
@@ -143,7 +143,7 @@ export class BackendService {
         this.http.get(this.productionScheduleUrl),
         this.lineService.find({}),
         this.scenarioService.findCurrentScenarioData(),
-        this.http.get(this.lineStaticDataUrl).map(res => res.json()),
+        this.http.get(this.lineStaticDataUrl),
         ]).subscribe(res => {
           let productStaticData = res[0];
           let productionScheduleResult = res[1];

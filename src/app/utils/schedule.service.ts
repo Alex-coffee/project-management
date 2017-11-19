@@ -50,10 +50,7 @@ export class ScheduleService {
       return this.http.post(this.runORURL, {
           id: JSON.parse(currentScenario)._id,
           numDays: this.toolsService.getScenarioDates
-        }).map((_response: Response) => {
-        const data = _response.json()
-        return _response.json();
-      });
+        });
     }
   }
 
