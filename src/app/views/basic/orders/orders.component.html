@@ -27,6 +27,7 @@
                                 <th>单位仓储成本</th>
                                 <th>安全库存</th>
                                 <th>初始库存</th>
+                                <th>排产优先级</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -38,6 +39,7 @@
                                 <td>{{d.storageCost}}</td>
                                 <td>{{d.saftyStorage}}</td>
                                 <td>{{d.initialStorage}}</td>
+                                <td>{{d.priority}}</td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
@@ -123,6 +125,13 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-4 control-label">排产优先级</label>
+                <div class="col-sm-8">
+                    <input name="priority" type="number" [(ngModel)]="detailItem.priority" class="form-control" min="0">
+                </div>
+            </div>
+            
         </form>
       </div>
       <div class="modal-footer">

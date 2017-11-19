@@ -121,6 +121,48 @@
                                 </div>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td class="col-sm-6">
+                               安全库存是否是硬性限制
+                            </td>
+                            <td class="col-sm-6">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="isSafeStorageHardConstraint" 
+                                            [(ngModel)]="parameters.isSafeStorageHardConstraint" 
+                                            class="onoffswitch-checkbox" id="isSafeStorageHardConstraint">
+                                        <label class="onoffswitch-label" for="isSafeStorageHardConstraint">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr *ngIf="parameters.isSafeStorageHardConstraint">
+                            <td class="col-sm-6">
+                                安全库存限制违反罚分
+                            </td>
+                            <td class="col-sm-6">
+                                <input type="number" name="penaltyForUseSafeStorage" 
+                                    [(ngModel)]="parameters.penaltyForUseSafeStorage" class="form-control">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-sm-6">
+                                安全库存计算方式
+                            </td>
+                            <td class="col-sm-6">
+                                <ng-select name="safeStorageCalculateMethod" 
+                                    [(ngModel)]="parameters.safeStorageCalculateMethod" required
+                                    [options]="safeStorageCalculateOptions">
+                                </ng-select>
+                            </td>
+                        </tr>
+
                     </table>
 
                     <!-- <button [disabled]="inProcess" class="btn btn-success btn-block" (click)="runOR()">

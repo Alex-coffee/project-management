@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import {RouterModule} from "@angular/router";
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,12 +57,20 @@ import { MaterialCalendarComponent } from 'app/views/scenario/material-calendar/
 import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-calendar.component';
 
 import { WizardComponent } from 'app/views/wizard/wizard.component';
+import { LoginComponent} from 'app/views/login/login.component';
 
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { OrderImportComponent } from './views/scenario/order-import/order-import.component';
 import { ProductStaticImportComponent } from './views/scenario/product-static-import/product-static-import.component';
 import { DataSheetDirective } from './directive/data-sheet.directive';
+
+import { AuthGuard } from 'app/guards/auth.guard';
+import { UsersComponent } from './views/admin/users/users.component';
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from 'app/guards/token.interceptor';
+import { ClockPickerDirective } from 'app/directive/clockpicker.directive';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -91,16 +99,19 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     StorageAmountComponent,
     GanttDirective,
     WizardComponent,
+    LoginComponent,
     OrderImportComponent,
     ProductStaticImportComponent,
     OrderScheduleComponent,
     DataSheetDirective,
+    UsersComponent,
+    ClockPickerDirective,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     LayoutsModule,
     AppviewsModule,
     SelectModule,
@@ -127,6 +138,12 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     })
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    AuthGuard,
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {provide: ToastOptions, useClass: ToastrCustomOption},
   ],

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -12,7 +13,7 @@ export class MaterialService {
   private orderRawMaterialsDataUrl = 'assets/or/input/OrderRawMaterials.json';
 
   
-  constructor (private http: Http) {}
+  constructor (private http: HttpClient) {}
 
   //*********** apis ****************/
   getRawMaterialData(): Observable<any[]> {
@@ -26,7 +27,6 @@ export class MaterialService {
   //****************************** */
   private getFilesByUrl(fileUrls: string){
     return this.http.get(fileUrls)
-                    .map(this.extractData)
                     .catch(this.handleError);
   }
 

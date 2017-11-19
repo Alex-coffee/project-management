@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import * as d3 from "d3";
 import 'rxjs/add/operator/catch';
@@ -26,7 +27,7 @@ export class BackendService {
   private uncoveredDemandsUrl = this.getOutputPath() + 'UncoveredDemands.json';
   
   constructor (
-    private http: Http,
+    private http: HttpClient,
     private scenarioService: ScenarioService,
     private lineService: LineService
   ) {}
@@ -85,8 +86,8 @@ export class BackendService {
   getOrderGanttData(): Observable<GanttDataSet>{
     let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
-        this.http.get(this.ordersUrl).map(res => res.json()),
-        this.http.get(this.productionScheduleUrl).map(res => res.json()),
+        this.http.get(this.ordersUrl),
+        this.http.get(this.productionScheduleUrl),
         this.scenarioService.findCurrentScenarioData(),
         ]).subscribe(res => {
           let orders = res[0];
@@ -134,8 +135,8 @@ export class BackendService {
   getLineOrderGanttData(): Observable<GanttDataSet>{
     let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
-        this.http.get(this.productStaticDataUrl).map(res => res.json()),
-        this.http.get(this.productionScheduleUrl).map(res => res.json()),
+        this.http.get(this.productStaticDataUrl),
+        this.http.get(this.productionScheduleUrl),
         this.lineService.find({}),
         this.scenarioService.findCurrentScenarioData(),
         ]).subscribe(res => {

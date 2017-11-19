@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { URLSearchParams } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { HTTP_BASE } from 'app/config';
 import { RequestOptions } from 'app/model/request-options';
@@ -19,69 +19,53 @@ export class GeneralService {
   private batchInsertURL = this.HOST + '/api/batch/insert/model';
   private deleteURL = this.HOST + '/api/delete/model';
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   protected findById(model: string, id: any): Observable<any> {
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('model', model);
-    params.set('id', id);
-    
-    return this.http.get(this.queryByIdURL, {search: params}).map((_response: Response) => {
-      const data = _response.json()
-      return _response.json();
-    });
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('model', model);
+    httpParams = httpParams.append('id', id);
+    return this.http.get(this.queryByIdURL, {params: httpParams});
   }
 
   protected find(model: string, conditions: any, options: RequestOptions): Observable<any> {
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('model', model);
-    if(model != "scenario") {
-      let currentScenario = localStorage.getItem('currentScenario');
-      if(currentScenario){
+    let httpParams: HttpParams = new HttpParams();
+    httpParams = httpParams.set('model', model);
+    if ( model !== 'scenario' && model !== 'user') {
+      const currentScenario = localStorage.getItem('currentScenario');
+      if (currentScenario) {
         conditions.scenario = JSON.parse(currentScenario)._id;
       }
     }
-    params.set('conditions', JSON.stringify(conditions));
+    httpParams = httpParams.append('conditions', JSON.stringify(conditions));
 
-    if(options){
-      params.set('options', JSON.stringify(options));
+    if (options) {
+      httpParams = httpParams.append('options', JSON.stringify(options));
     }
 
-    return this.http.get(this.queryURL, {search: params}).map((_response: Response) => {
-      const data = _response.json()
-      return _response.json();
-    });
+    return this.http.get(this.queryURL,  {params: httpParams});
   }
 
   protected save(model: string, content: any): Observable<any> {
-    let currentScenario = localStorage.getItem('currentScenario');
-    if(currentScenario){
+    const currentScenario = localStorage.getItem('currentScenario');
+    if (currentScenario) {
       content.scenario = JSON.parse(currentScenario)._id;
     }
-    return this.http.post(this.saveURL, {model: model, content: content}).map((_response: Response) => {
-      const data = _response.json()
-      return _response.json();
-    });
+    return this.http.post(this.saveURL, {model: model, content: content});
   }
 
   protected batchInsert(model: string, contentArray: any[]): Observable<any> {
-    let currentScenario = localStorage.getItem('currentScenario');
-    if(currentScenario && contentArray){
+    const currentScenario = localStorage.getItem('currentScenario');
+    if (currentScenario && contentArray) {
       contentArray.forEach(c => {
         c.scenario = JSON.parse(currentScenario)._id;
-      })
+      });
     }
-    return this.http.post(this.batchInsertURL, {model: model, content: contentArray}).map((_response: Response) => {
-      const data = _response.json()
-      return _response.json();
-    });
+    return this.http.post(this.batchInsertURL, {model: model, content: contentArray});
   }
 
   protected remove(model: string, content: any): Observable<any> {
-    return this.http.post(this.deleteURL, {model: model, content: content}).map((_response: Response) => {
-      const data = _response.json()
-      return _response.json();
-    });
+    return this.http.post(this.deleteURL, {model: model, content: content});
   }
 
 }

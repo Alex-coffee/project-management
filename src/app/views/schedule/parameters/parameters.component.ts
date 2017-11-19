@@ -8,6 +8,7 @@ import { PurchasePlanService } from 'app/services/purchase-plan.service';
 import { OrderDemandService } from 'app/services/order-demand.service';
 import { ToolsService } from 'app/utils/tools.service';
 import { Router } from '@angular/router';
+import { IOption } from 'ng-select';
 
 @Component({
   selector: 'app-parameters',
@@ -21,6 +22,7 @@ export class ParametersComponent implements OnInit {
   inProcess:boolean = false;
   @Output()
   private orCallback: EventEmitter<any>;
+  safeStorageCalculateOptions: Array<IOption> = [];
 
   constructor(
     private dataService: DataService, 
@@ -36,6 +38,10 @@ export class ParametersComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+
+    this.safeStorageCalculateOptions.push({ label: '用户输入', value: 'user' });
+    this.safeStorageCalculateOptions.push({ label: '最大需求', value: 'max' });
+    this.safeStorageCalculateOptions.push({ label: '平均需求', value: 'avg' });
   }
 
   save(){

@@ -6,6 +6,7 @@ var LineSchema = new Schema({
     name: {type: String},
     availableHours: {type: Number},
     turnHours: {type: Number},
+    lineCloseSchedule: {type: Object},
     scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },

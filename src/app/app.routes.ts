@@ -21,26 +21,32 @@ import { StorageAmountComponent} from "app/views/schedule/storage-amount/storage
 import { UncoveredDemandsComponent} from "app/views/schedule/uncovered-demands/uncovered-demands.component";
 import { KpiComponent} from "app/views/schedule/kpi/kpi.component";
 
-import { WizardComponent} from "app/views/wizard/wizard.component";
+import { UsersComponent } from 'app/views/admin/users/users.component';
 
+import { WizardComponent} from "app/views/wizard/wizard.component";
+import { LoginComponent} from "app/views/login/login.component";
 
 import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
 import {BasicLayoutComponent} from "./components/common/layouts/basicLayout.component";
 import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavigationlayout.component";
+import { AuthGuard } from 'app/guards/auth.guard';
 
 export const ROUTES:Routes = [
   // Main redirect
   {path: '', redirectTo: '/wizard/step', pathMatch: 'full'},
+  { path: 'login', component: LoginComponent },
 
   // App views
   {
     path: 'wizard', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'step', component: WizardComponent}
     ]
   },
   {
     path: 'scenario', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'management', component: ManagementComponent},
       {path: 'calendar', component: CalendarComponent},
@@ -50,6 +56,7 @@ export const ROUTES:Routes = [
   },
   {
     path: 'basic', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'line-static', component: LineStaticComponent},
       {path: 'raw-materials', component: RawMaterialsComponent},
@@ -59,6 +66,7 @@ export const ROUTES:Routes = [
   },
   {
     path: 'production', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'material-purchasing', component: MaterialPurchasingComponent},
       {path: 'product-static', component: ProductStaticComponent}
@@ -66,6 +74,7 @@ export const ROUTES:Routes = [
   },
   {
     path: 'schedule', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'parameters', component: ParametersComponent},
       {path: 'production-schedule', component: ProductionScheduleComponent},
@@ -75,7 +84,14 @@ export const ROUTES:Routes = [
       {path: 'uncovered-demands', component: UncoveredDemandsComponent}
     ]
   },
+  {
+    path: 'admin', component: BasicLayoutComponent,
+    // canActivate: [AuthGuard],
+    children: [
+      {path: 'users', component: UsersComponent}
+    ]
+  },
 
   // Handle all other routes
-  {path: '**',  redirectTo: '/scenario/management'}
+  {path: '**',  redirectTo: '/login'}
 ];

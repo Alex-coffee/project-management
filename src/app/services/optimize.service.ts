@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { HTTP_BASE } from 'app/config';
 import 'rxjs/add/operator/catch';
@@ -12,10 +13,10 @@ export class OptimizeService {
   private HOST:string = HTTP_BASE;
   // private HOST:string = "http://localhost:8001";
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   runOR(): Observable<any> {
-    return this.http.post(this.HOST + "/api/runOR", {}).map(this.extractData);
+    return this.http.post(this.HOST + "/api/runOR", {});
   }
 
   private extractData(res: Response) {

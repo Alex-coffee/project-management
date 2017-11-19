@@ -12,6 +12,11 @@ var ScenarioSchema = new Schema({
     penaltyForLineUsage: {type: Number, default: 0},
     isPenalizeForNumLineUsedOn: {type: Boolean, default: false},
     isRawMaterialPrepareConstraintOn: {type: Boolean, default: false},
+
+    isSafeStorageHardConstraint: {type: Boolean, default: false},
+    penaltyForUseSafeStorage: {type: Number, default: 0},
+    safeStorageCalculateMethod: {type: String},
+
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

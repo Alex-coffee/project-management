@@ -19,6 +19,7 @@
                                 <th>生产线号</th>
                                 <th>每日可用小时数</th>
                                 <th>换模小时数</th>
+                                <th>产线关闭时间段</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -27,6 +28,7 @@
                                 <td>{{d.name}}</td>
                                 <td>{{d.availableHours}}</td>
                                 <td>{{d.turnHours}}</td>
+                                <td><span class="label label-success" *ngIf="d.lineCloseSchedule">已设置</span></td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>
@@ -44,7 +46,7 @@
 </div>
 
 <div bsModal #detailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog ">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title pull-left">生产线信息</h4>
@@ -77,6 +79,59 @@
                 <label class="col-sm-4 control-label">换模小时数</label>
                 <div class="col-sm-8">
                     <input name="turnHours" type="number" min="0" [(ngModel)]="detailItem.turnHours" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">产线关闭时间段</label>
+                <div class="col-sm-8">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>产线关闭时间</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th></th>
+                            </tr>
+                            <tr *ngFor="let lineClose of detailItem.lineCloseSchedule; let i = index; trackBy:trackByIndex">
+                                <td>
+                                    <ng-select name="lcsDay_{{i}}" [(ngModel)]="detailItem.lineCloseSchedule[i].day" required
+                                        [options]="dayOptions" style="width: 150px;">
+                                    </ng-select>
+                                    <!-- <input name="lcsDay_{{i}}" type="number" class="form-control"
+                                        [(ngModel)]="detailItem.lineCloseSchedule[i].dayId" required> -->
+                                </td>
+                                <td>
+                                    <div class="input-group" appClockPicker>
+                                        <input name="lcsIntervalStart_{{i}}" type="text" class="form-control"
+                                        [(ngModel)]="detailItem.lineCloseSchedule[i].intervalStart" required>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group" appClockPicker>
+                                        <input name="lcsIntervalEnd_{{i}}" type="text" class="form-control"
+                                        [(ngModel)]="detailItem.lineCloseSchedule[i].intervalEnd" required>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-danger" (click)="removeLineCloseSchedule(i)">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <button class="btn btn-sm btn-info pull-right" (click)="addLineCloseSchedule()">
+                            <i class="fa fa-plus"></i>
+                            添加新原材料
+                        </button>
+                    
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { HTTP_BASE } from 'app/config';
 import 'rxjs/add/operator/catch';
@@ -27,7 +28,7 @@ export class DataService {
   private lineStaticDataUrl = 'assets/or/input/LineStaticData.json';
   private parametersUrl = 'assets/or/input/Parameters.json';
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getRawMaterialDemandsResult(): Observable<any[]> {
     return this.getFilesByUrl(this.rawMaterialDemandsResultUrl);
@@ -163,7 +164,7 @@ export class DataService {
 
   //************** private methods ***************
   private saveFile(fileUrl, content){
-    return this.http.post(this.HOST + "/api/saveJSON", {fileUrl: fileUrl, content: content}).map(this.extractData)
+    return this.http.post(this.HOST + "/api/saveJSON", {fileUrl: fileUrl, content: content});
   }
 
   private getFilesByUrl(fileUrls: string){

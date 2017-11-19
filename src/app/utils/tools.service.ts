@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HTTP_BASE } from 'app/config';
-import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ToolsService {
   private HOST:string = HTTP_BASE;
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getDateArrayByRange(startDate: Date, endDate: Date): Date[]{
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){

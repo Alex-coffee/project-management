@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { HTTP_BASE } from 'app/config';
 import 'rxjs/add/operator/catch';
@@ -35,7 +36,7 @@ export class ScheduleService {
   private runORURL = this.HOST + '/api/or/run';
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private purchasePlanService: PurchasePlanService,
     private orderDemandService: OrderDemandService,
     private itemService: ItemService,
