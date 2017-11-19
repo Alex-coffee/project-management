@@ -182,6 +182,56 @@ var apiInit = function(app){
         }
     });
 
+    app.post('/api/data/result/generate', function(req, res) {
+        const dateFormat = require('dateFormat');
+        const iconv = require('iconv-lite');
+        const json2csv = require('json2csv');
+
+        const scenaro = req.body.scenario;
+        const scenarioDates = req.body.scenarioDates;
+        const dateRangeLength = scenarioDates.length;
+
+        const productScheduleFilePath = path.join(settings.systemPath, 'output', scenaro._id, "ProductionScheduleResult.json")
+        const productScheduleFileBuffer =  fs.readFileSync(productScheduleFilePath);
+        const productSchedule = JSON.parse(productScheduleFileBuffer.toString());
+
+        let processedProductSchedule = [];
+        productSchedule.forEach(ps => {
+            let rowItem = {};
+            rowItem.order = ps.orderName;
+            
+            ps.plan.forEach(p => {
+                rowItem[scenarioDates[p.time]] = p.amount;
+            })
+            processedProductSchedule.push(rowItem);
+        })
+
+        let csvFields = ["order"].concat(scenarioDates);
+        let fieldNames = ["产品编号"];
+        scenarioDates.forEach(d => {
+            fieldNames.push(dateFormat(new Date(d).getTime(), 'yyyy-mm-dd'));
+        })
+
+        console.log(csvFields);
+        console.log(fieldNames);
+
+        let csv = json2csv({ 
+            data: processedProductSchedule, 
+            fields: csvFields, 
+            fieldNames: fieldNames 
+        });
+        
+        let filePath = path.join(settings.systemPath, 'output', 'ORResult.csv');
+        var newCsv = iconv.encode(csv, 'GBK');
+        fs.writeFileSync(filePath, newCsv);
+
+        res.status(200).send({message: "success"});
+    });
+
+    app.get('/api/data/result/export', function(req, res) {
+        res.download(path.join(settings.systemPath, 'output', 'ORResult.csv'), 'ORResult.csv');
+    });
+
     app.post('/api/data/productstatic/import', productStaticUpload.array('file', 20),function(req, res){
         if (req.files != undefined) {
             res.sendStatus(200);

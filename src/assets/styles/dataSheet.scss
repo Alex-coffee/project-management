@@ -3,7 +3,7 @@ $dataCell-height: 40px;
 
 
 .dataSheet { position: relative; height: $dataSheet-height;}
-.slotContainer, .contentContainer { position: absolute; top:0; height: $dataSheet-height; border: 1px solid #ccc;}
+.slotContainer, .contentContainer { position: absolute; top:0; height: $dataSheet-height;}
 .slotContainer { left:0; width: 25%; overflow: hidden}
 .contentContainer { left: 25%; width: 75%; overflow-x: auto;}
 .dataSheet table tr td, .dataSheet table tr th{

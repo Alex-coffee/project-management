@@ -89,10 +89,12 @@ export class BackendService {
         this.http.get(this.ordersUrl),
         this.http.get(this.productionScheduleUrl),
         this.scenarioService.findCurrentScenarioData(),
+        this.http.get(this.lineStaticDataUrl).map(res => res.json()),
         ]).subscribe(res => {
           let orders = res[0];
           let productionScheduleResult = res[1];
           const scenarioData = res[2];
+          const lineStaticData = res[3];
           let ganttItems: GanttItem[] = [], slots = [], ganttSlots: GanttSlot[] = [];;
           let i = 0;
 
@@ -109,6 +111,7 @@ export class BackendService {
           i = 0;
           productionScheduleResult.forEach(productSchedule => {
               productSchedule.plan.forEach(p => {
+                let lineStaticObj = lineStaticData.find(lineStatic => lineStatic.lineId == p.line);
                   const item = new GanttItem({
                       id: i++,
                       rowIndex: slots.indexOf(productSchedule.orderName),
@@ -116,7 +119,8 @@ export class BackendService {
                       endTime: new Date(scenarioData.startDate).getTime() + (p.time + 1) * 24 * 3600 * 1000,
                       assignedSlot: productSchedule.orderName,
                       label: productSchedule.orderName,
-                      content: p
+                      content: p,
+                      metaData: lineStaticObj
                   });
                   ganttItems.push(item);
               })
@@ -139,11 +143,13 @@ export class BackendService {
         this.http.get(this.productionScheduleUrl),
         this.lineService.find({}),
         this.scenarioService.findCurrentScenarioData(),
+        this.http.get(this.lineStaticDataUrl).map(res => res.json()),
         ]).subscribe(res => {
           let productStaticData = res[0];
           let productionScheduleResult = res[1];
           let lines = res[2].list;
           const scenarioData = res[3];
+          const lineStaticData = res[4];
 
           let ganttItems: GanttItem[] = [],
             ganttSlots: GanttSlot[] = [],
@@ -167,6 +173,7 @@ export class BackendService {
           productionScheduleResult.forEach(productSchedule => {
               productSchedule.plan.forEach(p => {
                   p.produceTime = p.amount * productStaticMap[productSchedule.orderName].unitTime * 1000;
+                  let lineStaticObj = lineStaticData.find(lineStatic => lineStatic.lineId == p.line);
                   const item = new GanttItem({
                       id: i++,
                       rowIndex: lines.findIndex(line => line._id === p.line),
@@ -174,6 +181,7 @@ export class BackendService {
                       assignedSlot: p.line,
                       label: productSchedule.orderName,
                       content: p,
+                      metaData: lineStaticObj
                   });
                   ganttItems.push(item);
               })

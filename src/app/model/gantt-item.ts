@@ -5,7 +5,8 @@ export class GanttItem{
     public startTime: number;
     public endTime: number;
     public label: string;
-    public content: any
+    public content: any;
+    public metaData: any;
 
     constructor(objMap: any){
         this.id = objMap.id;
@@ -15,5 +16,6 @@ export class GanttItem{
         this.endTime = objMap.endTime;
         this.label = objMap.label;
         this.content = objMap.content;
+        this.metaData = objMap.metaData;
     }
 }
