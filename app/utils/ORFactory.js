@@ -135,7 +135,10 @@ var apiInit = function(app){
                         "isPenalizeForStorageOn": scenario.isPenalizeForStorageOn,
                         "penaltyForLineUsage": scenario.penaltyForLineUsage,
                         "isPenalizeForNumLineUsedOn": scenario.isPenalizeForNumLineUsedOn,
-                        "isRawMaterialPrepareConstraintOn": scenario.isRawMaterialPrepareConstraintOn
+                        "isRawMaterialPrepareConstraintOn": scenario.isRawMaterialPrepareConstraintOn,
+                        "isSafeStorageHardConstraint": scenario.isSafeStorageHardConstraint,
+                        "penaltyForUseSafeStorage": scenario.penaltyForUseSafeStorage,
+                        "safeStorageCalculateMethod": scenario.safeStorageCalculateMethod,
                     }
 
                     writeFile(scenarioId, "Parameters.json", parameters);
@@ -178,6 +181,8 @@ var apiInit = function(app){
                             "safeStorage": product.saftyStorage,
                             "initialStorage": product.initialStorage,
                             "storageCost": product.storageCost,
+                            "priority": product.priority,
+                            "minProductAmount": product.minProductAmount,
                             "demands" : demands
                         })
                     });
@@ -247,11 +252,13 @@ var apiInit = function(app){
                     let lines = result;
                     let lineStaticData = [];
                     lines.forEach(line => {
+                        //TODO process lineCloseSchedule
                         lineStaticData.push({
                             "availHours": line.availableHours * numDays,
                             "lineId": line._id.toString(), 
                             "name": line.name, 
-                            "turnHours": line.turnHours
+                            "turnHours": line.turnHours,
+                            "lineCloseSchedule": line.lineCloseSchedule
                         })
                     })
                     writeFile(scenarioId, "LineStaticData.json", lineStaticData);
