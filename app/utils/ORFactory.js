@@ -30,6 +30,22 @@ function getDateArrayByRange(startDate, endDate){
     return undefined;
 }
 
+function getDayInDateArray(dateRangeArray, day){
+    let arrayTemp = []
+    if(dateRangeArray){
+        dateRangeArray.forEach(d => {
+            arrayTemp.push(d.getTime());
+        });
+    }
+    return arrayTemp.indexOf(day.getTime());
+}
+
+function getMinutesFromString(minStr){
+    var hour = parseInt(minStr.split(":")[0]);
+    var minutes = parseInt(minStr.split(":")[1]);
+    return hour * 60 + minutes;
+}
+
 function writeFile(scenarioId, fileName, content){
     try{
         let inputPath = path.join(settings.systemPath, 'temp', scenarioId);
@@ -242,23 +258,35 @@ var apiInit = function(app){
 
                     writeFile(scenarioId, "RawMaterials.json", rawMaterialData);
                     writeFile(scenarioId, "RawOrderMap.json", rawOrderData);
-                    callback(null, numDays);
+                    callback(null, numDays, dateRangeArray);
                 }) 
             },
             //process LineStaticData
-            function(numDays, callback){
+            function(numDays, dateRangeArray, callback){
                 let line = SchemaFactory.getModel("line");
                 SchemaServices.find(line, {"scenario": scenarioId, "isDeleted": false}, {}).then(result => {
                     let lines = result;
                     let lineStaticData = [];
                     lines.forEach(line => {
                         //TODO process lineCloseSchedule
+                        const lineCloseSchedule = [];
+                        const lcsArray = line.lineCloseSchedule;
+                        if(lcsArray && lcsArray.length > 0){
+                            lcsArray.forEach(lcs => {
+                                lineCloseSchedule.push({
+                                    dayInt: getDayInDateArray(dateRangeArray, new Date(lcs.day)),
+                                    intervalStart: getMinutesFromString(lcs.intervalStart),
+                                    intervalEnd: getMinutesFromString(lcs.intervalEnd)
+                                });
+                            });
+                        }
+
                         lineStaticData.push({
                             "availHours": line.availableHours * numDays,
                             "lineId": line._id.toString(), 
                             "name": line.name, 
                             "turnHours": line.turnHours,
-                            "lineCloseSchedule": line.lineCloseSchedule
+                            "lineCloseSchedule": lineCloseSchedule
                         })
                     })
                     writeFile(scenarioId, "LineStaticData.json", lineStaticData);
