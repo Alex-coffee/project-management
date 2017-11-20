@@ -11,6 +11,7 @@ var ItemSchema = new Schema({
     saftyStorage: {type: Number},
     priority: {type: Number},
     initialStorage: {type: Number, default: 0},
+    minProductAmount: {type: Number},
     useItem: {type: Boolean, default: false},
     refItem: { type: Schema.Types.ObjectId, ref: 'Item'},
     scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
