@@ -20,6 +20,7 @@ export class ProductStaticComponent implements OnInit {
   orderOptions: Array<IOption> = [];
   lineOptions: Array<IOption> = [];
   subLineOptions: Array<IOption> = [];
+  searchContent: string;
 
   constructor(
     private productStaticService: ProductStaticService, 
@@ -92,6 +93,29 @@ export class ProductStaticComponent implements OnInit {
         })
         this.orderOptions = optionArray;
       });
+  }
+
+  searchProduct() {
+    this.itemService.findProduct({
+      $or:[
+        {"desc": {$regex: this.searchContent, $options:'i'}},
+        {"name": {$regex: this.searchContent, $options:'i'}}
+      ], 
+      type: "product"
+    }).subscribe(res => {
+      const ids = [];
+      res.list.forEach(p => {
+        ids.push(p._id);
+      })
+      this.productStaticService.find({"product": {$in: ids}}).subscribe(res => {
+        this.dataList = res.list;
+      });
+    });
+  }
+
+  clearSearch() {
+    this.searchContent = "";
+    this.loadData();
   }
 
   prepareLines(){

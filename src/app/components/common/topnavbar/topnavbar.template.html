@@ -15,9 +15,9 @@
         </a>
       </li>
       <li>
-          <a href="#">
-            <i class="fa fa-sign-out"></i> Log out
-          </a>
+        <a (click)="logoutModal.show()">
+          <i class="fa fa-sign-out"></i>登出
+        </a>
         </li>
     </ul>
 
@@ -25,3 +25,25 @@
 </div>
 
 <app-scenario-modal #scenarioModal></app-scenario-modal>
+
+<div bsModal #logoutModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title pull-left">登出系统</h4>
+          <button type="button" class="close pull-right" (click)="logoutModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-info">
+              确认要登出系统吗？
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-success" (click)="confirmLogout()">确定</button>
+          <button class="btn btn-default" (click)="logoutModal.hide()">关闭</button>
+      </div>
+      </div>
+  </div>
+</div>

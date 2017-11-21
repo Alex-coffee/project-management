@@ -28,7 +28,7 @@
                                 <td>{{d.name}}</td>
                                 <td>{{d.availableHours}}</td>
                                 <td>{{d.turnHours}}</td>
-                                <td><span class="label label-success" *ngIf="d.lineCloseSchedule">已设置</span></td>
+                                <td><span class="label label-success" *ngIf="d.lineCloseSchedule && d.lineCloseSchedule.length > 0">已设置</span></td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-info" (click)="modify(d)"><i class="fa fa-pencil"></i></button>

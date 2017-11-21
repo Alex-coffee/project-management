@@ -17,6 +17,7 @@ export class OrdersComponent implements OnInit {
   totalDays: number;
   dataList: any[] = [];
   errMsg: string;
+  searchContent: string;
 
   constructor(
     private itemService: ItemService, 
@@ -59,5 +60,22 @@ export class OrdersComponent implements OnInit {
     this.itemService.findProduct({}).subscribe(res => {
         this.dataList = res.list;
       });
+  }
+
+  searchProduct() {
+    this.itemService.findProduct({
+      $or:[
+        {"desc": {$regex: this.searchContent, $options:'i'}},
+        {"name": {$regex: this.searchContent, $options:'i'}}
+      ], 
+      type: "product"
+    }).subscribe(res => {
+      this.dataList = res.list;
+    });
+  }
+
+  clearSearch() {
+    this.searchContent = "";
+    this.loadData();
   }
 }

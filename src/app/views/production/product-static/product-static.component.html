@@ -17,10 +17,27 @@
                     <h5>产品生产策略</h5>
                 </div>
                 <div class="ibox-content">
+                    <div class="row m-b-md">
+                        <div class="col-sm-6 col-sm-offset-6">
+                            <div class="input-group">
+                                <input placeholder="搜索产品名称或编号" name="searchContent" type="text" [(ngModel)]="searchContent" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" (click)="clearSearch()">
+                                        <i class="fa fa-times m-r-xs"></i>
+                                    </button>
+                                    <button class="btn btn-success" (click)="searchProduct()">
+                                        <i class="fa fa-search m-r-xs"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>产品名称</th>
+                                <th>产品描述</th>
                                 <th>单位生产时间</th>
                                 <th>主要生产线</th>
                                 <th>次要生产线</th>
@@ -30,6 +47,7 @@
                         <tbody>
                             <tr *ngFor="let d of dataList | paginate: {id: 'productStaticPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.product.name}}</td>
+                                <td>{{d.product.desc}}</td>
                                 <td>{{d.unitTime}}</td>
                                 <td>{{d.mainLine.name}}</td>
                                 <td>
