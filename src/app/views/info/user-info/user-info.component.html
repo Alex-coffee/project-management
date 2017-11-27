@@ -1,0 +1,22 @@
+<div class="profile-element" dropdown>
+  <a dropdownToggle>
+    <span class="block m-t-xs">
+      <strong class="font-bold">{{currentUser.lastName}}{{currentUser.firstName}}</strong>
+    </span>
+    <span class="text-muted text-xs block">
+      <span *ngIf="'0' === currentUser.type">
+        系统管理员
+      </span>
+      <span *ngIf="'1' === currentUser.type">
+        企业用户
+      </span>
+      <b class="caret"></b>
+    </span>
+  </a>
+  <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
+    <li><a href="#">登出</a></li>
+  </ul>
+</div>
+<div class="logo-element">
+    <img alt="image" src="assets/images/logo.png" style="height: 30px;">
+</div>

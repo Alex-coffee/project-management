@@ -100,13 +100,22 @@ export class ScheduleService {
     }
   }
 
-  getOrderSchedulePlanData(): Observable<any>{
+  getOrderSchedulePlanData(productIds: any): Observable<any>{
     const currentScenario = localStorage.getItem('currentScenario');
     if (currentScenario) {
+
+      let itemSearchCondition, orderDemandSearchCondition;
+      if (productIds) {
+        itemSearchCondition = {"_id": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+        orderDemandSearchCondition = {"item": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+      }else{
+        itemSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+        orderDemandSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+      }
       const data$ = new Observable(observer => {
         Observable.forkJoin([
-          this.itemService.findProduct({'scenario': JSON.parse(currentScenario)._id}),
-          this.orderDemandService.find({'scenario': JSON.parse(currentScenario)._id})
+          this.itemService.findProduct(itemSearchCondition),
+          this.orderDemandService.find(orderDemandSearchCondition)
         ]).subscribe(res => {
             const orderList = res[0].list;
             const orderDemandList = res[1].list;
@@ -130,8 +139,6 @@ export class ScheduleService {
               };
               orderScheduleList.push(orderSchedule);
             });
-
-            console.log(orderScheduleList);
 
             observer.next({
               orderList: orderList,

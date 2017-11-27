@@ -26,6 +26,7 @@ export class OrderScheduleComponent implements OnInit {
   errorMessage: any;
   detailItem: any = {};
   orderOptions: Array<IOption> = [];
+  searchContent: string = '';
 
   constructor(
     private orderDemandService: OrderDemandService,
@@ -50,9 +51,33 @@ export class OrderScheduleComponent implements OnInit {
     this.dateRanges = this.toolsService.getDateArrayByRange(new Date(currentScenarioObj.startDate),
     new Date(currentScenarioObj.endDate));
 
-    this.scheduleService.getOrderSchedulePlanData().subscribe(res => {
+    this.scheduleService.getOrderSchedulePlanData(undefined).subscribe(res => {
       this.dataList = res.orderScheduleList;
     });
+  }
+
+  searchProduct() {
+    this.itemService.findProduct({
+      $or:[
+        {"desc": {$regex: this.searchContent, $options:'i'}},
+        {"name": {$regex: this.searchContent, $options:'i'}}
+      ], 
+      type: "product"
+    }).subscribe(res => {
+      const ids = [];
+      res.list.forEach(p => {
+        ids.push(p._id);
+      });
+      
+      this.scheduleService.getOrderSchedulePlanData(ids).subscribe(res => {
+        this.dataList = res.orderScheduleList;
+      });
+    });
+  }
+
+  clearSearch() {
+    this.searchContent = "";
+    this.loadData();
   }
 
   trackByIndex(index: number, value: number) {

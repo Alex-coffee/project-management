@@ -4,21 +4,21 @@
         <button class="btn btn-primary pull-right" (click)="next('plan')">
             基础数据已就绪，下一步
         </button>
-      <tabset type="pills"> 
-        <tab heading='原材料信息'>
-          <app-raw-materials></app-raw-materials>
-        </tab>
+      <tabset type="pills">
         <tab heading='产品信息'>
           <app-orders></app-orders>
         </tab>
-        <tab heading='一级BOM原材料'>
-            <app-order-raw-materials></app-order-raw-materials>
-          </tab>
         <tab heading='产线信息'>
           <app-line-static></app-line-static>
         </tab>
         <tab heading='产品产线设置'>
           <app-product-static></app-product-static>
+        </tab>
+        <tab heading='原材料信息'>
+          <app-raw-materials></app-raw-materials>
+        </tab>
+        <tab heading='一级BOM原材料'>
+          <app-order-raw-materials></app-order-raw-materials>
         </tab>
       </tabset>
     </wizard-step>

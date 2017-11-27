@@ -17,6 +17,7 @@ import {FooterComponent} from "./../footer/footer.component";
 import {TopNavbarComponent} from "./../topnavbar/topnavbar.component";
 import {TopNavigationNavbarComponent} from "./../topnavbar/topnavigationnavbar.component";
 import { ScenarioModalComponent } from 'app/components/modal/scenario-modal/scenario-modal.component';
+import { UserInfoComponent } from 'app/views/info/user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ScenarioModalComponent } from 'app/components/modal/scenario-modal/scen
     TopNavigationLayoutComponent,
     TopNavbarComponent,
     TopNavigationNavbarComponent,
-    ScenarioModalComponent
+    ScenarioModalComponent,
+    UserInfoComponent
   ],
   imports: [
     FormsModule,

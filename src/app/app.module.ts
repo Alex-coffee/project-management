@@ -107,7 +107,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     DataSheetDirective,
     UsersComponent,
     ClockPickerDirective,
-    DemandsCoveredBySafeStorageComponent,
+    DemandsCoveredBySafeStorageComponent
   ],
   imports: [
     BrowserModule,
