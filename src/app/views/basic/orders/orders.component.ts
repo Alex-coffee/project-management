@@ -50,8 +50,8 @@ export class OrdersComponent implements OnInit {
 
   confirmChange() {
     this.itemService.saveProduct(this.detailItem).subscribe(res =>{
-
       this.loadData();
+      this.toastr.success('数据已保存');
       this.detailModal.hide();
     })
   }
@@ -77,5 +77,21 @@ export class OrdersComponent implements OnInit {
   clearSearch() {
     this.searchContent = "";
     this.loadData();
+  }
+
+  saveSaftyStorage(value, item) {
+    item.saftyStorage = value;
+    this.itemService.saveProduct(item).subscribe(res =>{
+      this.toastr.success('安全库存已更新');
+      this.loadData();
+    })
+  }
+
+  saveInitialStorage(value, item) {
+    item.initialStorage = value;
+    this.itemService.saveProduct(item).subscribe(res =>{
+      this.toastr.success('初始库存已更新');
+      this.loadData();
+    })
   }
 }

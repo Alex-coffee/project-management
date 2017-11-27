@@ -81,3 +81,40 @@ button.odAmountBtn {
     width: 50px;
     text-align: center;
 }
+
+inline-editor-number input[type=number].form-control{
+    width: 80px !important;
+}
+   .editable-empty,
+   .editable-empty:hover,
+   .editable-empty:focus,
+   a.editable-empty,
+   a.editable-empty:hover,
+   a.editable-empty:focus {
+     font-style: italic;
+     color: #DD1144;
+     text-decoration: none;
+   }
+    
+   .inlineEditForm{
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0;
+   }
+   #inlineEditWrapper{
+    display: inline-block;
+   }
+   .inlineEditForm input, select{
+    width: auto;
+    display: inline;
+   }
+   .editInvalid{
+    color: #a94442;
+    margin-bottom: 0;
+   }
+   .error{
+    border-color: #a94442;
+   }
+   [hidden] {
+    display: none;
+   }

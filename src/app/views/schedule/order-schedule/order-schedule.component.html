@@ -43,14 +43,23 @@
                                 <td>{{d.order.name}}</td>
                                 <td>{{d.order.desc}}</td>
                                 <td *ngFor="let s of d.scheduleArray; let i = index; trackBy:trackByIndex">
-                                    <button *ngIf="s" class="btn btn-primary btn-xs odAmountBtn" 
+
+                                    <inline-editor
+                                        type="number"
+                                        placeholder="0"
+                                        [(ngModel)]="s.amount"
+                                        (onSave)="saveODAmount($event, s)"
+                                        name="amount_{{i}}"
+                                        min="0"></inline-editor>
+
+                                    <!-- <button *ngIf="s" class="btn btn-primary btn-xs odAmountBtn" 
                                         (click)="modifyOrderSchedule(s, dateRanges[i], d)">
                                          {{s.amount}}
                                     </button>
                                     <button *ngIf="!s" class="btn btn-primary btn-xs odAmountBtn" 
                                         (click)="modifyOrderSchedule(s, dateRanges[i], d)">
                                             0
-                                    </button>
+                                    </button> -->
                                 </td>
                             </tr>
                         </tbody>

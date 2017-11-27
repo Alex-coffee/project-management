@@ -72,6 +72,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from 'app/guards/token.interceptor';
 import { ClockPickerDirective } from 'app/directive/clockpicker.directive';
 import { DemandsCoveredBySafeStorageComponent } from './views/schedule/demands-covered-by-safe-storage/demands-covered-by-safe-storage.component';
+import { InlineEditorModule } from 'ng2-inline-editor';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -119,6 +120,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     SelectModule,
     NgxPaginationModule,
     ChartsModule,
+    InlineEditorModule,
 
     // ScenarioModule,
     // BasicModule,

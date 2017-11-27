@@ -120,4 +120,11 @@ export class OrderScheduleComponent implements OnInit {
       });
   }
 
+  saveODAmount(value, schedule) {
+    schedule.amount = value;
+    this.orderDemandService.save(schedule).subscribe(res => {
+      this.toastr.success('保存成功');
+      this.loadData();
+    });
+  }
 }

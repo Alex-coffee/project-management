@@ -54,8 +54,22 @@
                                 <th>{{d.desc}}</th>
                                 <td>{{d.cost}}</td>
                                 <td>{{d.storageCost}}</td>
-                                <td>{{d.saftyStorage}}</td>
-                                <td>{{d.initialStorage}}</td>
+                                <td>
+                                    <inline-editor
+                                        type="number"
+                                        [(ngModel)]="d.saftyStorage"
+                                        (onSave)="saveSaftyStorage($event, d)"
+                                        name="saftyStorage"
+                                        min="0"></inline-editor>
+                                </td>
+                                <td>
+                                    <inline-editor
+                                        type="number"
+                                        [(ngModel)]="d.initialStorage"
+                                        (onSave)="saveInitialStorage($event, d)"
+                                        name="initialStorage"
+                                        min="0"></inline-editor>
+                                </td>
                                 <td>{{d.priority}}</td>
                                 <td>{{d.minProductAmount}}</td>
                                 <td>
