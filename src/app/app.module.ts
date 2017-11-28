@@ -73,6 +73,7 @@ import { TokenInterceptor } from 'app/guards/token.interceptor';
 import { ClockPickerDirective } from 'app/directive/clockpicker.directive';
 import { DemandsCoveredBySafeStorageComponent } from './views/schedule/demands-covered-by-safe-storage/demands-covered-by-safe-storage.component';
 import { InlineEditorModule } from 'ng2-inline-editor';
+import { DemandsMeetViewComponent } from './views/schedule/demands-meet-view/demands-meet-view.component';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -108,7 +109,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     DataSheetDirective,
     UsersComponent,
     ClockPickerDirective,
-    DemandsCoveredBySafeStorageComponent
+    DemandsCoveredBySafeStorageComponent,
+    DemandsMeetViewComponent
   ],
   imports: [
     BrowserModule,

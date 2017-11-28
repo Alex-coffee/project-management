@@ -25,6 +25,8 @@ export class BackendService {
   private productionScheduleUrl = this.getOutputPath() + 'ProductionScheduleResult.json';
   private storageAmountUrl = this.getOutputPath() + 'StorageAmountResult.json';
   private uncoveredDemandsUrl = this.getOutputPath() + 'UncoveredDemands.json';
+
+  private demandsMeetViewUrl = this.getOutputPath() + 'DemandsMeetView.json';
   
   constructor (
     private http: HttpClient,
@@ -253,7 +255,7 @@ export class BackendService {
   }
 
   private extractData(res: Response) {
-    const body = res.json();
+    const body = res;
     return body || { };
   }
   private handleError (error: Response | any) {

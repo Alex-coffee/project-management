@@ -11,6 +11,7 @@ var ORResultSchema = new Schema({
     storageKPIs: {type: Object},
     UncoveredDemands: {type: Object},
     DemandsCoveredBySafeStorage: {type: Object},
+    DemandsMeetView: {type: Object},
     scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
 
     isDeleted: {type: Boolean, default: false},

@@ -73,9 +73,7 @@ export class ProductionScheduleComponent implements OnInit {
   getProductScheduleData(){
     this.backendService.getProductionScheduleResult().subscribe(data => {
       this.productionScheduleList = data;
-      console.log(this.productionScheduleList);
     }, error => {
-      console.log(error);
       this.errorMessage = <any>error;
     });
   }
