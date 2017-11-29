@@ -228,7 +228,7 @@ var apiInit = function(app){
         res.status(200).send({message: "success"});
     });
 
-    app.get('/api/data/result/export', function(req, res) {
+    app.get('/data/result/export', function(req, res) {
         res.download(path.join(settings.systemPath, 'output', 'ORResult.csv'), 'ORResult.csv');
     });
 
