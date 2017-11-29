@@ -41,7 +41,7 @@ export class GanttDirective implements OnChanges, OnInit{
       {scale: 24, label: "1天"}
     ];
 
-  constructor(private el: ElementRef) { this.setBlockScale(3);}
+  constructor(private el: ElementRef) { this.setBlockScale(this.blockScale);}
 
   ngOnInit():any {
     this.createStructure();
@@ -54,11 +54,12 @@ export class GanttDirective implements OnChanges, OnInit{
     }
   }
   drawGantt(){
+      this.setBlockScale(this.blockScale);
       this.processData();
       this.buildSlot();
       this.buildTimeline();
       this.buildGantt();
-      this.setGanttType("line");
+      //this.setGanttType("line");
   }
 
   setGanttType(type: string){
@@ -311,7 +312,10 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 14;
           })
           .text(function(d){
-            return d.label;
+            if(that.getItemWidth(d.endTime, d.startTime) > 66)
+              return d.label;
+            else
+              return null;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
@@ -326,7 +330,10 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 25;
           })
           .text(function(d){
-            return "数量: " + d.content.amount;
+            if(that.getItemWidth(d.endTime, d.startTime) > 66)
+              return "数量: " + d.content.amount;
+            else
+              return null;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
@@ -341,7 +348,10 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 14;
           })
           .text(function(d){
-            return d.metaData.name;
+            if(that.getItemWidth(d.endTime, d.startTime) > 66)
+              return d.metaData.name;
+            else
+              return null;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2
@@ -356,7 +366,10 @@ export class GanttDirective implements OnChanges, OnInit{
             return that.blockSize * d.rowIndex + 25;
           })
           .text(function(d){
-            return "数量: " + d.content.amount;
+            if(that.getItemWidth(d.endTime, d.startTime) > 66)
+              return "数量: " + d.content.amount;
+            else
+              return null;
           })
           .attr("transform", function(d){
             let offset = that.getItemWidth(d.endTime, d.startTime) / 2 - this.getComputedTextLength() / 2

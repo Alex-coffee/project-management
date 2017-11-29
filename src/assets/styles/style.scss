@@ -118,3 +118,14 @@ inline-editor-number input[type=number].form-control{
    [hidden] {
     display: none;
    }
+   .statusBlock{
+    width: 25px;
+    height: 15px;
+    border-radius: 3px;
+   }
+   .statusBlock.danger{
+    background-color: $red;
+   }
+   .statusBlock.success{
+    background-color: $navy;
+   }

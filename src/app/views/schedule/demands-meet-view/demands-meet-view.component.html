@@ -20,9 +20,9 @@
                           <tr *ngFor="let d of dataList | paginate: {id: 'demandsMeetViewPaging', itemsPerPage: 10, currentPage: p }">
                               <td>{{d.name}}</td>
                               <td>{{d.desc}}</td>
-                              <td *ngFor="let m of d.demandsMeets">
-                                <i *ngIf="m > 0" class="fa fa-square text-danger"></i>
-                                <i *ngIf="m <= 0" class="fa fa-square text-mute"></i>
+                              <td *ngFor="let m of d.demandsMeets">                    
+                                <div class="statusBlock danger" *ngIf="m > 0" ></div>
+                                <div class="statusBlock success" *ngIf="m <= 0" ></div>
                               </td>
                           </tr>
                       </tbody>
