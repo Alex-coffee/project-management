@@ -3,8 +3,10 @@ import { GanttItem } from 'app/model/gantt-item';
 import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
 import * as d3 from "d3";
+import d3Tip from "d3-tip";
 import * as dateFormat from "dateFormat";
 declare var $:any;
+const tip = d3Tip();
 
 @Directive({
   selector: '[appGanttDirective]'
@@ -265,6 +267,17 @@ export class GanttDirective implements OnChanges, OnInit{
     height = +svg.attr("height");
     //{"earlistFinishTime":5,"earlistStartTime":0,"isCritical":true,"latestFinishTime":15,"latestStartTime":10,"processId":0}
 
+    /* Initialize tooltip */
+    let tooltip = tip.attr('class', 'd3-tip').html(function(d) {
+      if(that.type == "line"){
+        return d.label + "<br>数量: " + d.content.amount; 
+      }else{
+        return d.metaData.name + "<br>数量: " + d.content.amount; 
+      }
+    });
+
+    svg.call(tooltip)
+
     let ganttNodes = svg.selectAll("g.ganttNodes").data(ganttItems)
       .enter()
       .append("g")
@@ -286,6 +299,8 @@ export class GanttDirective implements OnChanges, OnInit{
         .attr("height", function(d){
           return that.blockSize - 8;
         })
+        .on('mouseover', tooltip.show)
+        .on('mouseout', tooltip.hide)
 
       if(this.type == "line"){
         ganttNodes.append("text")
