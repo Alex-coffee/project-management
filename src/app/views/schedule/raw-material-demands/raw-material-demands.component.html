@@ -17,7 +17,7 @@
                         <tbody>
                             <tr *ngFor="let d of dataList | paginate: {id: 'materialDemandsPaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.rawName}}</td>
-                                <td>{{d.day}}</td>
+                                <td>{{getScenarioDateStrByIndex(d.day) | date: 'yyyy-MM-dd'}}</td>
                                 <td>{{d.amountNeeded}}</td>
                             </tr>
                         </tbody>

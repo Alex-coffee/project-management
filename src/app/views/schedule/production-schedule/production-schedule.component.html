@@ -15,7 +15,7 @@
                             生成导出数据
                         </a>
                         <a *ngIf="fileGenerated" class="btn btn-success" 
-                            href="http://localhost:8001/api/data/result/export" target="_blank">
+                            href="http://115.159.83.14:8001/api/data/result/export" target="_blank">
                             <i class="fa fa-download m-r-xs"></i>下载
                         </a>
                     </div>
@@ -41,7 +41,7 @@
                                         <th>数量</th>
                                     </tr>
                                     <tr *ngFor="let plan of ps.plan">
-                                        <td>{{plan.time}}</td>
+                                        <td>{{getScenarioDateStrByIndex(plan.time) | date: "yyyy-MM-dd"}}</td>
                                         <td>
                                             <span *ngIf="lineMap[plan.line]">
                                                 {{lineMap[plan.line].name}}

@@ -11,7 +11,7 @@
                             <tr>
                                 <!-- <th>产品号</th> -->
                                 <th>产品名称</th>
-                                <th>天数</th>
+                                <th>日期</th>
                                 <th>数量</th>
                             </tr>
                         </thead>
@@ -19,7 +19,7 @@
                             <tr *ngFor="let d of dataList | paginate: {id: 'uncoveredDemandsPaging', itemsPerPage: 10, currentPage: p }">
                                 <!-- <td>{{d.orderId}}</td> --> 
                                 <td>{{d.orderName}}</td>
-                                <td>{{d.time}}</td>
+                                <td>{{getScenarioDateStrByIndex(d.time) | date: 'yyyy-MM-dd'}}</td>
                                 <td>{{d.amount}}</td>
                             </tr>
                         </tbody>

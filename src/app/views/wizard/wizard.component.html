@@ -63,6 +63,13 @@
 
     <wizard-step [title]="'结果输出及KPI'" >
         <tabset *ngIf="showResultConent" type="pills">
+            <tab heading='产品需求满足情况'>
+              <app-demands-meet-view></app-demands-meet-view>
+            </tab>
+            <tab heading='原材料库存情况'>
+              <app-raw-material-storage></app-raw-material-storage>
+            </tab>
+
             <tab heading='产线计划'>
               <app-production-schedule></app-production-schedule>
             </tab>
@@ -78,9 +85,6 @@
             </tab>
             <tab heading='未覆盖产品'>
               <app-uncovered-demands></app-uncovered-demands>
-            </tab>
-            <tab heading='产品覆盖情况'>
-              <app-demands-meet-view></app-demands-meet-view>
             </tab>
             <tab heading='使用安全库存满足的产品需求'>
               <app-demands-covered-by-safe-storage></app-demands-covered-by-safe-storage>

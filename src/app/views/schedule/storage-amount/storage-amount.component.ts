@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { OrResultService } from 'app/services/or-result.service';
+import { ToolsService } from 'app/utils/tools.service';
 
 @Component({
   selector: 'app-storage-amount',
   templateUrl: './storage-amount.component.html',
   styleUrls: ['./storage-amount.component.css'],
-  providers: [ DataService, OrResultService ]
+  providers: [ DataService, OrResultService, ToolsService ]
 })
 export class StorageAmountComponent implements OnInit {
   dataList: any[] = [];
@@ -15,11 +16,17 @@ export class StorageAmountComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private orResultService: OrResultService
+    private orResultService: OrResultService,
+    private toolsService: ToolsService
   ) { }
 
   ngOnInit() {
     this.loadData();
+  }
+
+  getScenarioDateStrByIndex(i: number) {
+    const scenarioDates = this.toolsService.getScenarioDates();
+    return scenarioDates[i];
   }
 
   loadData(){

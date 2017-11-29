@@ -25,11 +25,11 @@
                                 <td>
                                     <table class="table table-striped">
                                         <tr>
-                                            <th>天数</th>
+                                            <th>日期</th>
                                             <th>数量</th>
                                         </tr>
                                         <tr *ngFor="let l of d.storageLevel">
-                                            <td>{{l.time}}</td>
+                                            <td>{{getScenarioDateStrByIndex(l.time) | date: 'yyyy-MM-dd'}}</td>
                                             <td>{{l.amount}}</td>
                                         </tr>
                                     </table>

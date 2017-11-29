@@ -44,6 +44,11 @@ export class ProductionScheduleComponent implements OnInit {
     this.getLineInfo();
   }
 
+  getScenarioDateStrByIndex(i: number) {
+    const scenarioDates = this.toolsService.getScenarioDates();
+    return scenarioDates[i];
+  }
+
   exportORResult(){
     this.toolsService.exportORResult().then(res => {
       console.log(res);
