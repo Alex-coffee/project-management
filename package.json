@@ -3,11 +3,11 @@
   "version": "2.7.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "start": "ng serve --prod --environment prod --live-reload false --host 10.211.55.6 --port 4200"
   },
   "private": true,
   "dependencies": {
