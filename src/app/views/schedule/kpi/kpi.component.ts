@@ -15,6 +15,8 @@ export class KpiComponent implements OnInit {
   totalDays: number = 0;
   days:string[] = [];
   dateRanges: any[] = [];
+  p: any;
+  p2: any;
 
   constructor(
     private dataService: DataService,

@@ -14,6 +14,7 @@ export class RawMaterialStorageComponent implements OnInit {
   dataList: any[] = [];
   rawMaterialStorageList: any[] = [];
   scenarioDates: any[] = [];
+  p: any;
   
   constructor(
     private dataService: DataService,

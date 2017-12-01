@@ -11,6 +11,7 @@ import { ToolsService } from 'app/utils/tools.service';
 })
 export class UncoveredDemandsComponent implements OnInit {
   dataList: any[] = [];
+  p: any;
 
   constructor(
     private dataService: DataService,

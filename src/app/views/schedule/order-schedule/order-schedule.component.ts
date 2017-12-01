@@ -27,6 +27,7 @@ export class OrderScheduleComponent implements OnInit {
   detailItem: any = {};
   orderOptions: Array<IOption> = [];
   searchContent: string = '';
+  p: any;
 
   constructor(
     private orderDemandService: OrderDemandService,

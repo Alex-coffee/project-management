@@ -14,6 +14,7 @@ export class DemandsMeetViewComponent implements OnInit {
   dataList: any[] = [];
   demandsMeetViewList: any[] = [];
   scenarioDates: any[] = [];
+  p: any;
   
   constructor(
     private dataService: DataService,

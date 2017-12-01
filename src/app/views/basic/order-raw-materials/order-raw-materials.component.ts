@@ -19,6 +19,7 @@ export class OrderRawMaterialsComponent implements OnInit {
   errMsg: string;
   orderOptions: Array<IOption> = [];
   rawMaterialOptions: Array<IOption> = [];
+  p: any;
 
   constructor(
     private itemBOMService: ItemBOMService, 

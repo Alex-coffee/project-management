@@ -20,6 +20,7 @@ export class UsersComponent implements OnInit {
   userItem: any = {};
   dataList: any[] = [];
   errMsg: string;
+  p: any;
 
   constructor(private userService: UserService, public toastr: ToastsManager,
             vcr: ViewContainerRef) {

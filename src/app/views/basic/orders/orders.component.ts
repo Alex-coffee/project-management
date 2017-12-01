@@ -18,6 +18,7 @@ export class OrdersComponent implements OnInit {
   dataList: any[] = [];
   errMsg: string;
   searchContent: string;
+  p: any;
 
   constructor(
     private itemService: ItemService, 

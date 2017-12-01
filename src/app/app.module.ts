@@ -11,10 +11,7 @@ import { AppComponent } from './app.component';
 import { HTTP_BASE } from './config';
 
 // App views
-import {DashboardsModule} from "./views/dashboards/dashboards.module";
 import {AppviewsModule} from "./views/appviews/appviews.module";
-import {ProcessManagementViewModule} from "./views/processManagement/processManagement.views.module";
-import {MaterialsModule} from "./views/materials/materials.module";
 
 // App modules/components
 import {LayoutsModule} from "./components/common/layouts/layouts.module";
@@ -31,7 +28,7 @@ import { CalendarModule } from 'angular-calendar';
 import { PeityModule } from 'app/components/charts/peity';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { FormWizardModule } from 'angular2-wizard';
+
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { ManagementComponent } from 'app/views/scenario/management/management.component';
@@ -55,6 +52,9 @@ import { ProductStaticComponent } from 'app/views/production/product-static/prod
 import { MaterialPurchasingComponent } from 'app/views/production/material-purchasing/material-purchasing.component';
 import { MaterialCalendarComponent } from 'app/views/scenario/material-calendar/material-calendar.component';
 import { OrderCalendarComponent } from 'app/views/scenario/order-calendar/order-calendar.component';
+
+import { FormWizardComponent } from 'app/components/wizard/form-wizard.component';
+import { WizardStepComponent } from 'app/components/wizard/wizard-step.component';
 
 import { WizardComponent } from 'app/views/wizard/wizard.component';
 import { LoginComponent} from 'app/views/login/login.component';
@@ -102,6 +102,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     RawMaterialDemandsComponent,
     StorageAmountComponent,
     GanttDirective,
+    FormWizardComponent,
+    WizardStepComponent,
     WizardComponent,
     LoginComponent,
     OrderImportComponent,
@@ -140,7 +142,6 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     ToastModule.forRoot(),
     CalendarModule.forRoot(),
     PeityModule,
-    FormWizardModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger' // set defaults here
     })

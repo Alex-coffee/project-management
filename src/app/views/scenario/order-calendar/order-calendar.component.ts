@@ -52,6 +52,7 @@ export class OrderCalendarComponent implements OnInit {
   parameters: any = {};
   orderDemandDetailItem: any = {};
   orderOptions: Array<IOption> = [];
+  p: any;
 
   constructor(private materialService: MaterialService, 
     private toolsService: ToolsService,

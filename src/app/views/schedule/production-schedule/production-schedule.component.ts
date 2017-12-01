@@ -27,6 +27,7 @@ export class ProductionScheduleComponent implements OnInit {
   inProcess:boolean = false;
   fileGenerated:boolean = false;
   lineMap: any = {};
+  p: any;
 
   constructor(
     private backendService: BackendService, 

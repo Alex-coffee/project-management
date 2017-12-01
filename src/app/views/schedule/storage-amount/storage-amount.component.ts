@@ -13,6 +13,7 @@ export class StorageAmountComponent implements OnInit {
   dataList: any[] = [];
   public peityType:string = "bar";
   public peityOptions:any = { fill: ["#faa123"], width:100};
+  p: any;
 
   constructor(
     private dataService: DataService,

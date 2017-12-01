@@ -21,6 +21,7 @@ export class ProductStaticComponent implements OnInit {
   lineOptions: Array<IOption> = [];
   subLineOptions: Array<IOption> = [];
   searchContent: string;
+  p: any;
 
   constructor(
     private productStaticService: ProductStaticService, 

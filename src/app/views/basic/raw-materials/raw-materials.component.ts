@@ -17,6 +17,7 @@ export class RawMaterialsComponent implements OnInit {
   dataList: any[] = [];
   errMsg: string;
   orderOptions: Array<IOption> = [];
+  p: any;
 
   constructor(
     private itemService: ItemService,

@@ -22,13 +22,13 @@ export class OrderImportComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onUploadSuccess() {
+  public onUploadSuccess(event) {
     this.toolsService.processImportedOrderData().then(res => {
       location.reload();
     });
   }
 
-  public onUploadError() {
+  public onUploadError(event) {
     console.log('error');
   }
 

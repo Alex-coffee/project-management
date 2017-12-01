@@ -18,6 +18,7 @@ export class LineStaticComponent implements OnInit {
   dataList: any[] = [];
   errMsg: string;
   dayOptions: Array<IOption> = [];
+  p: any;
 
   constructor(
     private lineService: LineService,

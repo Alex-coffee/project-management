@@ -51,6 +51,7 @@ export class MaterialCalendarComponent implements OnInit {
   parameters: any = {};
   materialPurchaseDetailItem: any = {};
   rawMaterialOptions: Array<IOption> = [];
+  p: any;
 
   constructor(private materialService: MaterialService,
     private toolsService: ToolsService,

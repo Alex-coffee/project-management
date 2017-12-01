@@ -4,7 +4,7 @@ import { Md5 } from 'ts-md5/dist/md5';
 import { AuthenticationService } from 'app/utils/authentication.service';
 
 @Component({
-    moduleId: module.id,
+    //moduleId: module.id,
     templateUrl: 'login.component.html',
     providers: [AuthenticationService]
 })
