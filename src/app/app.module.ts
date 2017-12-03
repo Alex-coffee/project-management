@@ -75,6 +75,7 @@ import { DemandsCoveredBySafeStorageComponent } from './views/schedule/demands-c
 import { InlineEditorModule } from 'ng2-inline-editor';
 import { DemandsMeetViewComponent } from './views/schedule/demands-meet-view/demands-meet-view.component';
 import { RawMaterialStorageComponent } from './views/schedule/raw-material-storage/raw-material-storage.component';
+import { LineImportComponent } from './views/scenario/line-import/line-import.component';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -114,7 +115,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     ClockPickerDirective,
     DemandsCoveredBySafeStorageComponent,
     DemandsMeetViewComponent,
-    RawMaterialStorageComponent
+    RawMaterialStorageComponent,
+    LineImportComponent
   ],
   imports: [
     BrowserModule,

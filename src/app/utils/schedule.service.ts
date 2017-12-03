@@ -130,7 +130,7 @@ export class ScheduleService {
                 const schedule = orderDemandList.find(od => {
                   return od.item._id === order._id && new Date(od.date).getTime() === date.getTime();
                 });
-                scheduleArray.push(schedule);
+                if(schedule)  scheduleArray.push(schedule);
               });
 
               const orderSchedule = {

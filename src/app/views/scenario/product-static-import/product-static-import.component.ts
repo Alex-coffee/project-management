@@ -12,7 +12,7 @@ import { ToolsService } from 'app/utils/tools.service';
 export class ProductStaticImportComponent implements OnInit {
 
   config: DropzoneConfigInterface = {
-    url: HTTP_BASE + '/api/data/productstatic/import',
+    url: HTTP_BASE + '/import/data/productstatic',
   };
 
   constructor(

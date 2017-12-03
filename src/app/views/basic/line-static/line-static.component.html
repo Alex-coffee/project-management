@@ -8,6 +8,11 @@
                             <i class="fa fa-plus m-r-xs"></i>
                             新增
                         </button>
+
+                        <button class="btn btn-success" (click)="lineDataImportModal.show()">
+                            <i class="fa fa-download m-r-xs"></i>
+                            数据导入
+                        </button>
                     </div>
                     
                     <h5>生产线</h5>
@@ -143,4 +148,28 @@
       </div>
     </div>
   </div>
+</div>
+
+<div bsModal #lineDataImportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">产线数据导入</h4>
+            <button type="button" class="close pull-right" (click)="lineDataImportModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger">
+                <i class="fa fa-warning m-r-xs"></i>
+                导入数据会覆盖当前的产线数据，之前的数据将无法恢复
+            </div>
+            <app-line-import></app-line-import>
+        </div>
+        <div class="modal-footer">
+            <!-- <button class="btn btn-sm btn-success pull-left" (click)="orderDataProcess()">产品处理</button> -->
+            <button class="btn btn-sm btn-default" (click)="lineDataImportModal.hide()">关闭</button>
+        </div>
+        </div>
+    </div>
 </div>

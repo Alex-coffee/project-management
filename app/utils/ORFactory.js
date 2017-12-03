@@ -21,7 +21,7 @@ function getDateArrayByRange(startDate, endDate){
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){
     let result = [];
     var dateIntevalTime = startDate.getTime()
-    while(dateIntevalTime < endDate.getTime()){
+    while(dateIntevalTime <= endDate.getTime()){
         result.push(new Date(dateIntevalTime));
         dateIntevalTime += 24 * 3600 * 1000;
     }
@@ -197,6 +197,7 @@ var apiInit = function(app){
                             "safeStorage": product.saftyStorage,
                             "initialStorage": product.initialStorage,
                             "storageCost": product.storageCost,
+                            "advAmount": product.advAmount,
                             "priority": product.priority,
                             "minProductAmount": product.minProductAmount,
                             "demands" : demands
@@ -251,6 +252,7 @@ var apiInit = function(app){
                             "unitCost": material.cost,
                             "safeStorage": material.safeStorage,
                             "initialStorage": material.initialStorage,
+                            "advAmount": material.advAmount,
                             "storageCost": material.storageCost,
                             "supplys" : supplys
                         });

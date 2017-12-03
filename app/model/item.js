@@ -9,6 +9,7 @@ var ItemSchema = new Schema({
     cost: {type: Number},
     storageCost: {type: Number},
     saftyStorage: {type: Number},
+    advAmount: {type: Number},
     priority: {type: Number},
     initialStorage: {type: Number, default: 0},
     minProductAmount: {type: Number},

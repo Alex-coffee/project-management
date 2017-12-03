@@ -9,6 +9,7 @@ const path = require('path');
 const async = require('async');
 const orderDataFileName = "orderData.csv";
 const productStaticFileName = "productStatic.csv";
+const lineFileName = "lineData.csv";
 
 const multer  = require('multer')
 const storage = multer.diskStorage({
@@ -38,6 +39,20 @@ const productStaticStorage = multer.diskStorage({
     }
 })
 const productStaticUpload = multer({ storage: productStaticStorage })
+
+const lineStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, settings.uploadPath);
+    },
+    limits: {
+        fileSize: 200000000
+    },
+    filename: function (req, file, cb) {
+        //cb(null, file.originalname);
+        cb(null, lineFileName);
+    }
+})
+const lineUpload = multer({ storage: lineStorage })
 
 const isDateString = function(str){
     if(str.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) { 
@@ -78,11 +93,12 @@ const generateProductLineStatic = function(rawData, scenarioId){
         if (products.length > 0 && lines.length > 0) {
             const relProduct = products.find(p => p.name == rawData.orderName);
             const relLine = lines.find(l => l.name == rawData.mainLine);
+            const subLine = lines.find(l => l.name == rawData.subLine);
             if(relProduct && relLine){
                 let productStaticData = {
                     product: relProduct._id.toString(),
                     mainLine: relLine._id.toString(),
-                    subLine: undefined,
+                    subLine: subLine ? subLine._id.toString() : undefined,
                     unitTime: parseInt(rawData.unitTime ? rawData.unitTime : 0),
                     scenario: scenarioId
                 }
@@ -117,6 +133,7 @@ const parseOrderData = function(scenarioId, res){
               type: 'product',
               saftyStorage: productRawData.saftyStorage ? productRawData.saftyStorage : 0,
               initialStorage: productRawData.initStorage ? productRawData.initStorage : 0,
+              advAmount: productRawData.advAmount ? productRawData.advAmount : 0,
               scenario: scenarioId,
           };
   
@@ -174,9 +191,45 @@ const parseProductLineData = function(scenarioId, res){
     }
 }
 
+const parseLineData = function(scenarioId, res){
+    let lineNames = [];
+    
+    try{
+        fs.createReadStream(path.join(settings.uploadPath, lineFileName))
+        .pipe(csv())
+        .on('data', function (lineData) {
+            if(lineNames.indexOf(lineData.mainLine) == -1 && lineData.mainLine !== ""){
+                lineNames.push(lineData.mainLine);
+            }
+            if(lineData.subLine && lineNames.indexOf(lineData.subLine) == -1 && lineData.subLine !== ""){
+                lineNames.push(lineData.subLine);
+            }
+        })
+        .on('end', function (data){
+            const lineModel = SchemaFactory.getModel("line");
+            lineNames.forEach(line => {
+                let lineData = {
+                    name: line,
+                    availableHours: 22,
+                    turnHours: 2,
+                    scenario: scenarioId
+                };
+
+                SchemaServices.save(lineModel, lineData).then(result => {
+                    //console.log("insert " + result.length + " rows of line data");
+                })
+            });
+
+            res.status(200).send(data);
+        })
+    }catch(err){
+        res.status(500).send(err);
+    }
+}
+
 var apiInit = function(app){
 
-    app.post('/api/data/order/import', upload.array('file', 20),function(req, res){
+    app.post('/import/data/order', upload.array('file', 20),function(req, res){
         if (req.files != undefined) {
             res.sendStatus(200);
         }
@@ -232,7 +285,13 @@ var apiInit = function(app){
         res.download(path.join(settings.systemPath, 'output', 'ORResult.csv'), 'ORResult.csv');
     });
 
-    app.post('/api/data/productstatic/import', productStaticUpload.array('file', 20),function(req, res){
+    app.post('/import/data/productstatic', productStaticUpload.array('file', 20),function(req, res){
+        if (req.files != undefined) {
+            res.sendStatus(200);
+        }
+    });
+    
+    app.post('/import/data/line', lineUpload.array('file', 20),function(req, res){
         if (req.files != undefined) {
             res.sendStatus(200);
         }
@@ -274,6 +333,14 @@ var apiInit = function(app){
         .then(function(result){
             console.log("remove " + result.length + " rows of product static data");
             parseProductLineData(req.body.scenarioId, res);
+        });
+    });
+
+    app.post('/api/data/lineprocess', function(req, res){
+        const line = SchemaFactory.getModel("line");
+        SchemaServices.removeByCondition(line, {scenario: req.body.scenarioId})
+        .then(function(result){
+            parseLineData(req.body.scenarioId, res);
         });
     });
 }

@@ -4,15 +4,14 @@ import { HTTP_BASE } from 'app/config';
 import { ToolsService } from 'app/utils/tools.service';
 
 @Component({
-  selector: 'app-order-import',
-  templateUrl: './order-import.component.html',
-  styleUrls: ['./order-import.component.css'],
-  providers: [ToolsService]
+  selector: 'app-line-import',
+  templateUrl: './line-import.component.html',
+  styleUrls: ['./line-import.component.css']
 })
-export class OrderImportComponent implements OnInit {
+export class LineImportComponent implements OnInit {
 
   config: DropzoneConfigInterface = {
-    url: HTTP_BASE + '/import/data/order',
+    url: HTTP_BASE + '/import/data/line',
   };
 
   constructor(
@@ -23,7 +22,7 @@ export class OrderImportComponent implements OnInit {
   }
 
   public onUploadSuccess(event) {
-    this.toolsService.processImportedOrderData().then(res => {
+    this.toolsService.processImportedLineData().then(res => {
       location.reload();
     });
   }

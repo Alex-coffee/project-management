@@ -20,7 +20,7 @@ export class ToolsService {
     if(startDate && endDate && startDate.getTime() <= endDate.getTime()){
     let result = [];
     var dateIntevalTime = startDate.getTime()
-    while(dateIntevalTime < endDate.getTime()){
+    while(dateIntevalTime <= endDate.getTime()){
         result.push(new Date(dateIntevalTime));
         dateIntevalTime += 24 * 3600 * 1000;
     }
@@ -44,16 +44,16 @@ export class ToolsService {
 
   processImportedOrderData() {
     const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
-    const params: URLSearchParams = new URLSearchParams();
-    params.set('scenarioId', currentScenario._id);
-    return this.http.post(this.HOST + '/api/data/orderprocess', params).toPromise();
+    return this.http.post(this.HOST + '/api/data/orderprocess', {'scenarioId': currentScenario._id}).toPromise();
   }
 
   processImportedProductStaticData() {
     const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
-    const params: URLSearchParams = new URLSearchParams();
-    params.set('scenarioId', currentScenario._id);
-    return this.http.post(this.HOST + '/api/data/productstatic', params).toPromise();
+    return this.http.post(this.HOST + '/api/data/productstatic', {'scenarioId': currentScenario._id}).toPromise();
   }
 
+  processImportedLineData() {
+    const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
+    return this.http.post(this.HOST + '/api/data/lineprocess', {'scenarioId': currentScenario._id}).toPromise();
+  }
 }
