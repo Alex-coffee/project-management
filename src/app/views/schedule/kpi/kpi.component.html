@@ -18,7 +18,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let kpi of lineKPIList | paginate: {id: 'lineKPIPaging', itemsPerPage: 10, currentPage: p }">
-                                <td>{{kpi.line}}</td>
+                                <td>{{kpi.line ? kpi.line.name : ''}}</td>
                                 <td>{{kpi.numOrdersPorduced}}</td>
                                 <td>{{kpi.timeAvail}}</td>
                                 <td>{{kpi.timeUsed}}</td>

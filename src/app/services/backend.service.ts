@@ -186,7 +186,7 @@ export class BackendService {
                       metaData: lineStaticObj
                   });
                   ganttItems.push(item);
-              })
+              });
           })
 
           this.processOrderInSameDay(ganttItems);
@@ -211,6 +211,8 @@ export class BackendService {
         let gapDuration = 2 * 3600 * 1000;
         var result = {}
         var orderProduceTimeMap = {};
+
+        items.sort((a, b) => b.content.produceTime - a.content.produceTime);
 
         items.forEach(item => {
             if(!result[item.content.line]) result[item.content.line] = {};

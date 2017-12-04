@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { OrResultService } from 'app/services/or-result.service';
 import { ToolsService } from 'app/utils/tools.service';
+import { LineService } from 'app/services/line.service';
 
 @Component({
   selector: 'app-kpi',
   templateUrl: './kpi.component.html',
   styleUrls: ['./kpi.component.css'],
-  providers: [ DataService, OrResultService, ToolsService ]
+  providers: [ DataService, OrResultService, ToolsService, LineService ]
 })
 export class KpiComponent implements OnInit {
   lineKPIList: any[] = [];
@@ -21,6 +22,7 @@ export class KpiComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private toolsService: ToolsService,
+    private lineService: LineService,
     private orResultService: OrResultService
   ) { }
 
@@ -51,6 +53,13 @@ export class KpiComponent implements OnInit {
           var orResult = res.list[0];
           this.lineKPIList = orResult.LineKPIs;
           this.storageKPIList = orResult.storageKPIs;
+
+          this.lineService.find({}).subscribe(res => {
+            let lineData = res.list;
+            this.lineKPIList.forEach(lineKPI => {
+              lineKPI.line = lineData.find(l => l._id === lineKPI._id);
+            })
+          })
         }
       });
   }
