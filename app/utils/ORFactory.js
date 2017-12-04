@@ -155,6 +155,7 @@ var apiInit = function(app){
                         "isSafeStorageHardConstraint": scenario.isSafeStorageHardConstraint,
                         "penaltyForUseSafeStorage": scenario.penaltyForUseSafeStorage,
                         "safeStorageCalculateMethod": scenario.safeStorageCalculateMethod,
+                        'maxNumModeChangesDaily': scenario.maxNumModeChangesDaily
                     }
 
                     writeFile(scenarioId, "Parameters.json", parameters);

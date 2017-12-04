@@ -16,6 +16,7 @@ var ScenarioSchema = new Schema({
     isSafeStorageHardConstraint: {type: Boolean, default: false},
     penaltyForUseSafeStorage: {type: Number, default: 0},
     safeStorageCalculateMethod: {type: String},
+    maxNumModeChangesDaily: {type: Number, default: 0},
 
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
