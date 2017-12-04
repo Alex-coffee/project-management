@@ -212,7 +212,7 @@ export class BackendService {
         var result = {}
         var orderProduceTimeMap = {};
 
-        items.sort((a, b) => b.content.produceTime - a.content.produceTime);
+        items.sort((a, b) => a.content.produceTime - b.content.produceTime);
 
         items.forEach(item => {
             if(!result[item.content.line]) result[item.content.line] = {};
