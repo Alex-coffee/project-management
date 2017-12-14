@@ -8,6 +8,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin'
+import { Conditional } from '@angular/compiler';
 
 @Injectable()
 export class GeneralService {
@@ -18,6 +19,7 @@ export class GeneralService {
   private saveURL = this.HOST + '/api/save/model';
   private batchInsertURL = this.HOST + '/api/batch/insert/model';
   private deleteURL = this.HOST + '/api/delete/model';
+  private deleteByCondition = this.HOST + '/api/delete/model/condition';
 
   constructor(private http: HttpClient) { }
 
@@ -68,4 +70,12 @@ export class GeneralService {
     return this.http.post(this.deleteURL, {model: model, content: content});
   }
 
+  protected clearDataByScenario(model: string): Observable<any> {
+    const currentScenario = localStorage.getItem('currentScenario');
+    let content = {};
+    if (currentScenario) {
+      content["scenario"] = JSON.parse(currentScenario)._id;
+    }
+    return this.http.post(this.deleteByCondition, {model: model, condition: content});
+  }
 }

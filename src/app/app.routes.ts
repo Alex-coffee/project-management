@@ -23,6 +23,8 @@ import { KpiComponent} from "app/views/schedule/kpi/kpi.component";
 
 import { UsersComponent } from 'app/views/admin/users/users.component';
 
+import { ScheduleTableComponent} from "app/views/schedule/schedule-table/schedule-table.component";
+
 import { WizardComponent} from "app/views/wizard/wizard.component";
 import { LoginComponent} from "app/views/login/login.component";
 
@@ -42,6 +44,13 @@ export const ROUTES:Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'step', component: WizardComponent}
+    ]
+  },
+  {
+    path: 'plan', component: BasicLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {path: 'schedule', component: ScheduleTableComponent}
     ]
   },
   {

@@ -293,6 +293,34 @@ var apiInit = function(app){
                         })
                     })
                     writeFile(scenarioId, "LineStaticData.json", lineStaticData);
+                    callback(null, numDays, dateRangeArray);
+                }, err => {
+                    callback(null, 500);
+                });
+            },
+             //process LockedSchedule
+             function(numDays, dateRangeArray, callback){
+                let productionPlan = SchemaFactory.getModel("productionplan");
+                SchemaServices.find(productionPlan, 
+                        {"scenario": scenarioId, "isDeleted": false},
+                        {"populateFields": "item line"}
+                    ).then(result => {
+                    let productionPlans = result;
+                    let LockedScheduleData = [];
+
+                    productionPlans.forEach(pp => {
+                        if(dateRangeArray.findIndex(dr => new Date(pp.date).getTime() == new Date(dr).getTime()) > -1 
+                            && pp.isLocked){
+                            LockedScheduleData.push({
+                                "orderId": pp.item._id.toString(),
+                                "orderName": pp.item.name, 
+                                "amount":  pp.amount, 
+                                "line":  pp.line._id.toString(),
+                                "time": dateRangeArray.findIndex(dr => new Date(pp.date).getTime() == new Date(dr).getTime())
+                            })
+                        }
+                    })
+                    writeFile(scenarioId, "LockedSchedule.json", LockedScheduleData);
                     callback(null, numDays);
                 }, err => {
                     callback(null, 500);

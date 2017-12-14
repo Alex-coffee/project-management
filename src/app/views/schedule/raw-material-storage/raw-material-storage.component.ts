@@ -34,9 +34,11 @@ export class RawMaterialStorageComponent implements OnInit {
           var orResult = res.list[0];
           this.rawMaterialStorageList = orResult.RawMaterialStorage;
           let itemIds = [];
-          this.rawMaterialStorageList.forEach(item => {
-            itemIds.push(item._id);
-          });
+          if (this.rawMaterialStorageList) {
+            this.rawMaterialStorageList.forEach(item => {
+              itemIds.push(item._id);
+            });
+          }
 
           this.itemService.find({"_id": {$in: itemIds}}).subscribe(result => {
             let itemList = result.list;

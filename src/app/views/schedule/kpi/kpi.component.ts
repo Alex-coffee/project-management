@@ -56,9 +56,11 @@ export class KpiComponent implements OnInit {
 
           this.lineService.find({}).subscribe(res => {
             let lineData = res.list;
-            this.lineKPIList.forEach(lineKPI => {
-              lineKPI.line = lineData.find(l => l._id === lineKPI._id);
-            })
+            if (this.lineKPIList) {
+              this.lineKPIList.forEach(lineKPI => {
+                lineKPI.line = lineData.find(l => l._id === lineKPI._id);
+              });
+            }
           })
         }
       });

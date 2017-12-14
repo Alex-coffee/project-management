@@ -43,9 +43,15 @@
     </wizard-step>
 
     <wizard-step [title]="'配置参数'"  >
-      <button class="btn btn-success pull-right" (click)="runOR()">
+      <button *ngIf="isOrResultGenerated" class="btn btn-success pull-right m-l-sm" (click)="checkResult()">
+        优化结果已存在，查看
+      </button>
+
+      <button [ngClass]="{'btn-primary': isOrResultGenerated, 'btn-success': !isOrResultGenerated}" 
+        class="btn pull-right" (click)="runOR()">
         配置参数已就绪，开始优化
       </button>
+
       <div class="clearfix"></div>
       <div *ngIf="showConfigConent" class="m-t-md"> 
         <app-parameters #parameter (orCallback)="wizardORCallback()"></app-parameters>
@@ -62,6 +68,13 @@
     </wizard-step>
 
     <wizard-step [title]="'结果输出及KPI'" >
+        <button *ngIf="isOrResultGenerated"
+          [ngClass]="{'btn-primary': isProductPlanGenerated, 'btn-success': !isProductPlanGenerated}" 
+         class="btn pull-right" (click)="applyResult()">
+          <span *ngIf="isProductPlanGenerated">重新生成方案</span>
+          <span *ngIf="!isProductPlanGenerated">应用排产方案</span>
+        </button>
+
         <tabset *ngIf="showResultConent" type="pills">
             <tab heading='产品需求满足情况'>
               <app-demands-meet-view></app-demands-meet-view>

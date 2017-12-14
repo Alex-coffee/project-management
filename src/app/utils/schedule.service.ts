@@ -9,6 +9,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin'
 import {PurchasePlanService} from 'app/services/purchase-plan.service';
 import {OrderDemandService} from 'app/services/order-demand.service';
+import {ProductionPlanService} from 'app/services/production-plan.service';
 import {ToolsService} from 'app/utils/tools.service';
 import { ItemService } from 'app/services/item.service';
 
@@ -39,6 +40,7 @@ export class ScheduleService {
     private http: HttpClient,
     private purchasePlanService: PurchasePlanService,
     private orderDemandService: OrderDemandService,
+    private productionPlanService: ProductionPlanService,
     private itemService: ItemService,
     private toolsService: ToolsService
   ) { }
@@ -144,6 +146,59 @@ export class ScheduleService {
               orderList: orderList,
               orderDemandList: orderDemandList,
               orderScheduleList: orderScheduleList
+            });
+          });
+      });
+      return data$;
+    }
+  }
+
+  getOrderScheduleProductionPlanData(productIds: any): Observable<any>{
+    const currentScenario = localStorage.getItem('currentScenario');
+    if (currentScenario) {
+
+      let itemSearchCondition, productionPlanSearchCondition;
+      if (productIds) {
+        itemSearchCondition = {"_id": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+        productionPlanSearchCondition = {"item": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+      }else{
+        itemSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+        productionPlanSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+      }
+      const data$ = new Observable(observer => {
+        Observable.forkJoin([
+          this.itemService.findProduct(itemSearchCondition),
+          this.productionPlanService.find(productionPlanSearchCondition)
+        ]).subscribe(res => {
+            const orderList = res[0].list;
+            const productionPlanList = res[1].list;
+            const currentScenarioObj = JSON.parse(currentScenario);
+            const dateRanges = this.toolsService.getDateArrayByRange(new Date(currentScenarioObj.startDate), 
+              new Date(currentScenarioObj.endDate));
+
+            let productionScheduleList = [];
+            orderList.forEach(order => {
+              const scheduleArray = [];
+              dateRanges.forEach(date => {
+                const schedule = productionPlanList.find(od => {
+                  return od.item._id === order._id && new Date(od.date).getTime() === date.getTime();
+                });
+                if(schedule) {
+                  scheduleArray.push(schedule)
+                };
+              });
+
+              const orderSchedule = {
+                order: order,
+                scheduleArray: scheduleArray
+              };
+              productionScheduleList.push(orderSchedule);
+            });
+
+            observer.next({
+              orderList: orderList,
+              productionPlanList: productionPlanList,
+              productionScheduleList: productionScheduleList
             });
           });
       });

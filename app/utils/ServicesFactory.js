@@ -84,6 +84,19 @@ var apiInit = function(app){
             res.status(500).send({message: "service not found"});
         }
     });
+
+    app.post('/api/delete/model/condition', function(req, res) {
+        let name = req.body.model;
+        if(name) name = name.toLowerCase();
+        let model = SchemaFactory.getModel(name);
+        if(model){
+            SchemaServices.removeByCondition(model, req.body.condition).then(function(result){
+                res.status(200).send({"result": "success"});
+            });
+        }else{
+            res.status(500).send({message: "service not found"});
+        }
+    });
 }
 
 module.exports = {

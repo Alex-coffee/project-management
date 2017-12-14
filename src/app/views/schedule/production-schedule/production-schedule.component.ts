@@ -10,13 +10,13 @@ import { GanttSlot } from 'app/model/gantt-slot';
 import { GanttDataSet } from 'app/model/ganttDataSet';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GanttDirective } from 'app/directive/gantt.directive';
-
+import { OrResultService } from 'app/services/or-result.service';
 
 @Component({
   selector: 'app-production-schedule',
   templateUrl: './production-schedule.component.html',
   styleUrls: ['./production-schedule.component.css'],
-  providers: [ BackendService, OptimizeService, ScenarioService, LineService, ToolsService]
+  providers: [ BackendService, OptimizeService, ScenarioService, LineService, ToolsService, OrResultService]
 })
 export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;
@@ -35,6 +35,7 @@ export class ProductionScheduleComponent implements OnInit {
     private scenarioService: ScenarioService,
     private lineService: LineService,
     private toolsService: ToolsService,
+    private orResultService: OrResultService,
     public toastr: ToastsManager, vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }
@@ -77,10 +78,12 @@ export class ProductionScheduleComponent implements OnInit {
   }
 
   getProductScheduleData(){
-    this.backendService.getProductionScheduleResult().subscribe(data => {
-      this.productionScheduleList = data;
-    }, error => {
-      this.errorMessage = <any>error;
+    this.orResultService.getCurrentScenarioResult().subscribe(res => {
+      console.log(res)
+      if(res.list.length > 0){
+        var orResult = res.list[0];
+        this.productionScheduleList = orResult.ProductionScheduleResult;
+      }
     });
   }
 
