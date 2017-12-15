@@ -71,8 +71,8 @@
         <button *ngIf="isOrResultGenerated"
           [ngClass]="{'btn-primary': isProductPlanGenerated, 'btn-success': !isProductPlanGenerated}" 
          class="btn pull-right" (click)="applyResult()">
-          <span *ngIf="isProductPlanGenerated">重新生成方案</span>
-          <span *ngIf="!isProductPlanGenerated">应用排产方案</span>
+          <span *ngIf="isProductPlanGenerated">重新发布方案</span>
+          <span *ngIf="!isProductPlanGenerated">发布排产方案</span>
         </button>
 
         <tabset *ngIf="showResultConent" type="pills">
