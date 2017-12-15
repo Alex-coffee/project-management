@@ -188,11 +188,13 @@ export class ScheduleService {
                 };
               });
 
-              const orderSchedule = {
-                order: order,
-                scheduleArray: scheduleArray
-              };
-              productionScheduleList.push(orderSchedule);
+              if(scheduleArray.length > 0){
+                const orderSchedule = {
+                  order: order,
+                  scheduleArray: scheduleArray
+                };
+                productionScheduleList.push(orderSchedule);
+              }
             });
 
             observer.next({
