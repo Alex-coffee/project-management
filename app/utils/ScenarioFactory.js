@@ -244,41 +244,75 @@ var apiInit = function(app){
         const scenarioDates = req.body.scenarioDates;
         const dateRangeLength = scenarioDates.length;
 
-        const productScheduleFilePath = path.join(settings.systemPath, 'output', scenaro._id, "ProductionScheduleResult.json")
-        const productScheduleFileBuffer =  fs.readFileSync(productScheduleFilePath);
-        const productSchedule = JSON.parse(productScheduleFileBuffer.toString());
+        async.waterfall([
+            function(callback) {
+                const orResultModel = SchemaFactory.getModel("orresult");
+                SchemaServices.find(orResultModel, {"scenario": scenaro._id}, {}).then(result => {
+                    let productSchedule = []; 
+                    if(result && result.length > 0){
+                        productSchedule = result[0].ProductionScheduleResult;
+                    }
+                    callback(null, productSchedule);
+                });
+            },
+            function(productSchedule, callback) {
+                const lineModel = SchemaFactory.getModel("line");
+                SchemaServices.find(lineModel, {"scenario": scenaro._id}, {}).then(lines => {
+                    callback(null, lines, productSchedule);
+                });
+            },
+            function(lines, productSchedule, callback) {
+                let processedProductSchedule = [];
 
-        let processedProductSchedule = [];
-        productSchedule.forEach(ps => {
-            let rowItem = {};
-            rowItem.order = ps.orderName;
-            
-            ps.plan.forEach(p => {
-                rowItem[scenarioDates[p.time]] = p.amount;
-            })
-            processedProductSchedule.push(rowItem);
-        })
+                lines.forEach(line => {
+                    let lineProductSchedule = productSchedule.filter(ps => {
+                        return ps.plan.findIndex(p => {
+                            return p.line == line.name;
+                        })
+                    })
 
-        let csvFields = ["order"].concat(scenarioDates);
-        let fieldNames = ["产品编号"];
-        scenarioDates.forEach(d => {
-            fieldNames.push(dateFormat(new Date(d).getTime(), 'yyyy-mm-dd'));
-        })
+                    if (lineProductSchedule && lineProductSchedule.length > 0){
+                        lineProductSchedule.forEach(ps => {
+                            let rowItem = {};
+                            rowItem.line = line.name;
+                            rowItem.order = ps.orderName;
+                            
+                            ps.plan.forEach(p => {
+                                rowItem[scenarioDates[p.time]] = p.amount;
+                            })
+                            processedProductSchedule.push(rowItem);
+                        })
+                    }
+                });
 
-        console.log(csvFields);
-        console.log(fieldNames);
-
-        let csv = json2csv({ 
-            data: processedProductSchedule, 
-            fields: csvFields, 
-            fieldNames: fieldNames 
-        });
+                let csvFields = ["line", "order"].concat(scenarioDates);
+                let fieldNames = ["生产线", "产品编号"];
+                scenarioDates.forEach(d => {
+                    fieldNames.push(dateFormat(new Date(d).getTime(), 'yyyy-mm-dd'));
+                })
         
-        let filePath = path.join(settings.systemPath, 'output', 'ORResult.csv');
-        var newCsv = iconv.encode(csv, 'GBK');
-        fs.writeFileSync(filePath, newCsv);
+                console.log(csvFields);
+                console.log(fieldNames);
+        
+                let csv = json2csv({ 
+                    data: processedProductSchedule, 
+                    fields: csvFields, 
+                    fieldNames: fieldNames 
+                });
+                
+                let filePath = path.join(settings.systemPath, 'output', 'ORResult.csv');
+                var newCsv = iconv.encode(csv, 'GBK');
+                fs.writeFileSync(filePath, newCsv);
 
-        res.status(200).send({message: "success"});
+                callback(null, 'success');
+            }
+        ], function(err, results) {
+            if (err) {
+                res.status(500).send(err);
+            }else{
+                res.status(200).send({message: "success"});
+            }
+        });
     });
 
     app.get('/data/result/export', function(req, res) {
