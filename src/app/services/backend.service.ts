@@ -14,6 +14,7 @@ import { GanttDataSet } from 'app/model/ganttDataSet';
 
 import { ScenarioService } from 'app/services/scenario.service';
 import { LineService } from 'app/services/line.service';
+import { OrResultService } from 'app/services/or-result.service';
 
 
 @Injectable()
@@ -31,7 +32,8 @@ export class BackendService {
   constructor (
     private http: HttpClient,
     private scenarioService: ScenarioService,
-    private lineService: LineService
+    private lineService: LineService,
+    private orResultService: OrResultService
   ) {}
 
   getInputPath(): string {
@@ -173,7 +175,8 @@ export class BackendService {
 
           i = 0;
           productionScheduleResult.forEach(productSchedule => {
-              productSchedule.plan.forEach(p => {
+              if(productStaticMap[productSchedule.orderName]){
+                productSchedule.plan.forEach(p => {
                   p.produceTime = p.amount * productStaticMap[productSchedule.orderName].unitTime * 1000;
                   let lineStaticObj = lineStaticData.find(lineStatic => lineStatic.lineId == p.line);
                   const item = new GanttItem({
@@ -186,7 +189,8 @@ export class BackendService {
                       metaData: lineStaticObj
                   });
                   ganttItems.push(item);
-              });
+                });
+              }
           })
 
           this.processOrderInSameDay(ganttItems);
