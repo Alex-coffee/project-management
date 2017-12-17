@@ -267,8 +267,8 @@ var apiInit = function(app){
                 lines.forEach(line => {
                     let lineProductSchedule = productSchedule.filter(ps => {
                         return ps.plan.findIndex(p => {
-                            return p.line == line.name;
-                        })
+                            return p.line == line._id;
+                        }) > -1;
                     })
 
                     if (lineProductSchedule && lineProductSchedule.length > 0){
