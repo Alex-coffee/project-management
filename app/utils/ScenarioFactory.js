@@ -20,8 +20,8 @@ const storage = multer.diskStorage({
         fileSize: 200000000
     },
     filename: function (req, file, cb) {
-        //cb(null, file.originalname);
-        cb(null, orderDataFileName);
+        const timeStamp = new Date().getTime();
+        cb(null, "scenarioImport_" + timeStamp + ".csv");
     }
 })
 const upload = multer({ storage: storage })
@@ -62,7 +62,7 @@ const isDateString = function(str){
     } 
 }
 
-const generateOrderDemands = function(rawData, itemId, scenarioId){
+const generateOrderDemands = function(rawData, itemId, scenarioId, company){
     let orderDemands = [];
     for(let key in rawData){
         if(isDateString(key)){
@@ -77,7 +77,7 @@ const generateOrderDemands = function(rawData, itemId, scenarioId){
     return orderDemands;
 }
 
-const generateProductLineStatic = function(rawData, scenarioId){
+const generateProductLineStatic = function(rawData, scenarioId, company){
     let defer = q.defer();
     let result = [];
     const item = SchemaFactory.getModel("item");
@@ -85,8 +85,8 @@ const generateProductLineStatic = function(rawData, scenarioId){
     const productstatic = SchemaFactory.getModel("productstatic");
 
     q.all([
-        SchemaServices.find(item, {scenario: scenarioId, type: 'product'}),
-        SchemaServices.find(line, {scenario: scenarioId})
+        SchemaServices.find(item, {company: company, type: 'product'}),
+        SchemaServices.find(line, {company: company})
     ]).then(results => {
         let products = results[0];
         let lines = results[1];
@@ -114,7 +114,7 @@ const generateProductLineStatic = function(rawData, scenarioId){
     return defer.promise;
 }
 
-const parseOrderData = function(scenarioId, res){
+const parseOrderData = function(scenarioId, res, company){
     let orderData = [];
     const itemModel = SchemaFactory.getModel("item");
     let counts = {
@@ -175,7 +175,7 @@ const parseOrderData = function(scenarioId, res){
     }
 }
 
-const parseProductLineData = function(scenarioId, res){
+const parseProductLineData = function(scenarioId, res, company){
     
     try{
         fs.createReadStream(path.join(settings.uploadPath, productStaticFileName))
@@ -191,7 +191,7 @@ const parseProductLineData = function(scenarioId, res){
     }
 }
 
-const parseLineData = function(scenarioId, res){
+const parseLineData = function(scenarioId, res, company){
     let lineNames = [];
     
     try{
@@ -227,11 +227,199 @@ const parseLineData = function(scenarioId, res){
     }
 }
 
+function processCompanyData(req, res) {
+    const itemModel = SchemaFactory.getModel("item");
+    const lineModel = SchemaFactory.getModel("line");
+
+    let mode = req.body.mode;
+    const fileName = req.body.filename;
+    const scenarioId = req.body.scenarioId;
+    const company = req.body.company;
+
+    mode = "ignore";
+
+    let productData = [];
+    let lineNames = [];
+    let lineData = [];
+    let counts = {
+        productAdd: 0,
+        productUpdated: 0,
+    }
+
+    try{
+        async.waterfall([
+            function(callback) {
+                fs.createReadStream(path.join(settings.uploadPath, fileName))
+                .pipe(csv())
+                .on('data', function (productRawData) {
+                    //orders
+                    const product = {
+                        name: productRawData.orderName,
+                        desc: productRawData.desc,
+                        type: 'product',
+                        saftyStorage: productRawData.saftyStorage ? productRawData.saftyStorage : 0,
+                        initialStorage: productRawData.initStorage ? productRawData.initStorage : 0,
+                        advAmount: productRawData.advAmount ? productRawData.advAmount : 0,
+                        company: company,
+                    };
+                    productData.push(product);
+
+                    //lines
+                    if(lineNames.indexOf(productRawData.mainLine) == -1 && productRawData.mainLine !== ""){
+                        lineNames.push(productRawData.mainLine);
+                    }
+                    if(productRawData.subLine && lineNames.indexOf(productRawData.subLine) == -1 && productRawData.subLine !== ""){
+                        lineNames.push(productRawData.subLine);
+                    }
+                })
+                .on('end', function (data) {
+
+                    lineNames.forEach(l => {
+                        let line = {
+                            name: l,
+                            availableHours: 22,
+                            turnHours: 2,
+                            company: company,
+                        };
+                        lineData.push(line);
+                    })
+
+                    q.all([
+                        SchemaServices.batchUpsert(itemModel, productData, 
+                            ["name", "company"], ["desc", "saftyStorage", "type", "initialStorage", "advAmount"]),
+                        SchemaServices.batchUpsert(lineModel, lineData, 
+                                ["name", "company"], ["availableHours", "turnHours"])
+                    ]).then(response => {
+                        callback(null, response);
+                    });
+                })
+            }
+        ], function(err, results) {
+            res.status(200).send(results);
+        })            
+    }catch(err){
+        res.status(500).send(err);
+    }
+}
+
+function processScenarioData(req, res) {
+    const itemModel = SchemaFactory.getModel("item");
+    const lineModel = SchemaFactory.getModel("line");
+    const productstaticModel = SchemaFactory.getModel("productstatic");
+    const orderdemandModel = SchemaFactory.getModel("orderdemand");
+
+    let mode = req.body.mode;
+    const fileName = req.body.filename;
+    const scenarioId = req.body.scenarioId;
+    const company = req.body.company;
+
+    mode = "ignore";
+
+    let rawDataArray = [];
+    let lineNames = [];
+    let lineData = [];
+    let counts = {
+        productAdd: 0,
+        productUpdated: 0,
+    }
+
+    try{
+        async.waterfall([
+            function(callback) {
+                SchemaServices.removeByCondition(productstaticModel, {scenario: scenarioId}).then(result => {
+                    callback(null, result);
+                });
+            },
+            function(arg1, callback) {
+                SchemaServices.removeByCondition(orderdemandModel, {scenario: scenarioId}).then(result => {
+                    callback(null, result);
+                });
+            },
+            function(arg1, callback) {
+                fs.createReadStream(path.join(settings.uploadPath, fileName))
+                .pipe(csv())
+                .on('data', function (productRawData) {
+                    rawDataArray.push(productRawData);
+                })
+                .on('end', function (data) {
+
+                    q.all([
+                        SchemaServices.find(itemModel, {company: company, type: 'product'}),
+                        SchemaServices.find(lineModel, {company: company})
+                    ]).then(results => {
+                        let products = results[0];
+                        let lines = results[1];
+
+                        if (products.length > 0 && lines.length > 0) {
+                            const orderDemands = [];
+                            const productStaticDataArray = []
+                    
+                            rawDataArray.forEach(rawData => {
+                                const relProduct = products.find(p => p.name == rawData.orderName);
+                                const relLine = lines.find(l => l.name == rawData.mainLine);
+                                const subLine = lines.find(l => l.name == rawData.subLine);
+                                if(relProduct && relLine){
+                                    let productStaticData = {
+                                        product: relProduct._id.toString(),
+                                        mainLine: relLine._id.toString(),
+                                        subLine: subLine ? subLine._id.toString() : undefined,
+                                        unitTime: parseInt(rawData.unitTime ? rawData.unitTime : 0),
+                                        scenario: scenarioId
+                                    }
+                                    productStaticDataArray.push(productStaticData);
+                                }
+
+                                for(let key in rawData){
+                                    if(isDateString(key)){
+                                        orderDemands.push({
+                                            date: new Date(key),
+                                            amount: parseInt(rawData[key]),
+                                            item: relProduct._id.toString(),
+                                            scenario: scenarioId
+                                        })
+                                    }
+                                } 
+                            });
+
+                            q.all([
+                                SchemaServices.insertMany(orderdemandModel, orderDemands),
+                                SchemaServices.insertMany(productstaticModel, productStaticDataArray)
+                            ]).then(response => {
+                                callback(null, response);
+                            });
+                        }
+                    })
+                })
+            }
+        ], function(err, results) {
+            if(err){
+                res.status(500).send(err);
+            }else{
+                res.status(200).send(results);
+            }
+        })            
+    }catch(err){
+        res.status(500).send(err);
+    }
+}
+
 var apiInit = function(app){
 
     app.post('/import/data/order', upload.array('file', 20),function(req, res){
         if (req.files != undefined) {
             res.sendStatus(200);
+        }
+    });
+
+    app.post('/import/data/company', upload.array('file', 20),function(req, res){
+        if (req.files != undefined) {
+            res.status(200).send(req.files);
+        }
+    });
+
+    app.post('/import/data/scenario', upload.array('file', 20),function(req, res){
+        if (req.files != undefined) {
+            res.status(200).send(req.files);
         }
     });
 
@@ -376,6 +564,14 @@ var apiInit = function(app){
         .then(function(result){
             parseLineData(req.body.scenarioId, res);
         });
+    });
+
+    app.post('/api/data/scenario/process', function(req, res){
+        processScenarioData(req, res);
+    });
+
+    app.post('/api/data/company/process', function(req, res){
+        processCompanyData(req, res);
     });
 }
 

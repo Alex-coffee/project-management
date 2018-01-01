@@ -17,7 +17,6 @@ export class WizardComponent implements OnInit {
   @ViewChild('formWizard') public formWizard;
   @ViewChild('parameter') public parameter;
 
-  showPlanConent = false;
   showConfigConent = false;
   showORConent = false;
   showResultConent = false;
@@ -57,9 +56,7 @@ export class WizardComponent implements OnInit {
   }
 
   public next(itemToShow){
-    if ('plan' === itemToShow) {
-      this.showPlanConent = true;
-    } else if ('config' === itemToShow) {
+    if ('config' === itemToShow) {
       this.showConfigConent = true;
     } else if ('or' === itemToShow) {
       this.showORConent = true;

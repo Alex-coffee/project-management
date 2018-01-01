@@ -77,6 +77,9 @@ import { DemandsMeetViewComponent } from './views/schedule/demands-meet-view/dem
 import { RawMaterialStorageComponent } from './views/schedule/raw-material-storage/raw-material-storage.component';
 import { LineImportComponent } from './views/scenario/line-import/line-import.component';
 import { ScheduleTableComponent } from './views/schedule/schedule-table/schedule-table.component';
+import { CompanyComponent } from './views/admin/company/company.component';
+import { CompanyDataImportComponent } from './views/basic/company-data-import/company-data-import.component';
+import { ScenarioDataImportComponent } from './views/basic/scenario-data-import/scenario-data-import.component';
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -118,7 +121,10 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     DemandsMeetViewComponent,
     RawMaterialStorageComponent,
     LineImportComponent,
-    ScheduleTableComponent
+    ScheduleTableComponent,
+    CompanyComponent,
+    CompanyDataImportComponent,
+    ScenarioDataImportComponent
   ],
   imports: [
     BrowserModule,

@@ -8,7 +8,8 @@ var ItemBOMSchema = new Schema({
         item: {type: Schema.Types.ObjectId, ref: 'Item'},
         amount:  {type: Number}
     }],
-    scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    //scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    company: {type: String, ref: 'Company'},
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

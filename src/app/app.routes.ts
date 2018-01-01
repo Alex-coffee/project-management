@@ -22,6 +22,7 @@ import { UncoveredDemandsComponent} from "app/views/schedule/uncovered-demands/u
 import { KpiComponent} from "app/views/schedule/kpi/kpi.component";
 
 import { UsersComponent } from 'app/views/admin/users/users.component';
+import { CompanyComponent } from 'app/views/admin/company/company.component';
 
 import { ScheduleTableComponent} from "app/views/schedule/schedule-table/schedule-table.component";
 
@@ -70,7 +71,7 @@ export const ROUTES:Routes = [
       {path: 'line-static', component: LineStaticComponent},
       {path: 'raw-materials', component: RawMaterialsComponent},
       {path: 'orders', component: OrdersComponent},
-      {path: 'product-raw-materials', component: OrderRawMaterialsComponent}
+      {path: 'order-raw-materials', component: OrderRawMaterialsComponent}
     ]
   },
   {
@@ -97,7 +98,8 @@ export const ROUTES:Routes = [
     path: 'admin', component: BasicLayoutComponent,
     // canActivate: [AuthGuard],
     children: [
-      {path: 'users', component: UsersComponent}
+      {path: 'users', component: UsersComponent},
+      {path: 'company', component: CompanyComponent}
     ]
   },
 

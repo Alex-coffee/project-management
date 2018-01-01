@@ -30,15 +30,22 @@ export class GeneralService {
     return this.http.get(this.queryByIdURL, {params: httpParams});
   }
 
-  protected find(model: string, conditions: any, options: RequestOptions): Observable<any> {
+  protected find(model: any, conditions: any, options: RequestOptions): Observable<any> {
     let httpParams: HttpParams = new HttpParams();
     httpParams = httpParams.set('model', model);
-    if ( model !== 'scenario' && model !== 'user') {
+
+    if ( model === 'item' || model === 'line' || model === 'itemBOM' ){
+      const currentUser = sessionStorage.getItem('currentUser');
+      if (currentUser) {
+        conditions.company = JSON.parse(currentUser).company;
+      }
+    } else if ( model !== 'scenario' && model !== 'user' && model !== 'company') {
       const currentScenario = localStorage.getItem('currentScenario');
       if (currentScenario) {
         conditions.scenario = JSON.parse(currentScenario)._id;
       }
     }
+    
     httpParams = httpParams.append('conditions', JSON.stringify(conditions));
 
     if (options) {

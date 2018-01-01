@@ -3,12 +3,14 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Md5 } from 'ts-md5/dist/md5';
 import { UserService } from 'app/services/user.service';
+import { CompanyService } from 'app/services/admin/company.service';
+import {IOption} from 'ng-select';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
-  providers: [ UserService ]
+  providers: [ UserService, CompanyService ]
 })
 export class UsersComponent implements OnInit {
 
@@ -20,12 +22,17 @@ export class UsersComponent implements OnInit {
   userItem: any = {};
   dataList: any[] = [];
   errMsg: string;
+  companyOptions: Array<IOption> = [];
   p: any;
 
-  constructor(private userService: UserService, public toastr: ToastsManager,
-            vcr: ViewContainerRef) {
-              this.toastr.setRootViewContainerRef(vcr);
-            }
+  constructor(
+      private userService: UserService, 
+      private companyService: CompanyService,
+      public toastr: ToastsManager,
+      vcr: ViewContainerRef
+    ) {
+      this.toastr.setRootViewContainerRef(vcr);
+    }
 
   ngOnInit() {
     this.loadData();
@@ -62,7 +69,7 @@ export class UsersComponent implements OnInit {
     }
 
     this.userService.find({email: saveObj.email}).subscribe(result => {
-      if (result.count > 0) {
+      if (result.count > 0 && saveObj._id == undefined) {
         this.toastr.error('已存在邮箱名为' + saveObj.email + '的记录');
         return ;
       } else {
@@ -88,6 +95,18 @@ export class UsersComponent implements OnInit {
     this.userService.find({}).subscribe(res => {
         this.dataList = res.list;
       });
+
+    this.companyService.find({}).subscribe(res => {
+      const companyList = res.list;
+      const companyOptionArray = [];
+      companyList.forEach(c => {
+        companyOptionArray.push({
+          label: c.name,
+          value: c._id
+        });
+      });
+      this.companyOptions = companyOptionArray;
+    });
   }
 
 }

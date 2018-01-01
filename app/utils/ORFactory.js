@@ -61,6 +61,32 @@ function writeFile(scenarioId, fileName, content){
     }
 }
 
+function saveORInput(scenarioId){
+    var deferred = q.defer();
+    const inputPath = path.join(settings.systemPath, 'temp', scenarioId);
+    if (!fs.existsSync(inputPath)){
+        fs.mkdirSync(inputPath);
+    }
+    let inputFiles = fs.readdirSync(inputPath);
+    let ORInput = {scenario: scenarioId};
+
+    inputFiles.forEach(file => {
+        let content = fs.readFileSync(path.join(inputPath, file));
+        let keyName = file.substring(0, file.indexOf("."));
+        if(keyName != ""){
+            ORInput[keyName] = JSON.parse(content.toString());
+        }
+    })
+
+    let ORInputModel = SchemaFactory.getModel("orinput");
+    SchemaServices.save(ORInputModel, ORInput).then(result => {
+        deferred.resolve(result);
+    }, err => {
+        deferred.reject(err);
+    })
+    return deferred.promise;
+}
+
 function saveORResult(scenarioId){
     var deferred = q.defer();
     const outputPath = path.join(settings.systemPath, 'output', scenarioId);
@@ -91,11 +117,13 @@ var apiInit = function(app){
 
     app.post('/api/or/run', function(req, res) {
         let scenarioId = req.body.id;
+        let company = req.body.company;
+
         async.waterfall([
             //process OrderRawMaterials
             function(callback){
                 let itemBOM = SchemaFactory.getModel("itembom");
-                SchemaServices.find(itemBOM, {"scenario": scenarioId, "isDeleted": false}, {"populateFields": "item materials.item"}).then(res => {
+                SchemaServices.find(itemBOM, {"company": company, "isDeleted": false}, {"populateFields": "item materials.item"}).then(res => {
                     let itemBOMList = res;
                     let orderRawMaterials = [];
                     itemBOMList.forEach(itemBOM => {
@@ -122,11 +150,17 @@ var apiInit = function(app){
                 .then(res => {
                     let productStaticList = res;
                     let productStaticData = [];
+
                     productStaticList.forEach(ps => {
+                        let avaiLines = [];
+                        avaiLines.push(ps.mainLine);
+                        if(ps.subLine) avaiLines.push(ps.subLine);
+
                         productStaticData.push({
                             orderName: ps.product.name,
                             mainLine: ps.mainLine,
                             subLine: ps.subLine ? ps.subLine : "-1",
+                            avaiLines: avaiLines,
                             unitTime: ps.unitTime
                         })
                     });
@@ -168,8 +202,8 @@ var apiInit = function(app){
                 let Item = SchemaFactory.getModel("item");
 
                 q.all([
-                    SchemaServices.find(Item, {"type": ItemType.PRODUCT, "scenario": scenarioId, "isDeleted": false}, {}),
-                    SchemaServices.find(OrderDemand, {"scenario": scenarioId, "isDeleted": false}, {})
+                    SchemaServices.find(Item, {"type": ItemType.PRODUCT, "company": company}, {}),
+                    SchemaServices.find(OrderDemand, {"scenario": scenarioId}, {})
                 ]).then(resArray => {
                     let productList = resArray[0];
                     let orderDemands = resArray[1];
@@ -215,8 +249,8 @@ var apiInit = function(app){
                 let Item = SchemaFactory.getModel("item");
 
                 q.all([
-                    SchemaServices.find(Item, {"type": ItemType.MATERIAL, "scenario": scenarioId, "isDeleted": false}, {"populateFields": "refItem"}),
-                    SchemaServices.find(PurchasePlan, {"scenario": scenarioId, "isDeleted": false}, {})
+                    SchemaServices.find(Item, {"type": ItemType.MATERIAL, "company": company}, {"populateFields": "refItem"}),
+                    SchemaServices.find(PurchasePlan, {"scenario": scenarioId}, {})
                 ]).then(resArray => {
                     let materialList = resArray[0];
                     let purchasePlans = resArray[1];
@@ -267,7 +301,7 @@ var apiInit = function(app){
             //process LineStaticData
             function(numDays, dateRangeArray, callback){
                 let line = SchemaFactory.getModel("line");
-                SchemaServices.find(line, {"scenario": scenarioId, "isDeleted": false}, {}).then(result => {
+                SchemaServices.find(line, {"company": company}, {}).then(result => {
                     let lines = result;
                     let lineStaticData = [];
                     lines.forEach(line => {
@@ -371,7 +405,10 @@ var apiInit = function(app){
             },
 
             function(orResultCode, callback){
-                saveORResult(scenarioId).then(result => {
+                q.all([
+                    saveORInput(scenarioId),
+                    saveORResult(scenarioId)
+                ]).then(result => {
                     callback(null, result);
                 }, err => {
                     callback(500, "save result failed");

@@ -1,4 +1,7 @@
 node_modules/
+OR/upload/
+OR/temp/
+OR/output/
 src/assets/or/output/StorageAmountResult.json
 src/assets/or/output/LineKPIs.json
 src/assets/or/output/ProductionScheduleResult.json

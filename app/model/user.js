@@ -7,7 +7,7 @@ var UserSchema = new Schema({
     lastName: {type: String, required: true},
     pwd: {type: String, required: true},
     email: {type: String, required: true},
-    company: {type: String},
+    company: {type: Schema.Types.ObjectId, ref: 'Company'},
     type: {type: String},
     isActive: {type: Boolean, default: true},
     isDeleted: {type: Boolean, default: false},

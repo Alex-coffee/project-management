@@ -18,6 +18,8 @@ var ScenarioSchema = new Schema({
     safeStorageCalculateMethod: {type: String},
     maxNumModeChangesDaily: {type: Number, default: 0},
 
+    company: {type: Schema.Types.ObjectId, ref: 'Company'},
+
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

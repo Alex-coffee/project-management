@@ -19,7 +19,9 @@ var init = function (connectionMap) {
     var Scenario = rootRequire('app/model/scenario');
     var UncoveredDemand = rootRequire('app/model/uncoveredDemand');
     var ORResult = rootRequire('app/model/orResult');
+    var ORInput = rootRequire('app/model/orInput');
     var User = rootRequire('app/model/user');
+    var Company = rootRequire('app/model/company');
 
     modelMap["connection"] = mongoose.connection;
     modelMap["demand"] = Demand;
@@ -35,7 +37,9 @@ var init = function (connectionMap) {
     modelMap["scenario"] = Scenario;
     modelMap["uncovereddemand"] = UncoveredDemand;
     modelMap["orresult"] = ORResult;
+    modelMap["orinput"] = ORInput;
     modelMap["user"] = User;
+    modelMap["company"] = Company;
 }
 
 var getModel = function (name) {

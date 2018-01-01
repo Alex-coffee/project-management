@@ -15,6 +15,7 @@ import { GanttDataSet } from 'app/model/ganttDataSet';
 import { ScenarioService } from 'app/services/scenario.service';
 import { LineService } from 'app/services/line.service';
 import { OrResultService } from 'app/services/or-result.service';
+import { OrInputService } from 'app/services/or-input.service';
 
 
 @Injectable()
@@ -33,25 +34,26 @@ export class BackendService {
     private http: HttpClient,
     private scenarioService: ScenarioService,
     private lineService: LineService,
-    private orResultService: OrResultService
+    private orResultService: OrResultService,
+    private orInputService: OrInputService
   ) {}
 
   getInputPath(): string {
     let currentScenarioStr = localStorage.getItem("currentScenario");
     if(currentScenarioStr){
       let currentScenario = JSON.parse(currentScenarioStr);
-      return 'assets/or/temp/' + currentScenario._id + '/';
+      return 'OR/temp/' + currentScenario._id + '/';
     }
-    return 'assets/or/temp/';
+    return 'OR/temp/';
   }
 
   getOutputPath(): string {
     let currentScenarioStr = localStorage.getItem("currentScenario");
     if(currentScenarioStr){
       let currentScenario = JSON.parse(currentScenarioStr);
-      return 'assets/or/output/' + currentScenario._id + '/';
+      return 'OR/output/' + currentScenario._id + '/';
     }
-    return 'assets/or/output/';
+    return 'OR/output/';
   }
 
   //*********** apis ****************/
@@ -90,15 +92,23 @@ export class BackendService {
   getOrderGanttData(): Observable<GanttDataSet>{
     let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
-        this.http.get(this.ordersUrl),
-        this.http.get(this.productionScheduleUrl),
-        this.scenarioService.findCurrentScenarioData(),
-        this.http.get(this.lineStaticDataUrl),
+        this.orResultService.getCurrentScenarioResult(),
+        this.orInputService.getCurrentScenarioInput(),
+        this.scenarioService.findCurrentScenarioData()
         ]).subscribe(res => {
-          let orders = res[0];
-          let productionScheduleResult = res[1];
-          const scenarioData = res[2];
-          const lineStaticData = res[3];
+          let orders = [];
+          let productionScheduleResult = [];
+          let lineStaticData =[];
+          if(res[0].length > 0 && res[1].length > 0){
+            const orResult = res[0][0];
+            productionScheduleResult = orResult.ProductionScheduleResult;
+          
+            const orInput = res[1][0];
+            orders = orInput.Orders;
+            lineStaticData = orInput.LineStaticData;
+          }
+          let scenarioData = res[2];
+
           let ganttItems: GanttItem[] = [], slots = [], ganttSlots: GanttSlot[] = [];;
           let i = 0;
 
@@ -143,17 +153,25 @@ export class BackendService {
   getLineOrderGanttData(): Observable<GanttDataSet>{
     let ganttData$ = new Observable<GanttDataSet>(observer => {
       Observable.forkJoin([
-        this.http.get(this.productStaticDataUrl),
-        this.http.get(this.productionScheduleUrl),
+        this.orResultService.getCurrentScenarioResult(),
+        this.orInputService.getCurrentScenarioInput(),
         this.lineService.find({}),
         this.scenarioService.findCurrentScenarioData(),
-        this.http.get(this.lineStaticDataUrl),
         ]).subscribe(res => {
-          let productStaticData = res[0];
-          let productionScheduleResult = res[1];
+          let productionScheduleResult = [];
+          let productStaticData = [];
+          let lineStaticData = [];
+          if(res[0].length > 0 && res[1].length > 0){
+            const orResult = res[0][0];
+            productionScheduleResult = orResult.ProductionScheduleResult;
+          
+            const orInput = res[1][0];
+            productStaticData = orInput.ProductStaticData;
+            lineStaticData = orInput.LineStaticData;
+          }
+        
           let lines = res[2].list;
           const scenarioData = res[3];
-          const lineStaticData = res[4];
 
           let ganttItems: GanttItem[] = [],
             ganttSlots: GanttSlot[] = [],

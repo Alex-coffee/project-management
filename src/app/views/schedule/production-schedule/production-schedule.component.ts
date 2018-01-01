@@ -11,12 +11,15 @@ import { GanttDataSet } from 'app/model/ganttDataSet';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GanttDirective } from 'app/directive/gantt.directive';
 import { OrResultService } from 'app/services/or-result.service';
+import { OrInputService } from 'app/services/or-input.service';
+
 
 @Component({
   selector: 'app-production-schedule',
   templateUrl: './production-schedule.component.html',
   styleUrls: ['./production-schedule.component.css'],
-  providers: [ BackendService, OptimizeService, ScenarioService, LineService, ToolsService, OrResultService]
+  providers: [ BackendService, OptimizeService, ScenarioService, 
+    LineService, ToolsService, OrResultService, OrInputService]
 })
 export class ProductionScheduleComponent implements OnInit {
   @ViewChild(GanttDirective) gantt: GanttDirective;
@@ -36,6 +39,7 @@ export class ProductionScheduleComponent implements OnInit {
     private lineService: LineService,
     private toolsService: ToolsService,
     private orResultService: OrResultService,
+    private orInputService: OrInputService,
     public toastr: ToastsManager, vcr: ViewContainerRef) { 
               this.toastr.setRootViewContainerRef(vcr);
             }

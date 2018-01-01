@@ -150,7 +150,7 @@ var insertMany = function(schema, data){
     return deferred.promise;
 }
 
-var batchUpsert = function(schema, data, keys){
+var batchUpsert = function(schema, data, conditionKeys, keys){
     var deferred = q.defer();
 
     var bulk = schema.collection.initializeUnorderedBulkOp();
@@ -159,7 +159,18 @@ var batchUpsert = function(schema, data, keys){
         keys.forEach(function (key) {
             updateObj[key] = item[key]
         })
-        bulk.find({_id: item._id}).upsert().update({$set: updateObj});
+
+        var conditions = {};
+        if(conditionKeys){
+            conditionKeys.forEach(c => {
+                conditions[c] = item[c];
+            });
+        }else{
+            conditions = {_id: item._id};
+        }
+        bulk.find(conditions).upsert().updateOne({
+            $set:updateObj
+        });
     })
 
     bulk.execute(function(err, result) {

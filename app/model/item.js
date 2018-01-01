@@ -15,7 +15,8 @@ var ItemSchema = new Schema({
     minProductAmount: {type: Number},
     useItem: {type: Boolean, default: false},
     refItem: { type: Schema.Types.ObjectId, ref: 'Item'},
-    scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    //scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    company: {type: String, ref: 'Company'},
 
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },

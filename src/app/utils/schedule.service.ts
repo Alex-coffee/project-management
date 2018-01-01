@@ -46,11 +46,13 @@ export class ScheduleService {
   ) { }
 
   runOR(): Observable<any>{
-    let currentScenario = localStorage.getItem('currentScenario');
-    if(currentScenario){
+    const currentScenario = localStorage.getItem('currentScenario');
+    const currentUser = sessionStorage.getItem('currentUser');
+    if(currentScenario && currentUser){
 
       return this.http.post(this.runORURL, {
           id: JSON.parse(currentScenario)._id,
+          company: JSON.parse(currentUser).company,
           numDays: this.toolsService.getScenarioDates
         });
     }
@@ -104,14 +106,15 @@ export class ScheduleService {
 
   getOrderSchedulePlanData(productIds: any): Observable<any>{
     const currentScenario = localStorage.getItem('currentScenario');
-    if (currentScenario) {
+    const currentUser = sessionStorage.getItem('currentUser');
+    if (currentScenario && currentUser) {
 
       let itemSearchCondition, orderDemandSearchCondition;
       if (productIds) {
-        itemSearchCondition = {"_id": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+        itemSearchCondition = {"_id": { $in: productIds }, 'company': JSON.parse(currentUser).company};
         orderDemandSearchCondition = {"item": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
       }else{
-        itemSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+        itemSearchCondition = {'company': JSON.parse(currentUser).company};
         orderDemandSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
       }
       const data$ = new Observable(observer => {
@@ -155,14 +158,15 @@ export class ScheduleService {
 
   getOrderScheduleProductionPlanData(productIds: any): Observable<any>{
     const currentScenario = localStorage.getItem('currentScenario');
-    if (currentScenario) {
+    const currentUser = sessionStorage.getItem('currentUser');
+    if (currentScenario && currentUser) {
 
       let itemSearchCondition, productionPlanSearchCondition;
       if (productIds) {
-        itemSearchCondition = {"_id": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+        itemSearchCondition = {"_id": { $in: productIds }, 'company': JSON.parse(currentUser).company};
         productionPlanSearchCondition = {"item": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
       }else{
-        itemSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+        itemSearchCondition = {'company': JSON.parse(currentUser).company};
         productionPlanSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
       }
       const data$ = new Observable(observer => {

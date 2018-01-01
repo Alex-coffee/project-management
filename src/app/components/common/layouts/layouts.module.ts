@@ -19,6 +19,15 @@ import {TopNavigationNavbarComponent} from "./../topnavbar/topnavigationnavbar.c
 import { ScenarioModalComponent } from 'app/components/modal/scenario-modal/scenario-modal.component';
 import { UserInfoComponent } from 'app/views/info/user-info/user-info.component';
 
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address:
+  maxFilesize: 1,
+  acceptedFiles: '.csv'
+};
+
 @NgModule({
   declarations: [
     FooterComponent,
@@ -37,6 +46,7 @@ import { UserInfoComponent } from 'app/views/info/user-info/user-info.component'
     BrowserModule,
     RouterModule,
     DateValueAccessorModule,
+    DropzoneModule.forRoot(DROPZONE_CONFIG),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     ConfirmationPopoverModule.forRoot({

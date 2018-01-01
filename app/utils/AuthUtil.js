@@ -75,6 +75,7 @@ var apiInit = function(app){
                         email: loginUser.email,
                         firstName: loginUser.firstName,
                         lastName: loginUser.lastName,
+                        company: loginUser.company,
                         type: loginUser.type,
                         _id: loginUser._id,
                         token: token

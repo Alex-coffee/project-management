@@ -42,6 +42,27 @@ export class ToolsService {
     }
   }
 
+  processScenarioData(fileName: string) {
+    const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return this.http.post(this.HOST + '/api/data/scenario/process', 
+      {
+        'filename': fileName,
+        'company': currentUser.company,
+        'scenarioId': currentScenario._id
+      }).toPromise();
+  }
+
+  processCompanyData(fileName: string) {
+    const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return this.http.post(this.HOST + '/api/data/company/process', 
+      {
+        'filename': fileName,
+        'company': currentUser.company
+      }).toPromise();
+  }
+
   processImportedOrderData() {
     const currentScenario = JSON.parse(localStorage.getItem('currentScenario'));
     return this.http.post(this.HOST + '/api/data/orderprocess', {'scenarioId': currentScenario._id}).toPromise();

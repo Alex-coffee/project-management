@@ -96,6 +96,32 @@
                   <input name="endDate" type="date" [(ngModel)]="detailItem.endDate" class="form-control" useValueAsDate required>
               </div>
           </div>
+          <div class="hr-line-dashed"></div>
+
+          <div class="form-group">
+              <label class="col-sm-4 control-label">场景生产计划</label>
+              <div class="col-sm-8">
+                   <dropzone *ngIf="!isScenarioSCVUploaded"
+                    [config]="config" 
+                    [message]="'点击此处产品文件'" 
+                    (autoReset)="true"
+                    (errorReset)="true"
+                    (error)="onUploadError($event)" 
+                    (success)="onUploadSuccess($event)">
+                  </dropzone>
+
+                  <div *ngIf="isScenarioSCVUploaded" class="m-t-sm m-b-md">
+                    <span class="alert alert-success">
+                      {{uploadedFile}}
+                    </span>
+                  </div>
+                
+                  <button *ngIf="isScenarioSCVUploaded" class="btn btn-danger btn-xs" (click)="isScenarioSCVUploaded = false">
+                    <i class="fa fa-times"></i>
+                    不使用生产计划
+                  </button>
+              </div>
+          </div>
       </form>
     </div>
     <div class="modal-footer">
