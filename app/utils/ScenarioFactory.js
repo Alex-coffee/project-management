@@ -352,6 +352,52 @@ function processScenarioData(req, res) {
                 fs.createReadStream(path.join(settings.uploadPath, fileName))
                 .pipe(csv())
                 .on('data', function (productRawData) {
+                    //orders
+                    const product = {
+                        name: productRawData.orderName,
+                        desc: productRawData.desc,
+                        type: 'product',
+                        saftyStorage: productRawData.saftyStorage ? productRawData.saftyStorage : 0,
+                        initialStorage: productRawData.initStorage ? productRawData.initStorage : 0,
+                        advAmount: productRawData.advAmount ? productRawData.advAmount : 0,
+                        company: company,
+                    };
+                    productData.push(product);
+
+                    //lines
+                    if(lineNames.indexOf(productRawData.mainLine) == -1 && productRawData.mainLine !== ""){
+                        lineNames.push(productRawData.mainLine);
+                    }
+                    if(productRawData.subLine && lineNames.indexOf(productRawData.subLine) == -1 && productRawData.subLine !== ""){
+                        lineNames.push(productRawData.subLine);
+                    }
+                })
+                .on('end', function (data) {
+
+                    lineNames.forEach(l => {
+                        let line = {
+                            name: l,
+                            availableHours: 22,
+                            turnHours: 2,
+                            company: company,
+                        };
+                        lineData.push(line);
+                    })
+
+                    q.all([
+                        SchemaServices.batchUpsert(itemModel, productData, 
+                            ["name", "company"], ["desc", "saftyStorage", "type", "initialStorage", "advAmount"]),
+                        SchemaServices.batchUpsert(lineModel, lineData, 
+                                ["name", "company"], ["availableHours", "turnHours"])
+                    ]).then(response => {
+                        callback(null, response);
+                    });
+                })
+            },
+            function(arg1, callback) {
+                fs.createReadStream(path.join(settings.uploadPath, fileName))
+                .pipe(csv())
+                .on('data', function (productRawData) {
                     rawDataArray.push(productRawData);
                 })
                 .on('end', function (data) {

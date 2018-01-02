@@ -7,7 +7,30 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row m-b-md">
-                        <div class="col-sm-6 col-sm-offset-6">
+                        <div class="col-sm-8">
+                            <table>
+                                <tr>
+                                    <td><span class="m-l-sm m-r-sm">开始日期</span></td>
+                                    <td>
+                                        <input name="startDate" type="date"
+                                        [value]="startDate | date:'yyyy-MM-dd'" 
+                                        (input)="startDate = $event.target.valueAsDate" class="form-control" style="max-width: 160px;">
+                                    </td>
+                                    <td><span class="m-l-sm m-r-sm">结束日期</span></td>
+                                    <td>
+                                        <input name="endDate" type="date"
+                                        [value]="endDate | date:'yyyy-MM-dd'" 
+                                        (input)="endDate = $event.target.valueAsDate" class="form-control" style="max-width: 160px;">
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" (click)="searchSchedule()">
+                                            查询
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="input-group">
                                 <input placeholder="搜索产品名称或编号" name="searchContent" type="text" [(ngModel)]="searchContent" class="form-control">
                                 <span class="input-group-btn">
@@ -36,20 +59,14 @@
                             <tr *ngFor="let d of dataList | paginate: {id: 'schedulePaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.order.name}}</td>
                                 <td>{{d.order.desc}}</td>
-                                <td *ngFor="let s of d.scheduleArray; let i = index; trackBy:trackByIndex">
+                                <td *ngFor="let day of dateRanges; let i = index; trackBy:trackByIndex">
 
-                                    <!-- <inline-editor
-                                        type="number"
-                                        placeholder="0"
-                                        [(ngModel)]="s.amount"
-                                        (onSave)="savePPAmount($event, s)"
-                                        name="amount_{{i}}"
-                                        min="0"></inline-editor> -->
+                                    <span *ngIf="!getProductionSchedule(day, d)">0</span>
 
-                                    <button class="btn btn-primary btn-xs odAmountBtn" 
-                                        (click)="modifyProductionPlan(s, dateRanges[i], d)">
-                                        <i *ngIf="s.isLocked" class="fa fa-lock"></i>
-                                         {{s.amount}}
+                                    <button *ngIf="getProductionSchedule(day, d)" class="btn btn-primary btn-xs odAmountBtn" 
+                                        (click)="modifyProductionPlan(getProductionSchedule(day, d), day, d)">
+                                        <i *ngIf="getProductionSchedule(day, d).isLocked" class="fa fa-lock"></i>
+                                         {{getProductionSchedule(day, d).amount}}
                                     </button>
                                 </td>
                             </tr>

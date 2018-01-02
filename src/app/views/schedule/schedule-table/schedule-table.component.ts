@@ -29,6 +29,8 @@ export class ScheduleTableComponent implements OnInit {
   orderOptions: Array<IOption> = [];
   searchContent: string = '';
   p: any;
+  startDate: Date;
+  endDate: Date;
 
   constructor(
     private scenarioService: ScenarioService,
@@ -51,21 +53,38 @@ export class ScheduleTableComponent implements OnInit {
 
   loadData() {
     const currentScenarioObj = JSON.parse(localStorage.getItem('currentScenario'));
-    this.dateRanges = this.toolsService.getDateArrayByRange(new Date(currentScenarioObj.startDate),
-    new Date(currentScenarioObj.endDate));
+    if(this.startDate == undefined){
+      this.startDate = new Date(currentScenarioObj.startDate);
+    }
+
+    if(this.endDate == undefined){
+      this.endDate = new Date(currentScenarioObj.endDate);
+    }
+
+    this.dateRanges = this.toolsService.getDateArrayByRange(this.startDate, this.endDate);
 
     this.scheduleService.getOrderScheduleProductionPlanData(undefined).subscribe(res => {
       this.dataList = res.productionScheduleList;
     });
   }
 
+  searchSchedule() {
+    this.loadData();
+  }
+
+  getProductionSchedule(day, productionSchedule) {
+    return productionSchedule.scheduleArray.find(s => new Date(s.date).getTime() == day.getTime());
+  }
+
   searchProduct() {
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.itemService.findProduct({
       $or:[
         {"desc": {$regex: this.searchContent, $options:'i'}},
         {"name": {$regex: this.searchContent, $options:'i'}}
       ], 
-      type: "product"
+      type: "product",
+      company: currentUser.company
     }).subscribe(res => {
       const ids = [];
       res.list.forEach(p => {
