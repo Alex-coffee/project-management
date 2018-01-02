@@ -86,6 +86,7 @@ export class WizardComponent implements OnInit {
     setTimeout(() => { 
       this.orProcessEnded = true; 
       this.showResultConent = true;
+      this.isOrResultGenerated = true;
       this.formWizard.next(); 
     }, 5000);
   }
