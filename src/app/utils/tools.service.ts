@@ -49,7 +49,8 @@ export class ToolsService {
       {
         'filename': fileName,
         'company': currentUser.company,
-        'scenarioId': currentScenario._id
+        'scenarioId': currentScenario._id,
+        'scenario': currentScenario
       }).toPromise();
   }
 

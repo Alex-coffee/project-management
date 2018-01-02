@@ -143,32 +143,7 @@ var apiInit = function(app){
                     callback(null, orderRawMaterials.length);
                 });
             },
-            //process ProductStaticData
-            function(arg1, callback){
-                let productStatic = SchemaFactory.getModel("productstatic");
-                SchemaServices.find(productStatic, {"scenario": scenarioId, "isDeleted": false}, {"populateFields": "product"})
-                .then(res => {
-                    let productStaticList = res;
-                    let productStaticData = [];
-
-                    productStaticList.forEach(ps => {
-                        let avaiLines = [];
-                        avaiLines.push(ps.mainLine);
-                        if(ps.subLine) avaiLines.push(ps.subLine);
-
-                        productStaticData.push({
-                            orderName: ps.product.name,
-                            mainLine: ps.mainLine,
-                            subLine: ps.subLine ? ps.subLine : "-1",
-                            avaiLines: avaiLines,
-                            unitTime: ps.unitTime
-                        })
-                    });
-
-                    writeFile(scenarioId, "ProductStaticData.json", productStaticData);
-                    callback(null, productStaticData.length);
-                });
-            },
+            
             //process Parameters
             function(arg1, callback){
                 let scenario = SchemaFactory.getModel("scenario");
@@ -193,17 +168,51 @@ var apiInit = function(app){
                     }
 
                     writeFile(scenarioId, "Parameters.json", parameters);
-                    callback(null, scenarioNumDays, dateRangeArray);
+                    callback(null, scenarioNumDays, dateRangeArray, scenario);
+                });
+            },
+            //process ProductStaticData
+            function(scenarioNumDays, dateRangeArray, scenario, callback){
+                let productStatic = SchemaFactory.getModel("productstatic");
+                SchemaServices.find(productStatic, {
+                    scenario: scenarioId,
+                }, {"populateFields": "product"})
+                .then(res => {
+                    let productStaticList = res;
+                    let productStaticData = [];
+
+                    productStaticList.forEach(ps => {
+                        let avaiLines = [];
+                        avaiLines.push(ps.mainLine);
+                        if(ps.subLine) avaiLines.push(ps.subLine);
+
+                        productStaticData.push({
+                            orderName: ps.product.name,
+                            mainLine: ps.mainLine,
+                            subLine: ps.subLine ? ps.subLine : "-1",
+                            avaiLines: avaiLines,
+                            unitTime: ps.unitTime
+                        })
+                    });
+
+                    writeFile(scenarioId, "ProductStaticData.json", productStaticData);
+                    callback(null, scenarioNumDays, dateRangeArray, scenario);
                 });
             },
             //process Orders
-            function(numDays, dateRangeArray, callback){
+            function(numDays, dateRangeArray, scenario, callback){
                 let OrderDemand = SchemaFactory.getModel("orderdemand");
                 let Item = SchemaFactory.getModel("item");
 
                 q.all([
                     SchemaServices.find(Item, {"type": ItemType.PRODUCT, "company": company}, {}),
-                    SchemaServices.find(OrderDemand, {"scenario": scenarioId}, {})
+                    SchemaServices.find(OrderDemand, {
+                        scenario: scenarioId,
+                        date: {
+                            $gte: scenario.startDate,
+                            $lt: scenario.endDate
+                        }
+                    }, {})
                 ]).then(resArray => {
                     let productList = resArray[0];
                     let orderDemands = resArray[1];
@@ -240,17 +249,23 @@ var apiInit = function(app){
                     });
 
                     writeFile(scenarioId, "Orders.json", ordersData);
-                    callback(null, numDays, dateRangeArray);
+                    callback(null, numDays, dateRangeArray, scenario);
                 }) 
             },
             //process RawMaterials
-            function(numDays, dateRangeArray, callback){
+            function(numDays, dateRangeArray, scenario, callback){
                 let PurchasePlan = SchemaFactory.getModel("purchaseplan");
                 let Item = SchemaFactory.getModel("item");
 
                 q.all([
                     SchemaServices.find(Item, {"type": ItemType.MATERIAL, "company": company}, {"populateFields": "refItem"}),
-                    SchemaServices.find(PurchasePlan, {"scenario": scenarioId}, {})
+                    SchemaServices.find(PurchasePlan, {
+                        scenario: scenarioId,
+                        date: {
+                            $gte: scenario.startDate,
+                            $lt: scenario.endDate
+                        }
+                    }, {})
                 ]).then(resArray => {
                     let materialList = resArray[0];
                     let purchasePlans = resArray[1];
@@ -295,11 +310,11 @@ var apiInit = function(app){
 
                     writeFile(scenarioId, "RawMaterials.json", rawMaterialData);
                     writeFile(scenarioId, "RawOrderMap.json", rawOrderData);
-                    callback(null, numDays, dateRangeArray);
+                    callback(null, numDays, dateRangeArray, scenario);
                 }) 
             },
             //process LineStaticData
-            function(numDays, dateRangeArray, callback){
+            function(numDays, dateRangeArray, scenario, callback){
                 let line = SchemaFactory.getModel("line");
                 SchemaServices.find(line, {"company": company}, {}).then(result => {
                     let lines = result;
@@ -327,16 +342,21 @@ var apiInit = function(app){
                         })
                     })
                     writeFile(scenarioId, "LineStaticData.json", lineStaticData);
-                    callback(null, numDays, dateRangeArray);
+                    callback(null, numDays, dateRangeArray, scenario);
                 }, err => {
                     callback(null, 500);
                 });
             },
              //process LockedSchedule
-             function(numDays, dateRangeArray, callback){
+             function(numDays, dateRangeArray, scenario, callback){
                 let productionPlan = SchemaFactory.getModel("productionplan");
                 SchemaServices.find(productionPlan, 
-                        {"scenario": scenarioId, "isDeleted": false},
+                        {
+                            "scenario": scenarioId, 
+                            date: {
+                                $gte: scenario.startDate,
+                                $lt: scenario.endDate
+                            }},
                         {"populateFields": "item line"}
                     ).then(result => {
                     let productionPlans = result;
@@ -364,6 +384,15 @@ var apiInit = function(app){
             function(numDays, callback){
                 let orResultModel = SchemaFactory.getModel("orresult");
                 SchemaServices.removeByCondition(orResultModel, {"scenario": scenarioId}).then(result => {
+                    callback(null, result);
+                }, err => {
+                    callback(null, 500);
+                });
+            },
+            //clear input 
+            function(numDays, callback){
+                let orInputModel = SchemaFactory.getModel("orinput");
+                SchemaServices.removeByCondition(orInputModel, {"scenario": scenarioId}).then(result => {
                     callback(null, result);
                 }, err => {
                     callback(null, 500);

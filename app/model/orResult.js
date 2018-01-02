@@ -13,7 +13,7 @@ var ORResultSchema = new Schema({
     DemandsCoveredBySafeStorage: {type: Object},
     DemandsMeetView: {type: Object},
     RawMaterialStorage: {type: Object},
-    scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    scenario: { type: String, ref: 'Scenario'},
 
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },

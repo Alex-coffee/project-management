@@ -2,6 +2,8 @@ node_modules/
 OR/upload/
 OR/temp/
 OR/output/
+OR/plan.lp
+OR/result.txt
 src/assets/or/output/StorageAmountResult.json
 src/assets/or/output/LineKPIs.json
 src/assets/or/output/ProductionScheduleResult.json

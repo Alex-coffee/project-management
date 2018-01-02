@@ -13,10 +13,10 @@ var ScenarioSchema = new Schema({
     isPenalizeForNumLineUsedOn: {type: Boolean, default: false},
     isRawMaterialPrepareConstraintOn: {type: Boolean, default: false},
 
-    isSafeStorageHardConstraint: {type: Boolean, default: false},
-    penaltyForUseSafeStorage: {type: Number, default: 0},
+    isSafeStorageHardConstraint: {type: Boolean, default: true},
+    penaltyForUseSafeStorage: {type: Number, default: 50},
     safeStorageCalculateMethod: {type: String},
-    maxNumModeChangesDaily: {type: Number, default: 0},
+    maxNumModeChangesDaily: {type: Number, default: 3},
 
     company: {type: Schema.Types.ObjectId, ref: 'Company'},
 

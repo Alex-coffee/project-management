@@ -39,13 +39,15 @@
                             <tr *ngFor="let d of dataList | paginate: {id: 'orderSchedulePaging', itemsPerPage: 10, currentPage: p }">
                                 <td>{{d.order.name}}</td>
                                 <td>{{d.order.desc}}</td>
-                                <td *ngFor="let s of d.scheduleArray; let i = index; trackBy:trackByIndex">
+                                <td *ngFor="let day of dateRanges; let i = index; trackBy:trackByIndex">
 
-                                    <inline-editor
+                                    <span *ngIf="!getOrderDemand(day, d)">0</span>
+
+                                    <inline-editor *ngIf="getOrderDemand(day, d)"
                                         type="number"
                                         placeholder="0"
-                                        [(ngModel)]="s.amount"
-                                        (onSave)="saveODAmount($event, s)"
+                                        [(ngModel)]="getOrderDemand(day, d).amount"
+                                        (onSave)="saveODAmount($event, getOrderDemand(day, d))"
                                         name="amount_{{i}}"
                                         min="0"></inline-editor>
 

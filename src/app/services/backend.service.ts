@@ -20,15 +20,6 @@ import { OrInputService } from 'app/services/or-input.service';
 
 @Injectable()
 export class BackendService {
-  private lineStaticDataUrl = this.getInputPath() + 'LineStaticData.json';
-  private ordersUrl = this.getInputPath() + 'Orders.json';
-  private productStaticDataUrl = this.getInputPath() + 'ProductStaticData.json';
-
-  private productionScheduleUrl = this.getOutputPath() + 'ProductionScheduleResult.json';
-  private storageAmountUrl = this.getOutputPath() + 'StorageAmountResult.json';
-  private uncoveredDemandsUrl = this.getOutputPath() + 'UncoveredDemands.json';
-
-  private demandsMeetViewUrl = this.getOutputPath() + 'DemandsMeetView.json';
   
   constructor (
     private http: HttpClient,
@@ -38,48 +29,7 @@ export class BackendService {
     private orInputService: OrInputService
   ) {}
 
-  getInputPath(): string {
-    let currentScenarioStr = localStorage.getItem("currentScenario");
-    if(currentScenarioStr){
-      let currentScenario = JSON.parse(currentScenarioStr);
-      return 'OR/temp/' + currentScenario._id + '/';
-    }
-    return 'OR/temp/';
-  }
-
-  getOutputPath(): string {
-    let currentScenarioStr = localStorage.getItem("currentScenario");
-    if(currentScenarioStr){
-      let currentScenario = JSON.parse(currentScenarioStr);
-      return 'OR/output/' + currentScenario._id + '/';
-    }
-    return 'OR/output/';
-  }
-
   //*********** apis ****************/
-  getOrderData(): Observable<any[]> {
-    return this.getFilesByUrl(this.getInputPath() + 'Orders.json');
-  }
-
-  getLineStaticData(): Observable<any[]> {
-    return this.getFilesByUrl(this.getInputPath() + 'LineStaticData.json');
-  }
-
-  getProductStaticData(): Observable<any[]> {
-    return this.getFilesByUrl(this.getInputPath() + 'ProductStaticData.json');
-  }
-
-  getProductionScheduleResult(): Observable<any[]> {
-    return this.getFilesByUrl(this.getOutputPath() + 'ProductionScheduleResult.json');
-  }
-
-  getStorageAmountResult(): Observable<any[]> {
-    return this.getFilesByUrl(this.getOutputPath() + 'StorageAmountResult.json');
-  }
-
-  getUncoveredDemands(): Observable<any[]> {
-    return this.getFilesByUrl(this.getOutputPath() + 'UncoveredDemands.json');
-  }
 
   getGanttDataByType(type: string): Observable<GanttDataSet>{
     if("order" == type){
@@ -99,11 +49,11 @@ export class BackendService {
           let orders = [];
           let productionScheduleResult = [];
           let lineStaticData =[];
-          if(res[0].length > 0 && res[1].length > 0){
-            const orResult = res[0][0];
+          if(res[0].list.length > 0 && res[1].list.length > 0){
+            const orResult = res[0].list[0];
             productionScheduleResult = orResult.ProductionScheduleResult;
           
-            const orInput = res[1][0];
+            const orInput = res[1].list[0];
             orders = orInput.Orders;
             lineStaticData = orInput.LineStaticData;
           }
@@ -161,11 +111,11 @@ export class BackendService {
           let productionScheduleResult = [];
           let productStaticData = [];
           let lineStaticData = [];
-          if(res[0].length > 0 && res[1].length > 0){
-            const orResult = res[0][0];
+          if(res[0].list.length > 0 && res[1].list.length > 0){
+            const orResult = res[0].list[0];
             productionScheduleResult = orResult.ProductionScheduleResult;
           
-            const orInput = res[1][0];
+            const orInput = res[1].list[0];
             productStaticData = orInput.ProductStaticData;
             lineStaticData = orInput.LineStaticData;
           }
@@ -271,28 +221,4 @@ export class BackendService {
         })
     }
 
-  //****************************** */
-  private getFilesByUrl(fileUrls: string){
-    return this.http.get(fileUrls)
-                    .map(this.extractData)
-                    .catch(this.handleError);
-  }
-
-  private extractData(res: Response) {
-    const body = res;
-    return body || { };
-  }
-  private handleError (error: Response | any) {
-    // In a real world app, you might use a remote logging infrastructure
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error;
-      const err = body["error"] || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
-  }
 }

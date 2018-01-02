@@ -57,6 +57,10 @@ export class OrderScheduleComponent implements OnInit {
     });
   }
 
+  getOrderDemand(day, orderDemand) {
+    return orderDemand.scheduleArray.find(s => new Date(s.date).getTime() == day.getTime());
+  }
+
   searchProduct() {
     this.itemService.findProduct({
       $or:[

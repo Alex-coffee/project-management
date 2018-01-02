@@ -34,7 +34,7 @@ export class GeneralService {
     let httpParams: HttpParams = new HttpParams();
     httpParams = httpParams.set('model', model);
 
-    if ( model === 'item' || model === 'line' || model === 'itemBOM' ){
+    if ( model === 'item' || model === 'line' || model === 'itemBOM' || model === 'productionPlan' ){
       const currentUser = sessionStorage.getItem('currentUser');
       if (currentUser) {
         conditions.company = JSON.parse(currentUser).company;
@@ -65,9 +65,15 @@ export class GeneralService {
 
   protected batchInsert(model: string, contentArray: any[]): Observable<any> {
     const currentScenario = localStorage.getItem('currentScenario');
+    const currentUser = sessionStorage.getItem('currentUser');
+
     if (currentScenario && contentArray) {
       contentArray.forEach(c => {
         c.scenario = JSON.parse(currentScenario)._id;
+
+        if ( model === 'productionPlan' && currentUser) {
+          c.company = JSON.parse(currentUser).company;
+        }
       });
     }
     return this.http.post(this.batchInsertURL, {model: model, content: contentArray});

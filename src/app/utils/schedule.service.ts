@@ -164,10 +164,10 @@ export class ScheduleService {
       let itemSearchCondition, productionPlanSearchCondition;
       if (productIds) {
         itemSearchCondition = {"_id": { $in: productIds }, 'company': JSON.parse(currentUser).company};
-        productionPlanSearchCondition = {"item": { $in: productIds }, 'scenario': JSON.parse(currentScenario)._id};
+        productionPlanSearchCondition = {"item": { $in: productIds }, 'company': JSON.parse(currentUser).company};
       }else{
         itemSearchCondition = {'company': JSON.parse(currentUser).company};
-        productionPlanSearchCondition = {'scenario': JSON.parse(currentScenario)._id};
+        productionPlanSearchCondition = {'company': JSON.parse(currentUser).company};
       }
       const data$ = new Observable(observer => {
         Observable.forkJoin([

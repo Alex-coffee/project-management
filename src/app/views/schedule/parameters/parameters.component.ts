@@ -66,7 +66,6 @@ export class ParametersComponent implements OnInit {
       this.parameters = res;
       this.parameters.startDate = new Date(this.parameters.startDate);
       this.parameters.endDate = new Date(this.parameters.endDate);
-      console.log(this.parameters);
     });
 
     // this.dataService.getParameters()

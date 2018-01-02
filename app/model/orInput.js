@@ -11,7 +11,7 @@ var ORInputSchema = new Schema({
     ProductStaticData: {type: Object},
     RawMaterials: {type: Object},
     RawOrderMap: {type: Object},
-    scenario: { type: Schema.Types.ObjectId, ref: 'Scenario'},
+    scenario: { type: String, ref: 'Scenario'},
 
     isDeleted: {type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },

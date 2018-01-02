@@ -312,6 +312,7 @@ function processScenarioData(req, res) {
     const fileName = req.body.filename;
     const scenarioId = req.body.scenarioId;
     const company = req.body.company;
+    const scenario = req.body.scenario;
 
     mode = "ignore";
 
@@ -326,12 +327,24 @@ function processScenarioData(req, res) {
     try{
         async.waterfall([
             function(callback) {
-                SchemaServices.removeByCondition(productstaticModel, {scenario: scenarioId}).then(result => {
+                SchemaServices.removeByCondition(productstaticModel, {
+                    scenario: scenarioId,
+                    date: {
+                        $gte: scenario.startDate,
+                        $lt: scenario.endDate
+                    }
+                }).then(result => {
                     callback(null, result);
                 });
             },
             function(arg1, callback) {
-                SchemaServices.removeByCondition(orderdemandModel, {scenario: scenarioId}).then(result => {
+                SchemaServices.removeByCondition(orderdemandModel, {
+                    scenario: scenarioId,
+                    date: {
+                        $gte: scenario.startDate,
+                        $lt: scenario.endDate
+                    }
+                }).then(result => {
                     callback(null, result);
                 });
             },
@@ -370,7 +383,7 @@ function processScenarioData(req, res) {
                                 }
 
                                 for(let key in rawData){
-                                    if(isDateString(key)){
+                                    if(isDateString(key) && relProduct){
                                         orderDemands.push({
                                             date: new Date(key),
                                             amount: parseInt(rawData[key]),
