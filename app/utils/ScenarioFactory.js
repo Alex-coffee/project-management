@@ -319,6 +319,7 @@ function processScenarioData(req, res) {
     let rawDataArray = [];
     let lineNames = [];
     let lineData = [];
+    let productData = [];
     let counts = {
         productAdd: 0,
         productUpdated: 0,
