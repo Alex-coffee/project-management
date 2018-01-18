@@ -489,6 +489,7 @@ var apiInit = function(app){
         const json2csv = require('json2csv');
 
         const scenaro = req.body.scenario;
+        const company = req.body.company;
         const scenarioDates = req.body.scenarioDates;
         const dateRangeLength = scenarioDates.length;
 
@@ -505,7 +506,7 @@ var apiInit = function(app){
             },
             function(productSchedule, callback) {
                 const lineModel = SchemaFactory.getModel("line");
-                SchemaServices.find(lineModel, {"scenario": scenaro._id}, {}).then(lines => {
+                SchemaServices.find(lineModel, {"company": company}, {}).then(lines => {
                     callback(null, lines, productSchedule);
                 });
             },
@@ -542,23 +543,27 @@ var apiInit = function(app){
                 console.log(csvFields);
                 console.log(fieldNames);
         
-                let csv = json2csv({ 
+                //let csv = json2csv({ 
+                //    data: processedProductSchedule, 
+                //    fields: csvFields, 
+                //    fieldNames: fieldNames 
+                //});
+                
+                //let filePath = path.join(settings.systemPath, 'output', 'ORResult.csv');
+                //var newCsv = iconv.encode(csv, 'GBK');
+                //fs.writeFileSync(filePath, newCsv);
+
+                callback(null, { 
                     data: processedProductSchedule, 
                     fields: csvFields, 
                     fieldNames: fieldNames 
                 });
-                
-                let filePath = path.join(settings.systemPath, 'output', 'ORResult.csv');
-                var newCsv = iconv.encode(csv, 'GBK');
-                fs.writeFileSync(filePath, newCsv);
-
-                callback(null, 'success');
             }
         ], function(err, results) {
             if (err) {
                 res.status(500).send(err);
             }else{
-                res.status(200).send({message: "success"});
+                res.status(200).send({message: "success", csvData: results});
             }
         });
     });

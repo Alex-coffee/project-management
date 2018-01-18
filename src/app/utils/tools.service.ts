@@ -12,8 +12,12 @@ export class ToolsService {
   exportORResult(){
     let currentScenarioStr = localStorage.getItem("currentScenario");
     let currentScenario = JSON.parse(currentScenarioStr);
-    return this.http.post(this.HOST + '/api/data/result/generate', 
-        {scenario: currentScenario, scenarioDates: this.getScenarioDates()}).toPromise();
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return this.http.post(this.HOST + '/api/data/result/generate', {
+          scenario: currentScenario, 
+          scenarioDates: this.getScenarioDates(), 
+          company: currentUser.company
+        }).toPromise();
   }
 
   getDateArrayByRange(startDate: Date, endDate: Date): Date[]{

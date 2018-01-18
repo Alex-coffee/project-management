@@ -57,8 +57,26 @@ export class ProductionScheduleComponent implements OnInit {
 
   exportORResult(){
     this.toolsService.exportORResult().then(res => {
-      console.log(res);
-      this.fileGenerated = true;
+        const csvData = res["csvData"];
+        var csvRow = [];
+        csvRow.push(csvData.fieldNames.join(","));
+        if(csvData.data){
+            csvData.data.forEach(item => {
+                let rowData = [];
+                csvData.fields.forEach(f => {
+                  rowData.push(item[f]);
+                });
+                csvRow.push(rowData.join(","));
+            });
+        }
+
+        var csvString = csvRow.join("\n");
+        var a = document.createElement('a');
+        a.href = 'data:attachment/csv;charset=utf-8,%EF%BB%BF' +  encodeURIComponent(csvString);
+        a.target = '_blank';
+        a.download = '生产计划_' + (new Date().getTime()) + ".csv";
+        document.body.appendChild(a);
+        a.click();
     });
   }
 

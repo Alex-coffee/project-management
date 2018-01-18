@@ -11,12 +11,9 @@
                         <button [ngClass]="{'btn-info': currentType == 'line', 'btn-default': currentType != 'line'}" class="btn" (click)="setGanttType('line')">
                             生产线角度
                         </button>
-                        <a *ngIf="!fileGenerated" class="btn btn-success" (click)="exportORResult()">
-                            生成导出数据
-                        </a>
-                        <a *ngIf="fileGenerated" class="btn btn-success" 
-                            href="http://115.159.83.14:8001/data/result/export" target="_blank">
-                            <i class="fa fa-download m-r-xs"></i>下载
+                        <a class="btn btn-success" (click)="exportORResult()">
+                            <i class="fa fa-download m-r-xs"></i>
+                            导出生产计划
                         </a>
                     </div>
 
